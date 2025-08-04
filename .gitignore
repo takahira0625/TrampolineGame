@@ -1,23 +1,40 @@
+# Unity 基本除外
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+MemoryCaptures/
 UserSettings/
 
-# OSごとの一時ファイル
+# OS
 .DS_Store
 Thumbs.db
 
-# Unityクラウドビルドやパッケージ関係
+# IDE 関係
+.vscode/
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.dwlt
+*.opendb
+*.VC.db
+
+# Unity/IDEによる自動生成
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+
+# クラッシュログ
+sysinfo.txt
+
+# 配布物（チーム共有不要）
 *.apk
 *.aab
 *.unitypackage
-
-# RiderやVSCodeの一時ファイル
-.idea/
-.vscode/
-*.csproj
-*.sln
-*.user
