@@ -14,15 +14,13 @@ public class LineDrawer : MonoBehaviour
 
     private LineRenderer currentLineRenderer;
     private EdgeCollider2D currentEdgeCollider;
-    private Camera mainCamera; // ▼▼▼ カメラをキャッシュする変数
+    private Camera mainCamera;
 
-    // ▼▼▼ 始点の保持方法を変更 ▼▼▼
-    private Vector3 startViewportPos; // 始点をビューポート座標で記憶
-    private Vector2 startPos;         // 毎フレーム更新される始点のワールド座標
+    private Vector3 startViewportPos;
+    private Vector2 startPos;
 
     private bool canCreate;
 
-    // ▼▼▼ Startメソッドを追加 ▼▼▼
     void Start()
     {
         mainCamera = Camera.main;
@@ -39,7 +37,6 @@ public class LineDrawer : MonoBehaviour
         {
             if (currentLineRenderer != null)
             {
-                // ▼▼▼ 始点のワールド座標を毎フレーム更新 ▼▼▼
                 startPos = mainCamera.ViewportToWorldPoint(startViewportPos);
                 currentLineRenderer.SetPosition(0, startPos);
 
@@ -56,12 +53,31 @@ public class LineDrawer : MonoBehaviour
             {
                 if (canCreate)
                 {
-                    // ▼▼▼ 最終的な始点と終点を設定 ▼▼▼
                     startPos = mainCamera.ViewportToWorldPoint(startViewportPos);
                     Vector2 endPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
                     List<Vector2> points = new List<Vector2> { startPos, endPos };
                     currentEdgeCollider.points = points.ToArray();
+
+                    // ▼▼▼ このブロックを追加 ▼▼▼
+                    // Platform Effectorの角度を計算して設定
+                    PlatformEffector2D effector = currentLineRenderer.GetComponent<PlatformEffector2D>();
+                    if (effector != null)
+                    {
+                        // 線の方向ベクトルから法線（垂直なベクトル）を計算
+                        Vector2 direction = endPos - startPos;
+                        Vector2 normal = Vector2.Perpendicular(direction).normalized;
+
+                        // 法線が下を向いている場合は反転させる
+                        if (normal.y < 0)
+                        {
+                            normal = -normal;
+                        }
+
+                        // ワールドの真上（0, 1）と線の法線との間の角度を計算し、オフセットとして設定
+                        effector.rotationalOffset = Vector2.SignedAngle(Vector2.up, normal);
+                    }
+                    // ▲▲▲ ここまで ▲▲▲
                 }
                 else
                 {
@@ -82,7 +98,6 @@ public class LineDrawer : MonoBehaviour
         currentLineRenderer = lineGO.GetComponent<LineRenderer>();
         currentEdgeCollider = lineGO.GetComponent<EdgeCollider2D>();
 
-        // ▼▼▼ 始点をワールド座標とビューポート座標の両方で記録 ▼▼▼
         startPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         startViewportPos = mainCamera.WorldToViewportPoint(startPos);
 

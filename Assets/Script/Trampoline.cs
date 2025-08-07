@@ -25,7 +25,7 @@ public class Trampoline : MonoBehaviour
         Vector2 v = rb.velocity;
         float vnMag = Vector2.Dot(v, normal);      // 法線方向成分の大きさ
         Vector2 vt = v - vnMag * normal;           // 接線方向成分
-
+        Debug.Log("衝突");
         // 新しい速度：接線成分 ＋ 法線方向を jumpSpeed に置換
         Vector2 newVelocity = vt + normal * jumpSpeed;
         rb.velocity = - newVelocity;
