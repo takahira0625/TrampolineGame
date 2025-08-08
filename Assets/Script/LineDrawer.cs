@@ -59,7 +59,6 @@ public class LineDrawer : MonoBehaviour
                     List<Vector2> points = new List<Vector2> { startPos, endPos };
                     currentEdgeCollider.points = points.ToArray();
 
-                    // ▼▼▼ このブロックを追加 ▼▼▼
                     // Platform Effectorの角度を計算して設定
                     PlatformEffector2D effector = currentLineRenderer.GetComponent<PlatformEffector2D>();
                     if (effector != null)
@@ -72,6 +71,13 @@ public class LineDrawer : MonoBehaviour
                         if (normal.y < 0)
                         {
                             normal = -normal;
+                        }
+
+                        // Trampoline コンポーネントに法線を渡す
+                        Trampoline trampoline = currentLineRenderer.GetComponent<Trampoline>();
+                        if (trampoline != null)
+                        {
+                            trampoline.SetNormal(normal);
                         }
 
                         // ワールドの真上（0, 1）と線の法線との間の角度を計算し、オフセットとして設定

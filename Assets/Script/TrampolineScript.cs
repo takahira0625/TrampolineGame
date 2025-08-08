@@ -1,5 +1,7 @@
 using UnityEngine;
 
+//‚±‚Á‚¿‚Íg‚Á‚Ä‚¢‚Ü‚¹‚ñB
+
 public class TrampolineScript : MonoBehaviour
 {
     public float bounceForce = 20f; // ’µ‚Ë•Ô‚·—Í‚Ì‹­‚³
