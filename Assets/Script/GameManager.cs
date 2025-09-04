@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro; // TextMeshProを扱うために必要
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class GameManager : MonoBehaviour
     // インスペクターから設定する項目
     public int requiredCoins = 5; // ゴールに必要なコインの数
     public GameObject goalTextObject; // ゴールテキストのUIオブジェクト
-    public TextMeshProUGUI coinCounterText; // コインカウンターのUIテキスト
+    /*public TextMeshProUGUI coinCounterText;*/ // コインカウンターのUIテキスト
     public PlayerController playerController; // プレイヤーのスクリプト
 
     private int currentCoins = 0; // 現在のコイン取得数
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // ゲーム開始時にUIを初期化
-        UpdateCoinCounter();
+        /*UpdateCoinCounter();*/
         goalTextObject.SetActive(false); // ゴールテキストを非表示に
     }
 
@@ -38,32 +39,28 @@ public class GameManager : MonoBehaviour
     public void AddCoin()
     {
         currentCoins++;
-        UpdateCoinCounter();
+        /*UpdateCoinCounter();*/
 
         // ゴール条件を満たしたかチェック
         if (currentCoins >= requiredCoins)
         {
-            ShowGoal();
+            Goal();
         }
     }
 
     // コインカウンターUIを更新する関数
-    void UpdateCoinCounter()
+    /*void UpdateCoinCounter()
     {
         if (coinCounterText != null)
         {
             coinCounterText.text = "Coin: " + currentCoins + " / " + requiredCoins;
         }
-    }
+    }*/
 
     // ゴール処理を行う関数
-    void ShowGoal()
+    void Goal()
     {
-        // ゴールテキストを表示
-        if (goalTextObject != null)
-        {
-            goalTextObject.SetActive(true);
-        }
+        SceneManager.LoadScene("ResultScene");
 
         // プレイヤーの動きを止める
         if (playerController != null)
