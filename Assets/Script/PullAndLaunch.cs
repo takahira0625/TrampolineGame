@@ -28,6 +28,7 @@ public class PullAndLaunch : MonoBehaviour
     private Vector2 startPosition;
     private Vector2 dragVector;
     private bool isDragging = false;
+    private bool isGrounded = true;
     private bool isGoal = false;
 
     void Start()
@@ -47,17 +48,15 @@ public class PullAndLaunch : MonoBehaviour
     {
         if (isGoal) return;
 
-        // プレイヤーが停止したら
-        if (rb.velocity.magnitude < 0.1f)
+        // プレイヤーが停止していて、地面に接触しているとき
+        if (rb.velocity.magnitude < 0.1f && isGrounded)
         {
-            // ▼▼▼ このブロックを追加 ▼▼▼
-            // 再び線を引けないようにして、重力も0に戻す
+            // 線を引けないようにして重力も戻す
             if (lineDrawer != null && lineDrawer.enabled)
             {
                 lineDrawer.enabled = false;
                 rb.gravityScale = 0;
             }
-            // ▲▲▲ ここまで ▲▲▲
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -74,6 +73,7 @@ public class PullAndLaunch : MonoBehaviour
             }
         }
 
+
         if (isDragging)
         {
             UpdateArrow();
@@ -84,17 +84,42 @@ public class PullAndLaunch : MonoBehaviour
     {
         rb.gravityScale = gravityValue;
 
-        // ▼▼▼ この行を追加 ▼▼▼
         // 発射後に線を引けるようにする
         if (lineDrawer != null) lineDrawer.enabled = true;
 
         Vector2 launchVector = startPosition - (Vector2)mainCamera.ScreenToWorldPoint(Input.mousePosition);
-
+        
+        // 引っ張り距離が最大値を超えたら制限
         if (launchVector.magnitude > maxDragDistance)
         {
             launchVector = launchVector.normalized * maxDragDistance;
         }
+
+        // Rigidbody2D に力を加えて発射
         rb.AddForce(launchVector * launchPowerMultiplier, ForceMode2D.Impulse);
+        isGrounded = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            Debug.Log("普通の床に着地！");
+        }
+        else if (collision.gameObject.CompareTag("Trampoline"))
+        {
+            Debug.Log("トランポリンに着地！");
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") ||
+            collision.gameObject.CompareTag("Trampoline"))
+        {
+            isGrounded = false;
+        }
     }
 
     // 他メソッドは変更なし

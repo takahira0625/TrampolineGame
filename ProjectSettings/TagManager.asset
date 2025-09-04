@@ -7,6 +7,7 @@ TagManager:
   - GoalPlatform
   - GoalTop
   - Trampoline
+  - Ground
   layers:
   - Default
   - TransparentFX
