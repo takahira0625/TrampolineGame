@@ -82,6 +82,11 @@ public class PullAndLaunch : MonoBehaviour
 
     private void Launch()
     {
+        // 最初の発射でタイマーを開始（2 回目以降は無視される）
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.StartTimerOnce();
+        }
         rb.gravityScale = gravityValue;
 
         // 発射後に線を引けるようにする
