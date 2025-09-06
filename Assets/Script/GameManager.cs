@@ -68,4 +68,9 @@ public class GameManager : MonoBehaviour
             playerController.canMove = false;
         }
     }
+    public void GameOver()
+    {
+        Debug.Log("Game Over!");
+        SceneManager.LoadScene("GameOverScene");
+    }
 }
