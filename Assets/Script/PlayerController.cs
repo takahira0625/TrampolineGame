@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     // 外部から動きを制御するための変数
     public bool canMove = true;
 
-    public float outTimeToLose = 0.3f; // 画面外に出てからゲームオーバーまでの猶予
+    public float outTimeToLose = 0.01f; // 画面外に出てからゲームオーバーまでの猶予
     private float outTimer = 0f;
     private SpriteRenderer sr;
 
