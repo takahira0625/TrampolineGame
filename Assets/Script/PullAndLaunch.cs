@@ -73,7 +73,6 @@ public class PullAndLaunch : MonoBehaviour
             }
         }
 
-
         if (isDragging)
         {
             UpdateArrow();

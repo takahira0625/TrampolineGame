@@ -11,11 +11,9 @@ public class Trampoline : MonoBehaviour
     public void SetNormal(Vector2 normal)
     {
         normalDirection = normal.normalized;
-        normalDirection = normal.normalized;
 
         // デバッグ表示
         float angleZ = Vector2.SignedAngle(Vector2.up, normalDirection);
-        Debug.Log("トランポリンの法線方向: " + normalDirection);
         Debug.Log("トランポリンの角度: " + angleZ + "°");
     }
 
