@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -226618971679614995}
   - component: {fileID: 7989636980728123754}
   - component: {fileID: 1430869588357821869}
-  - component: {fileID: 8289126045115224097}
+  - component: {fileID: 2358880357906745319}
   m_Layer: 8
   m_Name: TrampolineLine
   m_TagString: Untagged
@@ -221,20 +221,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpSpeed: 10
---- !u!251 &8289126045115224097
+--- !u!251 &2358880357906745319
 PlatformEffector2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6527409715232394418}
-  m_Enabled: 1
+  m_Enabled: 0
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RotationalOffset: 0
-  m_UseOneWay: 1
+  m_UseOneWay: 0
   m_UseOneWayGrouping: 0
   m_SurfaceArc: 180
   m_UseSideFriction: 0
