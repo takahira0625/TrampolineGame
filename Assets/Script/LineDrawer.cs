@@ -11,6 +11,9 @@ public class LineDrawer : MonoBehaviour
     [SerializeField] private Color validColor = Color.white;
     [SerializeField] private Color invalidColor = Color.red;
     [SerializeField][Range(0, 90)] private float maxAngle = 45f;
+    // 追加推奨: 短すぎる線を弾く
+    [SerializeField][Min(0f)] private float minLength = 0.1f;
+
 
     private LineRenderer currentLineRenderer;
     private EdgeCollider2D currentEdgeCollider;
@@ -59,30 +62,41 @@ public class LineDrawer : MonoBehaviour
                     List<Vector2> points = new List<Vector2> { startPos, endPos };
                     currentEdgeCollider.points = points.ToArray();
 
-                    // Platform Effectorの角度を計算して設定
+                    // 置き換え: マウスアップ時の Effector / 法線設定まわりを少し堅牢化
+                    // （OnMouseUp 内の該当ブロックを書き換え）
                     PlatformEffector2D effector = currentLineRenderer.GetComponent<PlatformEffector2D>();
                     if (effector != null)
                     {
-                        // 線の方向ベクトルから法線（垂直なベクトル）を計算
                         Vector2 direction = endPos - startPos;
-                        Vector2 normal = Vector2.Perpendicular(direction).normalized;
-
-                        // 法線が下を向いている場合は反転させる
-                        if (normal.y < 0)
+                        if (direction.sqrMagnitude > 1e-6f)
                         {
-                            normal = -normal;
-                        }
+                            // 線に垂直な法線を取得
+                            Vector2 normal = Vector2.Perpendicular(direction).normalized;
 
-                        // Trampoline コンポーネントに法線を渡す
-                        Trampoline trampoline = currentLineRenderer.GetComponent<Trampoline>();
-                        if (trampoline != null)
-                        {
-                            trampoline.SetNormal(normal);
-                        }
+                            // 上向き成分が負なら反転（上向き優先の一方向判定）
+                            if (normal.y < 0f)
+                            {
+                                normal = -normal;
+                            }
 
-                        // ワールドの真上（0, 1）と線の法線との間の角度を計算し、オフセットとして設定
-                        effector.rotationalOffset = Vector2.SignedAngle(Vector2.up, normal);
+                            // Trampoline に法線を通知
+                            Trampoline trampoline = currentLineRenderer.GetComponent<Trampoline>();
+                            if (trampoline != null)
+                            {
+                                trampoline.SetNormal(normal);
+                            }
+
+                            // ほぼ水平～斜め: Effector 有効、ほぼ垂直: Effector 無効化
+                            bool nearlyVertical = Mathf.Abs(normal.y) < 0.01f;
+                            effector.enabled = !nearlyVertical;
+
+                            if (effector.enabled)
+                            {
+                                effector.rotationalOffset = Vector2.SignedAngle(Vector2.up, normal);
+                            }
+                        }
                     }
+
                     // ▲▲▲ ここまで ▲▲▲
                 }
                 else
@@ -114,33 +128,28 @@ public class LineDrawer : MonoBehaviour
         canCreate = true;
     }
 
+    // 置き換え: CheckLineValidity を角度制限なし版に
     private void CheckLineValidity(Vector2 endPos)
     {
         Vector2 direction = endPos - startPos;
-        if (direction.x == 0)
+
+        // 1) 最小長チェックのみ
+        if (direction.sqrMagnitude < minLength * minLength)
         {
             canCreate = false;
         }
         else
         {
-            float angle = Mathf.Abs(Mathf.Atan(direction.y / direction.x) * Mathf.Rad2Deg);
-            canCreate = angle <= maxAngle;
-        }
-
-        if (canCreate)
-        {
+            // 2) 重なり（自己/他トランポリン）チェックは従来どおり
             currentEdgeCollider.enabled = false;
             RaycastHit2D hit = Physics2D.Linecast(startPos, endPos, trampolineLayer);
             currentEdgeCollider.enabled = true;
-
-            if (hit.collider != null)
-            {
-                canCreate = false;
-            }
+            canCreate = (hit.collider == null);
         }
 
         Color colorToSet = canCreate ? validColor : invalidColor;
         currentLineRenderer.startColor = colorToSet;
         currentLineRenderer.endColor = colorToSet;
     }
+
 }
