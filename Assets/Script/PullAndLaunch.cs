@@ -20,11 +20,15 @@ public class PullAndLaunch : MonoBehaviour
     [Header("オブジェクト参照")]
     [SerializeField] private Transform arrow;
 
+    // ▼▼▼ この行を追加 ▼▼▼
+    [SerializeField] public LineDrawer lineDrawer;
+
     private Rigidbody2D rb;
     private Camera mainCamera;
     private Vector2 startPosition;
     private Vector2 dragVector;
     private bool isDragging = false;
+    private bool isGrounded = true;
     private bool isGoal = false;
 
     void Start()
@@ -34,16 +38,23 @@ public class PullAndLaunch : MonoBehaviour
         arrow.gameObject.SetActive(false);
         rb.gravityScale = 0;
         goalTextObject.SetActive(false);
+
+        // ▼▼▼ この行を追加 ▼▼▼
+        // ゲーム開始時は線を引けないようにする
+        if (lineDrawer != null) lineDrawer.enabled = false;
     }
 
     void Update()
     {
         if (isGoal) return;
 
-        if (rb.velocity.magnitude < 0.1f)
+        // プレイヤーが停止していて、地面に接触しているとき
+        if (rb.velocity.magnitude < 0.1f && isGrounded)
         {
-            if (rb.gravityScale != 0)
+            // 線を引けないようにして重力も戻す
+            if (lineDrawer != null && lineDrawer.enabled)
             {
+                lineDrawer.enabled = false;
                 rb.gravityScale = 0;
             }
 
@@ -68,10 +79,57 @@ public class PullAndLaunch : MonoBehaviour
         }
     }
 
+    private void Launch()
+    {
+        // 最初の発射でタイマーを開始（2 回目以降は無視される）
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.StartTimerOnce();
+        }
+        rb.gravityScale = gravityValue;
+
+        // 発射後に線を引けるようにする
+        if (lineDrawer != null) lineDrawer.enabled = true;
+
+        Vector2 launchVector = startPosition - (Vector2)mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        
+        // 引っ張り距離が最大値を超えたら制限
+        if (launchVector.magnitude > maxDragDistance)
+        {
+            launchVector = launchVector.normalized * maxDragDistance;
+        }
+
+        // Rigidbody2D に力を加えて発射
+        rb.AddForce(launchVector * launchPowerMultiplier, ForceMode2D.Impulse);
+        isGrounded = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            Debug.Log("普通の床に着地！");
+        }
+        else if (collision.gameObject.CompareTag("Trampoline"))
+        {
+            Debug.Log("トランポリンに着地！");
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") ||
+            collision.gameObject.CompareTag("Trampoline"))
+        {
+            isGrounded = false;
+        }
+    }
+
+    // 他メソッドは変更なし
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isGoal) return;
-
         if (other.gameObject.CompareTag("GoalTop"))
         {
             AchieveGoal();
@@ -84,7 +142,6 @@ public class PullAndLaunch : MonoBehaviour
         goalTextObject.SetActive(true);
         rb.velocity = Vector2.zero;
         rb.simulated = false;
-        // ▼▼▼ この行を修正 ▼▼▼
         UnityEngine.Debug.Log("GOAL!");
     }
 
@@ -102,18 +159,5 @@ public class PullAndLaunch : MonoBehaviour
         float angle = Mathf.Atan2(dragVector.y, dragVector.x) * Mathf.Rad2Deg;
         arrow.rotation = Quaternion.Euler(0, 0, angle);
         arrow.localScale = new Vector3(dragVector.magnitude * arrowLengthMultiplier, arrowThickness, 1);
-    }
-
-    private void Launch()
-    {
-        rb.gravityScale = gravityValue;
-
-        Vector2 launchVector = startPosition - (Vector2)mainCamera.ScreenToWorldPoint(Input.mousePosition);
-
-        if (launchVector.magnitude > maxDragDistance)
-        {
-            launchVector = launchVector.normalized * maxDragDistance;
-        }
-        rb.AddForce(launchVector * launchPowerMultiplier, ForceMode2D.Impulse);
     }
 }

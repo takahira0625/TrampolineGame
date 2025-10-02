@@ -1,0 +1,132 @@
+using UnityEngine;
+using TMPro; // TextMeshProを扱うために必要
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    // このクラスの唯一のインスタンスを保持する（シングルトン）
+    public static GameManager instance;
+
+    // インスペクターから設定する項目
+    public int requiredCoins = 5; // ゴールに必要なコインの数
+    public GameObject goalTextObject; // ゴールテキストのUIオブジェクト
+    /*public TextMeshProUGUI coinCounterText;*/ // コインカウンターのUIテキスト
+    public PlayerController playerController; // プレイヤーのスクリプト
+
+    private int currentCoins = 0; // 現在のコイン取得数
+
+    // ==== タイマー関連 ====
+    [SerializeField] private bool autoStartTimer = false; // ゲーム開始で自動計測するか
+    private bool isTiming = false;
+    private bool hasStarted = false;        // ← 追記：一度だけ開始管理
+    private float elapsedTime = 0f;
+    public float FinalTime { get; private set; } = -1f; // ゴール時の確定タイム
+    void Awake()
+    {
+        // シングルトンの設定
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // シーンを跨いで保持
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    void Start()
+    {
+        // ゲーム開始時にUIを初期化
+        /*UpdateCoinCounter();*/
+        goalTextObject.SetActive(false); // ゴールテキストを非表示に
+        if (goalTextObject != null) goalTextObject.SetActive(false);
+        if (autoStartTimer) StartTimer();
+    }
+
+    private void Update()
+    {
+        if (isTiming)
+        {
+            elapsedTime += Time.deltaTime;
+        }
+    }
+
+    // ==== タイマー操作 ====
+    public void StartTimer()
+    {
+        elapsedTime = 0f;
+        FinalTime = -1f;
+        isTiming = true;
+        hasStarted = true;
+    }
+
+    // ← 追記：二重起動防止用のラッパー
+    public void StartTimerOnce()
+    {
+        if (!hasStarted) StartTimer();
+    }
+
+    public void StopTimer()
+    {
+        isTiming = false;
+        FinalTime = elapsedTime;
+    }
+    public float ElapsedTime => elapsedTime; // 現在の経過秒を外部から参照
+    // もしリトライで再計測したい場合に呼ぶ用（任意）
+    public void ResetTimerForNewRun()
+    {
+        isTiming = false;
+        hasStarted = false;
+        elapsedTime = 0f;
+        FinalTime = -1f;
+    }
+    public static string FormatTime(float t)
+    {
+        if (t < 0f) return "--:--.--";
+        int minutes = (int)(t / 60f);
+        float seconds = t - minutes * 60f;
+        return $"{minutes:00}:{seconds:00.00}";
+    }
+
+    // コインが取得された時に呼ばれる関数
+    public void AddCoin()
+    {
+        currentCoins++;
+        /*UpdateCoinCounter();*/
+
+        // ゴール条件を満たしたかチェック
+        if (currentCoins >= requiredCoins)
+        {
+            Goal();
+        }
+    }
+
+    // コインカウンターUIを更新する関数
+    /*void UpdateCoinCounter()
+    {
+        if (coinCounterText != null)
+        {
+            coinCounterText.text = "Coin: " + currentCoins + " / " + requiredCoins;
+        }
+    }*/
+
+    // ゴール処理を行う関数
+    void Goal()
+    {
+        StopTimer(); // ← タイマー確定
+        SceneManager.LoadScene("ResultScene");
+
+        // プレイヤーの動きを止める
+        if (playerController != null)
+        {
+            playerController.canMove = false;
+        }
+    }
+    public void GameOver()
+    {
+        Debug.Log("Game Over!");
+        SceneManager.LoadScene("GameOverScene");
+    }
+}
