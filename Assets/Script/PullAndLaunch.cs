@@ -8,7 +8,7 @@ public class PullAndLaunch : MonoBehaviour
     [SerializeField] private float maxDragDistance = 3f;
 
     [Header("•¨—İ’è")]
-    [SerializeField] private float gravityValue = 1f;
+    [SerializeField] private float gravityValue = 0f;
 
     [Header("–îˆó‚ÌŒ©‚½–Ú’²®")]
     [SerializeField] private float arrowLengthMultiplier = 1.0f;
