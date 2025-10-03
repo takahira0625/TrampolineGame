@@ -6,8 +6,19 @@ public class Trampoline : MonoBehaviour
     [Tooltip("跳ね上げる初速（m/s）")]
     public float jumpSpeed = 10f;
 
+    [Tooltip("生成後に自動破棄されるまでの秒数。0以下の場合は破棄しない")]
+    public float lifeTime = 5f;
+
     // 予備：LineDrawerから与えられる基準法線（連絡が来ない/接触が0件のとき用）
     private Vector2 fallbackNormal = Vector2.up;
+
+    private void Start()
+    {
+        if (lifeTime > 0f)
+        {
+            Destroy(gameObject, lifeTime);
+        }
+    }
 
     public void SetNormal(Vector2 normal)
     {
