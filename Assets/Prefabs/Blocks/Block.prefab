@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1601262014685866441}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -161,7 +161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
-  bounceMultiplier: 1
   breakBlock: {fileID: 0}
 --- !u!1 &5616716021223577167
 GameObject:
