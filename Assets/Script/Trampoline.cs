@@ -33,27 +33,30 @@ public class Trampoline : MonoBehaviour
         Rigidbody2D rb = collision.rigidbody;
         if (rb == null) return;
 
+        // プレイヤー跳ね上げ処理（無効化）
+        /*
         Vector2 n = GetAveragedContactNormal(collision);
         rb.velocity = n * jumpSpeed;
-
         Debug.Log($"Bounce ENTER: n={n}, v={rb.velocity}");
+        */
     }
 
-    // 連続接触でも確実に発火させたい場合は有効化（必要なければ削除可）
+    // 連続接触時の再加速処理（無効化中）
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (!collision.collider.CompareTag("Player")) return;
         Rigidbody2D rb = collision.rigidbody;
         if (rb == null) return;
 
-        // もし減速して面に押し付けられている等で再加速したいなら、条件付きで再適用
+        // プレイヤー跳ね上げ再適用処理（無効化）
+        /*
         Vector2 n = GetAveragedContactNormal(collision);
-        // 面から離れる成分が小さいときだけ上書き
         if (Vector2.Dot(rb.velocity, n) < jumpSpeed * 0.5f)
         {
             rb.velocity = -n * jumpSpeed;
             Debug.Log($"Bounce STAY: n={n}, v={rb.velocity}");
         }
+        */
     }
 
     private Vector2 GetAveragedContactNormal(Collision2D collision)
