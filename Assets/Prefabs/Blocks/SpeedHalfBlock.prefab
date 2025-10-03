@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2678684027038643576}
   m_Layer: 0
   m_Name: SpeedHalfBlock
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

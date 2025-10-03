@@ -128,28 +128,43 @@ public class LineDrawer : MonoBehaviour
         canCreate = true;
     }
 
-    // 置き換え: CheckLineValidity を角度制限なし版に
+    // Block タグとの重なりも弾くように拡張
     private void CheckLineValidity(Vector2 endPos)
     {
         Vector2 direction = endPos - startPos;
 
-        // 1) 最小長チェックのみ
+        // 1) 長さチェック
         if (direction.sqrMagnitude < minLength * minLength)
         {
             canCreate = false;
         }
         else
         {
-            // 2) 重なり（自己/他トランポリン）チェックは従来どおり
+            // 自身の EdgeCollider を一時無効化
             currentEdgeCollider.enabled = false;
-            RaycastHit2D hit = Physics2D.Linecast(startPos, endPos, trampolineLayer);
+
+            // 2) 既存トランポリンとの重なり
+            RaycastHit2D hitTrampoline = Physics2D.Linecast(startPos, endPos, trampolineLayer);
+
+            // 3) Block タグとの重なり検出
+            bool hitBlock = false;
+            RaycastHit2D[] hits = Physics2D.LinecastAll(startPos, endPos);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].collider != null && hits[i].collider.CompareTag("Block"))
+                {
+                    hitBlock = true;
+                    break;
+                }
+            }
+
             currentEdgeCollider.enabled = true;
-            canCreate = (hit.collider == null);
+
+            canCreate = (hitTrampoline.collider == null) && !hitBlock;
         }
 
         Color colorToSet = canCreate ? validColor : invalidColor;
         currentLineRenderer.startColor = colorToSet;
         currentLineRenderer.endColor = colorToSet;
     }
-
 }
