@@ -37,7 +37,7 @@ public class BaseBlock : MonoBehaviour
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null && sr.sprite != null)
         {
-            sr.drawMode = SpriteDrawMode.Sliced; // Sliced or Tiled
+            sr.drawMode = SpriteDrawMode.Sliced;
             // Œ³‚Ì Sprite ƒTƒCƒY‚ğæ“¾‚µ‚Ä‚»‚Ì‚Ü‚Üİ’è
             sr.size = sr.sprite.bounds.size;
         }

@@ -13,6 +13,9 @@ public class BreakBlock : MonoBehaviour
 
         if (_col == null)
             _col = GetComponent<Collider2D>();
+
+        if (_particle == null)
+            _particle = GetComponentInChildren<ParticleSystem>();
     }
 
     public void OnBreak()
