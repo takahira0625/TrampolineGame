@@ -4,12 +4,16 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
 
-    // ŠO•”‚©‚ç“®‚«‚ğ§Œä‚·‚é‚½‚ß‚Ì•Ï”
+    // ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ç“®ï¿½ï¿½ï¿½ğ§Œä‚·ï¿½é‚½ï¿½ß‚Ì•Ïï¿½
     public bool canMove = true;
 
-    public float outTimeToLose = 0.1f; // ‰æ–ÊŠO‚Éo‚Ä‚©‚çƒQ[ƒ€ƒI[ƒo[‚Ü‚Å‚Ì—P—\
+    public float outTimeToLose = 0.1f; // ï¿½ï¿½ÊŠOï¿½Éoï¿½Ä‚ï¿½ï¿½ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½Ü‚Å‚Ì—Pï¿½\
     private float outTimer = 0f;
     private SpriteRenderer sr;
+
+    [Header("ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½xï¿½Ìï¿½ï¿½ (m/s)ï¿½B0ï¿½È‰ï¿½ï¿½Å–ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public float maxSpeed = 40f;
 
     void Awake()
     {
@@ -21,8 +25,14 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void Update()
     {
+        // ï¿½ï¿½ÊŠOï¿½ï¿½ï¿½ï¿½
         if (!sr.isVisible)
         {
             outTimer += Time.deltaTime;
@@ -34,11 +44,35 @@ public class PlayerController : MonoBehaviour
         else
         {
             outTimer = 0f;
+            outTimer = 0f;
         }
+
+        if (!canMove)
 
         if (!canMove)
         {
             rb.velocity = Vector2.zero;
+        }
+        // ï¿½Ú“ï¿½ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ FixedUpdate ï¿½Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å“ï¿½ï¿½Í‚Ì‚İæ“¾ï¿½ï¿½ï¿½A
+        // ï¿½ï¿½ï¿½xï¿½Kï¿½pï¿½ï¿½ FixedUpdate ï¿½É‰ñ‚·İŒvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    }
+
+    void FixedUpdate()
+    {
+        if (!canMove) return;
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ÅˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ê‡ï¿½ï¿½ rb.velocity ï¿½ï¿½İ’è‚µï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j: rb.velocity = new Vector2(inputX * moveSpeed, rb.velocity.y);
+
+        // ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½v
+        if (maxSpeed > 0f)
+        {
+            float maxSq = maxSpeed * maxSpeed;
+            Vector2 v = rb.velocity;
+            if (v.sqrMagnitude > maxSq)
+            {
+                rb.velocity = v.normalized * maxSpeed;
+            }
         }
     }
 }
