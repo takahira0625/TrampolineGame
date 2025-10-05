@@ -4,15 +4,18 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
 
-    // �O�����瓮���𐧌䂷�邽�߂̕ϐ�
+    // 外部から動きを制御するための変数
     public bool canMove = true;
 
-    public float outTimeToLose = 0.1f; // ��ʊO�ɏo�Ă���Q�[���I�[�o�[�܂ł̗P�\
+    [Header("画面外判定")]
+    [Tooltip("画面外に出てからゲームオーバーになるまでの猶予秒数")]
+    public float outTimeToLose = 0.1f;
     private float outTimer = 0f;
+
     private SpriteRenderer sr;
 
-    [Header("���x����")]
-    [Tooltip("�v���C���[���x�̏�� (m/s)�B0�ȉ��Ŗ�����")]
+    [Header("速度制限")]
+    [Tooltip("プレイヤー速度の上限 (m/s)。0以下で無制限")]
     public float maxSpeed = 40f;
 
     void Awake()
@@ -25,14 +28,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
     void Update()
     {
-        // ��ʊO����
+        // 画面外判定
         if (!sr.isVisible)
         {
             outTimer += Time.deltaTime;
@@ -43,28 +41,27 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            outTimer = 0f;
-            outTimer = 0f;
+            outTimer = 0f; // 画面内に戻ったらリセット
         }
 
-        if (!canMove)
-
+        // canMove が false のときは停止
         if (!canMove)
         {
             rb.velocity = Vector2.zero;
         }
-        // �ړ����͏����������ɏ����ꍇ�� FixedUpdate �ł͂Ȃ�������œ��͂̂ݎ擾���A
-        // ���x�K�p�� FixedUpdate �ɉ񂷐݌v������
+
+        // ここで入力のみ取得し、物理的な速度適用は FixedUpdate に分離するのが推奨
+        // 例）horizontal = Input.GetAxisRaw("Horizontal");
     }
 
     void FixedUpdate()
     {
         if (!canMove) return;
 
-        // �����ňړ��������s���ꍇ�� rb.velocity ��ݒ肵����ɑ��x����
-        // ��i�������j: rb.velocity = new Vector2(inputX * moveSpeed, rb.velocity.y);
+        // 必要ならここで rb.velocity を設定した後に速度制限を適用
+        // 例）rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
-        // ���x����N�����v
+        // 速度上限クランプ
         if (maxSpeed > 0f)
         {
             float maxSq = maxSpeed * maxSpeed;
