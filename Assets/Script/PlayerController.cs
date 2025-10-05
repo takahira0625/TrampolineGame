@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
     private Rigidbody2D rb;
 
     // 外部から動きを制御するための変数
     public bool canMove = true;
 
-    public float outTimeToLose = 0.01f; // 画面外に出てからゲームオーバーまでの猶予
+    public float outTimeToLose = 0.1f; // 画面外に出てからゲームオーバーまでの猶予
     private float outTimer = 0f;
     private SpriteRenderer sr;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+    }
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -34,16 +33,11 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            outTimer = 0f; // 画面内に戻ったらリセット
+            outTimer = 0f;
         }
-        // canMoveがtrueの時だけ移動処理を行う
-        if (canMove)
+
+        if (!canMove)
         {
-           
-        }
-        else
-        {
-            // 動きを止める
             rb.velocity = Vector2.zero;
         }
     }
