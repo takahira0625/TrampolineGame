@@ -21,23 +21,13 @@ public class BarController : MonoBehaviour
     [Tooltip("進行方向に回転させる")]
     [SerializeField] private bool rotateToDirection = true;
     [Tooltip("回転の滑らかさ（0で即座に回転）")]
-    [SerializeField] private float rotationSpeed = 1f;
+    [SerializeField] private float rotationSpeed = 5f;
 
-    [Header("低速プレイヤーバウンド設定")]
-    [Tooltip("低速のプレイヤーを弾く機能 ON/OFF")]
-    [SerializeField] private bool enableLowSpeedBounce = true;
-    [Tooltip("これ未満の速度で衝突したらバウンドさせる閾値 (m/s)")]
-    [SerializeField] private float speedThreshold = 2f;
-    [Tooltip("弾く際に与える法線方向速度 (m/s)")]
-    [SerializeField] private float bounceSpeed = 6f;
-    [Tooltip("接触点の法線を使用（OFFなら Bar の向きから推定）")]
-    [SerializeField] private bool useContactNormal = true;
-    [Tooltip("Bar の向きから推定する場合に transform.right を法線とみなす（通常は up）")]
-    [SerializeField] private bool useRightAsNormal = false;
-    [Tooltip("算出した法線を反転（方向が逆になった場合の切替用）")]
-    [SerializeField] private bool invertNormal = false;
-    [Tooltip("既に離れる方向へ動いている場合は弾かない")]
-    [SerializeField] private bool skipIfAlreadyMovingAway = true;
+    [Header("プレイヤー衝突時の力設定")]
+    [Tooltip("この速度未満の場合に力を加える")]
+    [SerializeField] private float speedThreshold = 5f;
+    [Tooltip("法線方向に加える力")]
+    [SerializeField] private float boostForce = 10f;
 
     private Camera mainCamera;
     private Vector3 lastPosition;
@@ -92,47 +82,27 @@ public class BarController : MonoBehaviour
         transform.position = targetPos;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!enableLowSpeedBounce) return;
-        if (!collision.collider.CompareTag("Player")) return;
-
-        Rigidbody2D playerRb = collision.rigidbody;
-        if (playerRb == null) return;
-
-        float currentSpeed = playerRb.velocity.magnitude;
-        if (currentSpeed >= speedThreshold) return; // 一定以上なら何もしない
-
-        // 法線計算
-        Vector2 normal;
-        if (useContactNormal)
+        // プレイヤーとの衝突チェック
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Bar 側コライダー → Player 側コライダー方向の法線（プレイヤーを離す方向にほぼ一致）
-            ContactPoint2D cp = collision.GetContact(0);
-            normal = cp.normal;
+            Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
+            if (playerRb != null)
+            {
+                float playerSpeed = playerRb.velocity.magnitude;
+
+                // プレイヤーの速度が閾値未満の場合
+                if (playerSpeed < speedThreshold)
+                {
+                    // 衝突点から法線方向を取得
+                    Vector2 normal = collision.contacts[0].normal;
+                    
+                    // バーの法線方向（バーから見たプレイヤー方向）に力を加える
+                    Vector2 forceDirection = -normal;
+                    playerRb.AddForce(forceDirection * boostForce, ForceMode2D.Impulse);
+                }
+            }
         }
-        else
-        {
-            // Bar の見た目の“面の向き”から算出
-            normal = useRightAsNormal ? (Vector2)transform.right : (Vector2)transform.up;
-
-            // プレイヤーの位置方向へ向いていなければ反転（離れる方向を正に）
-            Vector2 toPlayer = (Vector2)playerRb.position - (Vector2)transform.position;
-            if (Vector2.Dot(normal, toPlayer) < 0f)
-                normal = -normal;
-        }
-
-        if (invertNormal) normal = -normal;
-        normal.Normalize();
-
-        // 既に離れる方向へ十分動いているならスキップ（任意）
-        if (skipIfAlreadyMovingAway && Vector2.Dot(playerRb.velocity, normal) > 0f)
-        {
-            return;
-        }
-
-        playerRb.velocity = normal * bounceSpeed;
-
-        Debug.Log($"Bar LowSpeedBounce: speed={currentSpeed:F2} -> {bounceSpeed:F2}, normal={normal}");
     }
 }
