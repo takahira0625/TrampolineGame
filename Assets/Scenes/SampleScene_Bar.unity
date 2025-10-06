@@ -1697,11 +1697,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 433907fbf77cb534bb980bb08aa4d1ab, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4748,7 +4748,9 @@ MonoBehaviour:
   minPos: {x: -8, y: -4}
   maxPos: {x: 8, y: 4}
   rotateToDirection: 1
-  rotationSpeed: 15
+  rotationSpeed: 10
+  speedThreshold: 5
+  boostForce: 10
 --- !u!212 &686219636
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4825,7 +4827,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 686219634}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 433907fbf77cb534bb980bb08aa4d1ab, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4877,7 +4879,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 433907fbf77cb534bb980bb08aa4d1ab, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
