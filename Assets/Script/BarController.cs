@@ -87,6 +87,12 @@ public class BarController : MonoBehaviour
         // プレイヤーとの衝突チェック
         if (collision.gameObject.CompareTag("Player"))
         {
+            // 最初の衝突時にタイマーを開始
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.StartTimerOnce();
+            }
+
             Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (playerRb != null)
             {

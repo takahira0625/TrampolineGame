@@ -1133,7 +1133,7 @@ MonoBehaviour:
   requiredCoins: 1
   goalTextObject: {fileID: 633067703}
   playerController: {fileID: 0}
-  autoStartTimer: 1
+  autoStartTimer: 0
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
@@ -1697,7 +1697,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -1828,6 +1828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   outTimeToLose: 0.1
+  maxSpeed: 40
 --- !u!1001 &262527216
 PrefabInstance:
   m_ObjectHideFlags: 0
