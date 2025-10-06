@@ -32,13 +32,11 @@ public abstract class GimmickBlock : BaseBlock
         if (isOnCooldown)
         {
             SetSprite(parameter.blackSprite);//このコードはOK
-            Debug.Log($"{name}: クールタイム開始");
             OnCooldownStart();
         }
         else
         {
             SetActiveState();
-            Debug.Log($"{name}: クールタイム終了");
         }
     }
     protected override void OnCollisionEnter2D(Collision2D collision)
@@ -47,16 +45,10 @@ public abstract class GimmickBlock : BaseBlock
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log($"{name}: プレイヤーに衝突");
             // 衝突時にクールタイムを開始
             if (cooldown != null && !cooldown.IsOnCooldown)
             {
-                Debug.Log($"{name}: クールタイムではない → クールタイム開始を呼ぶ");
                 cooldown.StartCooldown(parameter.cooldownTime);
-            }
-            else
-            {
-                Debug.Log($"{name}: すでにクールタイム中");
             }
         }
     }
@@ -68,4 +60,5 @@ public abstract class GimmickBlock : BaseBlock
 
     protected virtual void OnCooldownStart() { }
     protected virtual void SetActiveState() { }
+
 }

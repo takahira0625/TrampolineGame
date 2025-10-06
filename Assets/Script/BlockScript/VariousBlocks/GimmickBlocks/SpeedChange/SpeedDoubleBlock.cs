@@ -13,7 +13,6 @@ public class SpeedDoubleBlock : SpeedChangeBlock
         {
             eachMaterial.bounciness = parameter.UpBounce;
             col.sharedMaterial = eachMaterial;
-            Debug.Log($"{name}: Bounciness‚ğ{parameter.UpBounce}‚Éİ’è (ÀÛ‚Ì’l: {col.sharedMaterial.bounciness})");
         }
         SetSprite(parameter.speedUpSprite);
     }

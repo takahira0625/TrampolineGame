@@ -23,7 +23,5 @@ public class SpeedChangeBlock : GimmickBlock
         if (eachMaterial != null)
             eachMaterial.bounciness = parameter.Bounce;
             col.sharedMaterial = eachMaterial;
-
-        Debug.Log($"{name}: クールタイム中 Bouncinessを{parameter.Bounce}に設定");
     }
 }

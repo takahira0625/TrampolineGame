@@ -33,25 +33,34 @@ public class BaseBlock : MonoBehaviour
         if (parameter != null)
             health = parameter.Health;
 
-        // 見た目を設定
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null && sr.sprite != null)
-        {
-            sr.drawMode = SpriteDrawMode.Sliced;
-            // 元の Sprite サイズを取得してそのまま設定
-            sr.size = sr.sprite.bounds.size;
-        }
         SetSprite(parameter.baseSprite);
     }
-    //マテリアルを変更
+
+    // スプライトを変更
     protected void SetSprite(Sprite sprite)
     {
-        var sr = GetComponent<SpriteRenderer>();
-        if (sr != null && sprite != null)
+        if (sprite == null || parameter == null) return;
+        
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        // スプライトを設定
+        sr.sprite = sprite;
+
+        // Slicedモードに設定
+        sr.drawMode = SpriteDrawMode.Sliced;
+
+        // サイズを適用
+        sr.size = new Vector2(parameter.Width, parameter.Height);
+        
+        // BoxCollider2Dのサイズも合わせる
+        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        if (boxCollider != null)
         {
-            sr.sprite = sprite;
+            boxCollider.size = new Vector2(parameter.Width, parameter.Height);
         }
     }
+
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))

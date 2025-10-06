@@ -20,7 +20,6 @@ public class BreakBlock : MonoBehaviour
 
     public void OnBreak()
     {
-        Debug.Log(gameObject.name + " BreakBlock.OnBreak called!"); // ©‚±‚±‚ÅŒÄ‚Î‚ê‚½‚±‚Æ‚ğŠm”F
         StartCoroutine(BreakSequence());
     }
 

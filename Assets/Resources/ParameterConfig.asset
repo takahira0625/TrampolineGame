@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: ParameterConfig
   m_EditorClassIdentifier: 
   Health: 3
+  Width: 0.1
+  Height: 0.1
   cooldownTime: 3
   Bounce: 1
   UpBounce: 2
@@ -20,6 +22,8 @@ MonoBehaviour:
   baseSprite: {fileID: 21300000, guid: 4e0ba6ca48557b54797853b1907807b0, type: 3}
   graySprite: {fileID: 21300000, guid: 9ef06799333fa1c43ad79a66b8cb9dc9, type: 3}
   blackSprite: {fileID: 21300000, guid: c0b5c12ab947e4444bf73f82f827614a, type: 3}
-  speedHalfSprite: {fileID: 21300000, guid: 81dd090b36d240b4a9abef020ad7dcd4, type: 3}
-  speedUpSprite: {fileID: 21300000, guid: 39fbd688d112e3a40b4385cf461cff80, type: 3}
-  cooldownSprite: {fileID: 21300000, guid: a79848618734cb040ad01feb8a6efb6d, type: 3}
+  speedHalfSprite: {fileID: 21300000, guid: 639fb40d2bc39b541b8ee13b346db792, type: 3}
+  speedUpSprite: {fileID: 21300000, guid: 6783d5dde9142f8429efa9af6ec3e7ce, type: 3}
+  cooldownSprite: {fileID: 21300000, guid: c0b5c12ab947e4444bf73f82f827614a, type: 3}
+  KeySprite: {fileID: 21300000, guid: ccd17f84fea1e3041a15fc6bd65ffc5f, type: 3}
+  GoalSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}

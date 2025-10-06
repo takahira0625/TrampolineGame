@@ -1,7 +1,17 @@
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class KeyBlock : GimmickBlock
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        SetActiveState();
+    }
+    protected override void SetActiveState()
+    {
+        SetSprite(parameter.KeySprite);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
