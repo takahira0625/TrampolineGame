@@ -9,7 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
+    path: Assets/Scenes/StageSelectScene.unity
+    guid: 061ee822c6315954397138d8f0ec3bc0
+  - enabled: 0
+    path: Assets/Scenes/SelectScene.unity
     guid: 39796357a742fa14295ac35a18a5d151
   - enabled: 1
     path: Assets/Scenes/SampleScene 2.unity
@@ -21,6 +24,6 @@ EditorBuildSettings:
     path: Assets/Scenes/GameoverScene.unity
     guid: 1658b6aea2e178f47b676775d431335b
   - enabled: 1
-    path: Assets/Scenes/StageSelectScene.unity
+    path: Assets/Scenes/TitleScene.unity
     guid: 8f9d46f290c787d4ba4a5191bef0f4f2
   m_configObjects: {}

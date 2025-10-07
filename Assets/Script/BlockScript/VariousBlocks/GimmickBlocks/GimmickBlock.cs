@@ -39,17 +39,30 @@ public abstract class GimmickBlock : BaseBlock
             SetActiveState();
         }
     }
+    protected virtual void OnPlayerTouch(GameObject player)
+    {
+        // 共通の「プレイヤー接触時」処理（クールタイムなど）
+        if (cooldown != null && !cooldown.IsOnCooldown)
+        {
+            cooldown.StartCooldown(parameter.cooldownTime);
+        }
+    }
+
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        base.OnCollisionEnter2D(collision); // BaseBlock の処理を実行
+        base.OnCollisionEnter2D(collision);
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 衝突時にクールタイムを開始
-            if (cooldown != null && !cooldown.IsOnCooldown)
-            {
-                cooldown.StartCooldown(parameter.cooldownTime);
-            }
+            OnPlayerTouch(collision.gameObject);
+        }
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            OnPlayerTouch(other.gameObject);
         }
     }
     protected override void TakeDamage(int damage)

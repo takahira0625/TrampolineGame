@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7420434379190034484}
   - component: {fileID: 7883599501884535608}
   - component: {fileID: 7377178755193301573}
-  - component: {fileID: -2195392306719398946}
+  - component: {fileID: -7155023338347991653}
   m_Layer: 0
   m_Name: BlackBlock
   m_TagString: Block
@@ -132,7 +132,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-2195392306719398946
+--- !u!114 &-7155023338347991653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 624581176439169900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c1c45af9f2ae0044a91e95a816226b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 97b1a1d36dcb9b846b2cb7718ff13ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parameter: {fileID: 0}
