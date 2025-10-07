@@ -1828,7 +1828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   outTimeToLose: 0.1
-  maxSpeed: 40
+  maxSpeed: 20
 --- !u!1001 &262527216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4749,7 +4749,7 @@ MonoBehaviour:
   minPos: {x: -8, y: -4}
   maxPos: {x: 8, y: 4}
   rotateToDirection: 1
-  rotationSpeed: 10
+  rotationSpeed: 90
   speedThreshold: 5
   boostForce: 10
 --- !u!212 &686219636
