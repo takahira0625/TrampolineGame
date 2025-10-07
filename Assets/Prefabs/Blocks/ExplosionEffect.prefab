@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a78e5799229e146499b1fcc1ee38c5b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vfxPrefab: {fileID: 2708598583397607911, guid: a14bea7d8e66ed74cb7c2d3c4052e687, type: 3}
+  vfxPrefab: {fileID: 2708598583397607911, guid: 6398d43fe79ea0140913dc5530c646af, type: 3}
   vfxLifetime: 2
