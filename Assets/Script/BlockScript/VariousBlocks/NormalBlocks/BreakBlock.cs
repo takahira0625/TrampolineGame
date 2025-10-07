@@ -13,11 +13,13 @@ public class BreakBlock : MonoBehaviour
 
         if (_col == null)
             _col = GetComponent<Collider2D>();
+
+        if (_particle == null)
+            _particle = GetComponentInChildren<ParticleSystem>();
     }
 
     public void OnBreak()
     {
-        Debug.Log(gameObject.name + " BreakBlock.OnBreak called!"); // Å©Ç±Ç±Ç≈åƒÇŒÇÍÇΩÇ±Ç∆ÇämîF
         StartCoroutine(BreakSequence());
     }
 

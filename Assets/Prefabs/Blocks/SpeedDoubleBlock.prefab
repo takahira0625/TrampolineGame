@@ -11,12 +11,10 @@ GameObject:
   - component: {fileID: 7066897570707931640}
   - component: {fileID: 3294510214245016835}
   - component: {fileID: -4722819471972507649}
-  - component: {fileID: -5754030605651456913}
-  - component: {fileID: 6752773114200623736}
-  - component: {fileID: -7278184272520555889}
+  - component: {fileID: -2697385957223999570}
   m_Layer: 0
   m_Name: SpeedDoubleBlock
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 73167fc55ac6e3546a33640f8ab6e329, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.035848916, b: 0.035848916, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -133,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-5754030605651456913
+--- !u!114 &-2697385957223999570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,36 +140,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3797651389120414331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b244cb0b612c2154cbc92196512c27c3, type: 3}
+  m_Script: {fileID: 11500000, guid: fe47fb7e3ee8c9841a038a8ae9126644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rend: {fileID: 0}
-  _particle: {fileID: 0}
-  _col: {fileID: 0}
---- !u!114 &6752773114200623736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3797651389120414331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388718ed653cb1245bddc8e42087c0ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 3
+  parameter: {fileID: 0}
   breakBlock: {fileID: 0}
---- !u!114 &-7278184272520555889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3797651389120414331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e198cd282de6d44429e25935232d5852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cooldownTime: 5
+  cooldown: {fileID: 0}
