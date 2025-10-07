@@ -16,11 +16,13 @@ public class BarController : MonoBehaviour
 
     [Header("回転（任意）")]
     [SerializeField] bool rotateToDirection = false; // ピッタリ追従なら基本OFF推奨
+    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f; // 0=即座, 1=超ゆっくり
 
     Camera cam;
     Rigidbody2D rb;
     Vector2 desiredPos;     // Updateで決めて、FixedUpdateで即座にMovePosition
     Vector2 lastPhysicsPos; // 回転用
+    float currentAngle;     // 現在の角度（補間用）
 
     [SerializeField] float deadZoneEnter = 0.02f; // 追従開始しきい値（ワールド座標）
     [SerializeField] float deadZoneExit = 0.01f; // 追従停止しきい値（小さめ）
@@ -28,6 +30,7 @@ public class BarController : MonoBehaviour
     bool inChase = false;
     Vector2 holdPos; // 直近の静止位置
     Vector2 filteredTarget;
+    
     void Awake()
     {
         cam = Camera.main;
@@ -45,6 +48,7 @@ public class BarController : MonoBehaviour
         lastPhysicsPos = rb.position;
         holdPos = rb.position;
         filteredTarget = rb.position;
+        currentAngle = rb.rotation; // 初期角度を記録
     }
 
     void Update()
@@ -89,10 +93,15 @@ public class BarController : MonoBehaviour
         if (rotateToDirection)
         {
             Vector2 delta = desiredPos - lastPhysicsPos;
-            if (delta.sqrMagnitude > 0.000001f)
+            if (delta.sqrMagnitude > 0.005f)
             {
-                float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                rb.MoveRotation(angle); // 回転も物理側で
+                // 目標角度を計算
+                float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
+                
+                // 現在の角度から目標角度へ滑らかに補間
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
+                
+                rb.MoveRotation(currentAngle);
             }
         }
         rb.MovePosition(desiredPos);
