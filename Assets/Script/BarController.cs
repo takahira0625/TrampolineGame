@@ -79,7 +79,7 @@ public class BarController : MonoBehaviour
             holdPos = target;          // V‚µ‚¢Ã~’†S‚ğXV
         }
         filteredTarget = Vector2.Lerp(filteredTarget, target, 1f - Mathf.Pow(1f - smoothing, Time.deltaTime * 60f));
-        desiredPos = inChase ? target : holdPos; // —h‚ê‚é‚Æ‚«‚Í holdPos ‚ÉŒÅ’è
+        desiredPos = inChase ? filteredTarget : holdPos; // —h‚ê‚é‚Æ‚«‚Í holdPos ‚ÉŒÅ’è
 
     }
 
