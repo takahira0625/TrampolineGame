@@ -108,4 +108,31 @@ public class BarController : MonoBehaviour
 
         lastPhysicsPos = desiredPos;
     }
+
+    // ★ 追加: プレイヤーとの衝突検出（Trigger用）
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // プレイヤーのタグまたはレイヤーで判定
+        if (collision.CompareTag("Player"))
+        {
+            // GameManagerのタイマーを一度だけ開始
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.StartTimerOnce();
+            }
+        }
+    }
+
+    // ★ 追加: プレイヤーとの衝突検出（Collision用）
+    // Collider2DがTriggerでない場合はこちらを使用
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.StartTimerOnce();
+            }
+        }
+    }
 }
