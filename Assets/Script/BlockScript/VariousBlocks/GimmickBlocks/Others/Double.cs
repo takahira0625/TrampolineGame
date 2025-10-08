@@ -11,10 +11,12 @@ public class Double : GimmickBlock
     {
         SetSprite(parameter.DoubleSprite);
     }
-
-    // Update is called once per frame
-    void Update()
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (!collision.collider.CompareTag("Player")) return;
+
+        GameManager.instance.SpawnAdditionalPlayer(collision.transform);
+
+        Destroy(gameObject); // 一度だけ使用可能
     }
 }

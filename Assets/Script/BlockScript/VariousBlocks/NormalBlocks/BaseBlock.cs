@@ -8,6 +8,7 @@ public class BaseBlock : MonoBehaviour
     protected int health;
     protected virtual void Awake()
     {
+        Physics.bounceThreshold = 0.0f;
         //①コンポーネントを追加（BreakBlock.cs,ParameterConfig.cs）
 
         // -------------------------------

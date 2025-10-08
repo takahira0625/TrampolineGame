@@ -1,46 +1,42 @@
-using UnityEngine;
-
+ï»¿using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class BarController : MonoBehaviour
 {
-    [Header("’Ç]²")]
+    [Header("è¿½å¾“è»¸")]
     [SerializeField] bool followX = true;
     [SerializeField] bool followY = false;
     [SerializeField] float fixedY;
-
-    [Header("”ÍˆÍ§ŒÀi”CˆÓj")]
+    [Header("ç¯„å›²åˆ¶é™ï¼ˆä»»æ„ï¼‰")]
     [SerializeField] bool useBounds = false;
-    [SerializeField] Vector2 minPos = new Vector2(-8f, -4f);
-    [SerializeField] Vector2 maxPos = new Vector2(8f, 4f);
-
-    [Header("‰ñ“]i”CˆÓj")]
-    [SerializeField] bool rotateToDirection = false; // ƒsƒbƒ^ƒŠ’Ç]‚È‚çŠî–{OFF„§
-    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f; // 0=‘¦À, 1=’´‚ä‚Á‚­‚è
-
+    [SerializeField] Vector2 minPos = new Vector2(-1f, -1f);
+    [SerializeField] Vector2 maxPos = new Vector2(1f, 1f);
+    [Header("å›è»¢è¨­å®š")]
+    [SerializeField] bool rotateToDirection = false;
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMin = 0.01f; // å°ã•ã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMax = 1f;  // å¤§ãã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField] float angleDeltaThreshold = 30f; // ã“ã®è§’åº¦å·®ä»¥ä¸Šã§ç´ æ—©ãå›è»¢
     Camera cam;
     Rigidbody2D rb;
-    Vector2 desiredPos;     // Update‚ÅŒˆ‚ß‚ÄAFixedUpdate‚Å‘¦À‚ÉMovePosition
-    Vector2 lastPhysicsPos; // ‰ñ“]—p
-    float currentAngle;     // Œ»İ‚ÌŠp“xi•âŠÔ—pj
-
-    [SerializeField] float deadZoneEnter = 0.02f; // ’Ç]ŠJn‚µ‚«‚¢’liƒ[ƒ‹ƒhÀ•Wj
-    [SerializeField] float deadZoneExit = 0.01f; // ’Ç]’â~‚µ‚«‚¢’li¬‚³‚ßj
-    [SerializeField, Range(0f, 1f)] float smoothing = 0.25f; // 0=¶‚Ì“ü—Í, 1=’´‚Ü‚Á‚½‚è
+    Vector2 desiredPos;
+    Vector2 lastPhysicsPos;
+    float currentAngle;
+    [Header("ãƒ‡ãƒƒãƒ‰ã‚¾ãƒ¼ãƒ³è¨­å®š")]
+    [SerializeField] float deadZoneEnter = 0.01f;
+    [SerializeField] float deadZoneExit = 0.01f;
+    [SerializeField, Range(0f, 1f)] float smoothing = 0.25f;
     bool inChase = false;
-    Vector2 holdPos; // ’¼‹ß‚ÌÃ~ˆÊ’u
+    Vector2 holdPos;
     Vector2 filteredTarget;
-    
+
     void Awake()
     {
         cam = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-
         rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate; // Œ©‚½–Ú‚Ì’x‚ê‚ğ•â³
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.useFullKinematicContacts = true;
     }
-
     void Start()
     {
         fixedY = transform.position.y;
@@ -48,23 +44,18 @@ public class BarController : MonoBehaviour
         lastPhysicsPos = rb.position;
         holdPos = rb.position;
         filteredTarget = rb.position;
-        currentAngle = rb.rotation; // ‰ŠúŠp“x‚ğ‹L˜^
+        currentAngle = rb.rotation;
     }
-
     void Update()
     {
         if (!cam) return;
 
-        // ƒ}ƒEƒX¨ƒ[ƒ‹ƒh
         var mp = Input.mousePosition;
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
-
-        var target = rb.position; // Œ»İ‚©‚çì‚é
-
+        var target = rb.position;
         if (followX) target.x = world.x;
         if (followY) target.y = world.y; else target.y = fixedY;
-
         if (useBounds)
         {
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
@@ -72,7 +63,6 @@ public class BarController : MonoBehaviour
         }
         float d = Vector2.Distance(holdPos, target);
 
-        // ’Ç]ŠJn/’â~‚ÌƒqƒXƒeƒŠƒVƒX
         if (!inChase && d >= deadZoneEnter)
         {
             inChase = true;
@@ -80,32 +70,35 @@ public class BarController : MonoBehaviour
         else if (inChase && d <= deadZoneExit)
         {
             inChase = false;
-            holdPos = target;          // V‚µ‚¢Ã~’†S‚ğXV
+            holdPos = target;
         }
         filteredTarget = Vector2.Lerp(filteredTarget, target, 1f - Mathf.Pow(1f - smoothing, Time.deltaTime * 60f));
-        desiredPos = inChase ? filteredTarget : holdPos; // —h‚ê‚é‚Æ‚«‚Í holdPos ‚ÉŒÅ’è
-
+        desiredPos = inChase ? filteredTarget : holdPos;
     }
-
     void FixedUpdate()
     {
-        // •¨—‚İ‚Å‘¦À‚Éw’èˆÊ’u‚ÖiƒXƒs[ƒh§ŒÀ‚È‚µj
         if (rotateToDirection)
         {
             Vector2 delta = desiredPos - lastPhysicsPos;
             if (delta.sqrMagnitude > 0.005f)
             {
-                // –Ú•WŠp“x‚ğŒvZ
+                // ç›®æ¨™è§’åº¦ã‚’è¨ˆç®—
                 float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                
-                // Œ»İ‚ÌŠp“x‚©‚ç–Ú•WŠp“x‚ÖŠŠ‚ç‚©‚É•âŠÔ
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
-                
+
+                // ç¾åœ¨ã®è§’åº¦ã¨ç›®æ¨™è§’åº¦ã®å·®ã‚’è¨ˆç®—ï¼ˆ-180ã€œ180ã®ç¯„å›²ã«æ­£è¦åŒ–ï¼‰
+                float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
+
+                // è§’åº¦å·®ã«å¿œã˜ã¦è£œé–“é€Ÿåº¦ã‚’èª¿æ•´
+                float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDifference) / angleDeltaThreshold);
+                float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
+
+                // æ»‘ã‚‰ã‹ã«è£œé–“
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
+
                 rb.MoveRotation(currentAngle);
             }
         }
         rb.MovePosition(desiredPos);
-
         lastPhysicsPos = desiredPos;
     }
 }
