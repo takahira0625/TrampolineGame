@@ -6,6 +6,7 @@ public class BaseBlock : MonoBehaviour
     [SerializeField] protected BreakBlock breakBlock; // 演出担当のスクリプト
 
     protected int health;
+
     protected virtual void Awake()
     {
         //①コンポーネントを追加（BreakBlock.cs,ParameterConfig.cs）
@@ -40,7 +41,7 @@ public class BaseBlock : MonoBehaviour
     protected void SetSprite(Sprite sprite)
     {
         if (sprite == null || parameter == null) return;
-        
+
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr == null) return;
 
@@ -52,7 +53,8 @@ public class BaseBlock : MonoBehaviour
 
         // サイズを適用
         sr.size = new Vector2(parameter.Width, parameter.Height);
-        
+        Debug.Log(sr.size);
+
         // BoxCollider2Dのサイズも合わせる
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
         if (boxCollider != null)
