@@ -15,21 +15,44 @@ public class BarController : MonoBehaviour
     [SerializeField] Vector2 maxPos = new Vector2(8f, 4f);
 
     [Header("回転（任意）")]
-    [SerializeField] bool rotateToDirection = false; // ピッタリ追従なら基本OFF推奨
-    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f; // 0=即座, 1=超ゆっくり
+    [SerializeField] bool rotateToDirection = false;
+    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f;
+
+    [Header("ボールをはじく設定")]
+    [Tooltip("バーの速度をボールに伝える倍率")]
+    [SerializeField] float hitForceMultiplier = 1.5f;
+    [Tooltip("はじく際の最小バー速度（これ以下だと通常の反射）")]
+    [SerializeField] float minHitSpeed = 2f;
+    [Tooltip("はじく際の最大力（無限に加速しないように制限）")]
+    [SerializeField] float maxHitForce = 50f;
+    [Tooltip("左クリック押下中のみはじく機能を有効化")]
+    [SerializeField] bool requireLeftClick = true;
+
+    [Header("追従制御")]
+    [Tooltip("左クリック中に追従を停止する")]
+    [SerializeField] bool stopFollowOnLeftClick = true;
+    [Tooltip("左クリック解除後の移動速度（0=即座、1=非常にゆっくり）")]
+    [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
 
     Camera cam;
     Rigidbody2D rb;
-    Vector2 desiredPos;     // Updateで決めて、FixedUpdateで即座にMovePosition
-    Vector2 lastPhysicsPos; // 回転用
-    float currentAngle;     // 現在の角度（補間用）
+    Vector2 desiredPos;
+    Vector2 lastPhysicsPos;
+    float currentAngle;
 
-    [SerializeField] float deadZoneEnter = 0.02f; // 追従開始しきい値（ワールド座標）
-    [SerializeField] float deadZoneExit = 0.01f; // 追従停止しきい値（小さめ）
-    [SerializeField, Range(0f, 1f)] float smoothing = 0.25f; // 0=生の入力, 1=超まったり
+    [SerializeField] float deadZoneEnter = 0.02f;
+    [SerializeField] float deadZoneExit = 0.01f;
+    [SerializeField, Range(0f, 1f)] float smoothing = 0.25f;
     bool inChase = false;
-    Vector2 holdPos; // 直近の静止位置
+    Vector2 holdPos;
     Vector2 filteredTarget;
+
+    private Vector2 barVelocity;
+    private Vector2 previousPosition;
+    private Vector2 frozenPosition;
+    // ★ 追加: 左クリック解除後の滑らか移動用
+    private bool isReturningToMouse = false;
+    private Vector2 returnStartPos;
     
     void Awake()
     {
@@ -37,7 +60,7 @@ public class BarController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 見た目の遅れを補正
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.useFullKinematicContacts = true;
     }
 
@@ -48,19 +71,21 @@ public class BarController : MonoBehaviour
         lastPhysicsPos = rb.position;
         holdPos = rb.position;
         filteredTarget = rb.position;
-        currentAngle = rb.rotation; // 初期角度を記録
+        currentAngle = rb.rotation;
+        previousPosition = rb.position;
+        frozenPosition = rb.position;
     }
 
     void Update()
     {
         if (!cam) return;
 
-        // マウス→ワールド
+        // マウスのワールド座標を取得
         var mp = Input.mousePosition;
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
 
-        var target = rb.position; // 現在から作る
+        var target = rb.position;
 
         if (followX) target.x = world.x;
         if (followY) target.y = world.y; else target.y = fixedY;
@@ -70,9 +95,54 @@ public class BarController : MonoBehaviour
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
+
+        // ★ 修正: 左クリック中は追従を停止
+        if (stopFollowOnLeftClick && Input.GetMouseButton(0))
+        {
+            // 左クリック押下開始時に現在位置を記録
+            if (Input.GetMouseButtonDown(0))
+            {
+                frozenPosition = rb.position;
+                isReturningToMouse = false; // リターン状態をキャンセル
+            }
+            
+            // 固定位置を目標位置に設定
+            desiredPos = frozenPosition;
+            return; // 以降の追従処理をスキップ
+        }
+
+        // ★ 追加: 左クリック解除時の処理
+        if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
+        {
+            // 滑らか移動モードを開始
+            isReturningToMouse = true;
+            returnStartPos = rb.position;
+            filteredTarget = rb.position; // フィルタをリセット
+        }
+
+        // ★ 追加: 滑らか移動中の処理
+        if (isReturningToMouse)
+        {
+            // 目標位置（マウス位置）に向かって滑らかに移動
+            filteredTarget = Vector2.Lerp(filteredTarget, target, 
+                1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
+            
+            desiredPos = filteredTarget;
+            
+            // マウス位置に十分近づいたら通常追従モードに戻る
+            float distanceToTarget = Vector2.Distance(filteredTarget, target);
+            if (distanceToTarget < 2f)
+            {
+                isReturningToMouse = false;
+                inChase = false;
+                holdPos = target;
+            }
+            return;
+        }
+
+        // ★ 通常の追従処理（デッドゾーン付き）
         float d = Vector2.Distance(holdPos, target);
 
-        // 追従開始/停止のヒステリシス
         if (!inChase && d >= deadZoneEnter)
         {
             inChase = true;
@@ -80,26 +150,24 @@ public class BarController : MonoBehaviour
         else if (inChase && d <= deadZoneExit)
         {
             inChase = false;
-            holdPos = target;          // 新しい静止中心を更新
+            holdPos = target;
         }
         filteredTarget = Vector2.Lerp(filteredTarget, target, 1f - Mathf.Pow(1f - smoothing, Time.deltaTime * 60f));
-        desiredPos = inChase ? filteredTarget : holdPos; // 揺れるときは holdPos に固定
-
+        desiredPos = inChase ? filteredTarget : holdPos;
     }
 
     void FixedUpdate()
     {
-        // 物理刻みで即座に指定位置へ（スピード制限なし）
+        barVelocity = (desiredPos - previousPosition) / Time.fixedDeltaTime;
+
         if (rotateToDirection)
         {
             Vector2 delta = desiredPos - lastPhysicsPos;
             if (delta.sqrMagnitude > 0.005f)
             {
-                // 目標角度を計算
                 float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                
-                // 現在の角度から目標角度へ滑らかに補間
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 
+                    1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
                 
                 rb.MoveRotation(currentAngle);
             }
@@ -107,15 +175,13 @@ public class BarController : MonoBehaviour
         rb.MovePosition(desiredPos);
 
         lastPhysicsPos = desiredPos;
+        previousPosition = desiredPos;
     }
 
-    // ★ 追加: プレイヤーとの衝突検出（Trigger用）
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // プレイヤーのタグまたはレイヤーで判定
         if (collision.CompareTag("Player"))
         {
-            // GameManagerのタイマーを一度だけ開始
             if (GameManager.instance != null)
             {
                 GameManager.instance.StartTimerOnce();
@@ -123,8 +189,6 @@ public class BarController : MonoBehaviour
         }
     }
 
-    // ★ 追加: プレイヤーとの衝突検出（Collision用）
-    // Collider2DがTriggerでない場合はこちらを使用
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -133,6 +197,33 @@ public class BarController : MonoBehaviour
             {
                 GameManager.instance.StartTimerOnce();
             }
+
+            ApplyHitForce(collision);
         }
+    }
+
+    private void ApplyHitForce(Collision2D collision)
+    {
+        if (requireLeftClick && !Input.GetMouseButton(0))
+        {
+            return;
+        }
+
+        float barSpeed = barVelocity.magnitude;
+        if (barSpeed < minHitSpeed)
+        {
+            return;
+        }
+
+        Rigidbody2D ballRb = collision.rigidbody;
+        if (ballRb == null) return;
+
+        Vector2 hitDirection = barVelocity.normalized;
+        float hitForce = Mathf.Min(barSpeed * hitForceMultiplier, maxHitForce);
+
+        Vector2 newVelocity = ballRb.velocity + hitDirection * hitForce;
+        ballRb.velocity = newVelocity;
+
+        Debug.Log($"ボールをはじいた！ バー速度: {barSpeed:F2}, 力: {hitForce:F2}, 方向: {hitDirection}");
     }
 }
