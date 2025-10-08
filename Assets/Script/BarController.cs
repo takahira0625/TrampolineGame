@@ -31,6 +31,8 @@ public class BarController : MonoBehaviour
     [Header("追従制御")]
     [Tooltip("左クリック中に追従を停止する")]
     [SerializeField] bool stopFollowOnLeftClick = true;
+    [Tooltip("左クリック解除後の移動速度（0=即座、1=非常にゆっくり）")]
+    [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
 
     Camera cam;
     Rigidbody2D rb;
@@ -47,7 +49,10 @@ public class BarController : MonoBehaviour
 
     private Vector2 barVelocity;
     private Vector2 previousPosition;
-    private Vector2 frozenPosition; // ★ 追加: 左クリック時の固定位置
+    private Vector2 frozenPosition;
+    // ★ 追加: 左クリック解除後の滑らか移動用
+    private bool isReturningToMouse = false;
+    private Vector2 returnStartPos;
     
     void Awake()
     {
@@ -68,27 +73,14 @@ public class BarController : MonoBehaviour
         filteredTarget = rb.position;
         currentAngle = rb.rotation;
         previousPosition = rb.position;
-        frozenPosition = rb.position; // ★ 追加
+        frozenPosition = rb.position;
     }
 
     void Update()
     {
         if (!cam) return;
 
-        // ★ 追加: 左クリック中は追従を停止
-        if (stopFollowOnLeftClick && Input.GetMouseButton(0))
-        {
-            // 左クリック押下開始時に現在位置を記録
-            if (Input.GetMouseButtonDown(0))
-            {
-                frozenPosition = rb.position;
-            }
-            
-            // 固定位置を目標位置に設定
-            desiredPos = frozenPosition;
-            return; // 以降の追従処理をスキップ
-        }
-
+        // マウスのワールド座標を取得
         var mp = Input.mousePosition;
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
@@ -103,6 +95,52 @@ public class BarController : MonoBehaviour
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
+
+        // ★ 修正: 左クリック中は追従を停止
+        if (stopFollowOnLeftClick && Input.GetMouseButton(0))
+        {
+            // 左クリック押下開始時に現在位置を記録
+            if (Input.GetMouseButtonDown(0))
+            {
+                frozenPosition = rb.position;
+                isReturningToMouse = false; // リターン状態をキャンセル
+            }
+            
+            // 固定位置を目標位置に設定
+            desiredPos = frozenPosition;
+            return; // 以降の追従処理をスキップ
+        }
+
+        // ★ 追加: 左クリック解除時の処理
+        if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
+        {
+            // 滑らか移動モードを開始
+            isReturningToMouse = true;
+            returnStartPos = rb.position;
+            filteredTarget = rb.position; // フィルタをリセット
+        }
+
+        // ★ 追加: 滑らか移動中の処理
+        if (isReturningToMouse)
+        {
+            // 目標位置（マウス位置）に向かって滑らかに移動
+            filteredTarget = Vector2.Lerp(filteredTarget, target, 
+                1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
+            
+            desiredPos = filteredTarget;
+            
+            // マウス位置に十分近づいたら通常追従モードに戻る
+            float distanceToTarget = Vector2.Distance(filteredTarget, target);
+            if (distanceToTarget < 2f)
+            {
+                isReturningToMouse = false;
+                inChase = false;
+                holdPos = target;
+            }
+            return;
+        }
+
+        // ★ 通常の追従処理（デッドゾーン付き）
         float d = Vector2.Distance(holdPos, target);
 
         if (!inChase && d >= deadZoneEnter)
