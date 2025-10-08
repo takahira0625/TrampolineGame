@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            outTimer = 0f; // 画面内に戻ったらリセット
+            outTimer = 0f;
         }
 
         // canMove が false のときは停止
@@ -59,9 +59,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (!canMove) return;
-
-        // 必要ならここで rb.velocity を設定した後に速度制限を適用
-        // 例）rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
         // 速度上限クランプ
         if (maxSpeed > 0f)

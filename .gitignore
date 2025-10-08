@@ -35,6 +35,7 @@ Thumbs.db
 sysinfo.txt
 
 # 配布物（チーム共有不要）
+*.unitypackage.meta
 *.apk
 *.aab
 *.unitypackage

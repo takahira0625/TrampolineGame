@@ -9,18 +9,36 @@ public class BarController : MonoBehaviour
     [SerializeField] float fixedY;
     [Header("範囲制限（任意）")]
     [SerializeField] bool useBounds = false;
+
     [SerializeField] Vector2 minPos = new Vector2(-1f, -1f);
     [SerializeField] Vector2 maxPos = new Vector2(1f, 1f);
+
     [Header("回転設定")]
     [SerializeField] bool rotateToDirection = false;
     [SerializeField, Range(0f, 1f)] float rotationSmoothingMin = 0.01f; // 小さい角度変化時の補間速度
     [SerializeField, Range(0f, 1f)] float rotationSmoothingMax = 1f;  // 大きい角度変化時の補間速度
     [SerializeField] float angleDeltaThreshold = 30f; // この角度差以上で素早く回転
+    [Header("�{�[����͂����ݒ�")]
+    [Tooltip("�o�[�̑��x��{�[���ɓ`����{��")]
+    [SerializeField] float hitForceMultiplier = 1.5f;
+    [Tooltip("�͂����ۂ̍ŏ��o�[���x�i����ȉ����ƒʏ�̔��ˁj")]
+    [SerializeField] float minHitSpeed = 2f;
+    [Tooltip("�͂����ۂ̍ő�́i�����ɉ������Ȃ��悤�ɐ����j")]
+    [SerializeField] float maxHitForce = 50f;
+    [Tooltip("LeftClick")]
+    [SerializeField] bool requireLeftClick = true;
+    [Header("�Ǐ]����")]
+    [Tooltip("���N���b�N���ɒǏ]���~����")]
+    [SerializeField] bool stopFollowOnLeftClick = true;
+    [Tooltip("���N���b�N�����̈ړ����x�i0=�����A1=���ɂ������j")]
+    [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
+
     Camera cam;
     Rigidbody2D rb;
     Vector2 desiredPos;
     Vector2 lastPhysicsPos;
     float currentAngle;
+
     [Header("デッドゾーン設定")]
     [SerializeField] float deadZoneEnter = 0.01f;
     [SerializeField] float deadZoneExit = 0.01f;
@@ -29,6 +47,14 @@ public class BarController : MonoBehaviour
     Vector2 holdPos;
     Vector2 filteredTarget;
 
+
+    private Vector2 barVelocity;
+    private Vector2 previousPosition;
+    private Vector2 frozenPosition;
+    // �� �ǉ�: ���N���b�N�����̊��炩�ړ��p
+    private bool isReturningToMouse = false;
+    private Vector2 returnStartPos;
+    
     void Awake()
     {
         cam = Camera.main;
@@ -45,6 +71,8 @@ public class BarController : MonoBehaviour
         holdPos = rb.position;
         filteredTarget = rb.position;
         currentAngle = rb.rotation;
+        previousPosition = rb.position;
+        frozenPosition = rb.position;
     }
     void Update()
     {
@@ -54,6 +82,7 @@ public class BarController : MonoBehaviour
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
         var target = rb.position;
+
         if (followX) target.x = world.x;
         if (followY) target.y = world.y; else target.y = fixedY;
         if (useBounds)
@@ -61,6 +90,51 @@ public class BarController : MonoBehaviour
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
+
+        // �� �C��: ���N���b�N���͒Ǐ]���~
+        if (stopFollowOnLeftClick && Input.GetMouseButton(0))
+        {
+            // ���N���b�N�����J�n���Ɍ��݈ʒu��L�^
+            if (Input.GetMouseButtonDown(0))
+            {
+                frozenPosition = rb.position;
+                isReturningToMouse = false; // ���^�[����Ԃ�L�����Z��
+            }
+            
+            // �Œ�ʒu��ڕW�ʒu�ɐݒ�
+            desiredPos = frozenPosition;
+            return; // �ȍ~�̒Ǐ]������X�L�b�v
+        }
+
+        // �� �ǉ�: ���N���b�N������̏���
+        if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
+        {
+            // ���炩�ړ����[�h��J�n
+            isReturningToMouse = true;
+            returnStartPos = rb.position;
+            filteredTarget = rb.position; // �t�B���^����Z�b�g
+        }
+
+        // �� �ǉ�: ���炩�ړ����̏���
+        if (isReturningToMouse)
+        {
+            // �ڕW�ʒu�i�}�E�X�ʒu�j�Ɍ������Ċ��炩�Ɉړ�
+            filteredTarget = Vector2.Lerp(filteredTarget, target, 
+                1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
+            
+            desiredPos = filteredTarget;
+            
+            // �}�E�X�ʒu�ɏ\���߂Â�����ʏ�Ǐ]���[�h�ɖ߂�
+            float distanceToTarget = Vector2.Distance(filteredTarget, target);
+            if (distanceToTarget < 2f)
+            {
+                isReturningToMouse = false;
+                inChase = false;
+                holdPos = target;
+            }
+            return;
+        }
+
         float d = Vector2.Distance(holdPos, target);
 
         if (!inChase && d >= deadZoneEnter)
@@ -77,6 +151,9 @@ public class BarController : MonoBehaviour
     }
     void FixedUpdate()
     {
+
+        barVelocity = (desiredPos - previousPosition) / Time.fixedDeltaTime;
+
         if (rotateToDirection)
         {
             Vector2 delta = desiredPos - lastPhysicsPos;
@@ -95,10 +172,59 @@ public class BarController : MonoBehaviour
                 // 滑らかに補間
                 currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
 
+
                 rb.MoveRotation(currentAngle);
             }
         }
         rb.MovePosition(desiredPos);
         lastPhysicsPos = desiredPos;
+        previousPosition = desiredPos;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.StartTimerOnce();
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.StartTimerOnce();
+            }
+
+            ApplyHitForce(collision);
+        }
+    }
+
+    private void ApplyHitForce(Collision2D collision)
+    {
+        if (requireLeftClick && !Input.GetMouseButton(0))
+        {
+            return;
+        }
+
+        float barSpeed = barVelocity.magnitude;
+        if (barSpeed < minHitSpeed)
+        {
+            return;
+        }
+
+        Rigidbody2D ballRb = collision.rigidbody;
+        if (ballRb == null) return;
+
+        Vector2 hitDirection = barVelocity.normalized;
+        float hitForce = Mathf.Min(barSpeed * hitForceMultiplier, maxHitForce);
+
+        Vector2 newVelocity = ballRb.velocity + hitDirection * hitForce;
+        ballRb.velocity = newVelocity;
     }
 }
