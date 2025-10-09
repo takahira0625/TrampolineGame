@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [Header("スローモーション設定")]
     [Tooltip("スローモーション時のタイムスケール")]
     [SerializeField, Range(0.1f, 1f)] private float slowMotionTimeScale = 0.3f;
-    [Tooltip("Barに触れた後のスローモーション無効化時間（秒）")]
+    [Tooltip("Barに触れた後のスローモーション無効化時間（秒）　")]
     [SerializeField] private float slowMotionCooldownTime = 3f;
     
     private bool isInSlowZone = false;
