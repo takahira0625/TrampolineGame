@@ -1,37 +1,36 @@
-using UnityEngine;
-
+ï»¿using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class BarController : MonoBehaviour
 {
-    [Header("’Ç]²")]
+    [Header("è¿½å¾“è»¸")]
     [SerializeField] bool followX = true;
     [SerializeField] bool followY = false;
     [SerializeField] float fixedY;
-
-    [Header("”ÍˆÍ§ŒÀi”CˆÓj")]
+    [Header("ç¯„å›²åˆ¶é™ï¼ˆä»»æ„ï¼‰")]
     [SerializeField] bool useBounds = false;
-    [SerializeField] Vector2 minPos = new Vector2(-8f, -4f);
-    [SerializeField] Vector2 maxPos = new Vector2(8f, 4f);
 
-    [Header("‰ñ“]i”CˆÓj")]
+    [SerializeField] Vector2 minPos = new Vector2(-1f, -1f);
+    [SerializeField] Vector2 maxPos = new Vector2(1f, 1f);
+
+    [Header("å›è»¢è¨­å®š")]
     [SerializeField] bool rotateToDirection = false;
-    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f;
-
-    [Header("ƒ{[ƒ‹‚ğ‚Í‚¶‚­İ’è")]
-    [Tooltip("ƒo[‚Ì‘¬“x‚ğƒ{[ƒ‹‚É“`‚¦‚é”{—¦")]
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMin = 0.01f; // å°ã•ã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMax = 1f;  // å¤§ãã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField] float angleDeltaThreshold = 30f; // ã“ã®è§’åº¦å·®ä»¥ä¸Šã§ç´ æ—©ãå›è»¢
+    [Header("ï¿½{ï¿½[ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½İ’ï¿½")]
+    [Tooltip("ï¿½oï¿½[ï¿½Ì‘ï¿½ï¿½xï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½É“`ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½")]
     [SerializeField] float hitForceMultiplier = 1.5f;
-    [Tooltip("‚Í‚¶‚­Û‚ÌÅ¬ƒo[‘¬“xi‚±‚êˆÈ‰º‚¾‚Æ’Êí‚Ì”½Ëj")]
+    [Tooltip("ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Û‚ÌÅï¿½ï¿½oï¿½[ï¿½ï¿½ï¿½xï¿½iï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½ï¿½ï¿½Æ’Êï¿½Ì”ï¿½ï¿½Ëj")]
     [SerializeField] float minHitSpeed = 2f;
-    [Tooltip("‚Í‚¶‚­Û‚ÌÅ‘å—Íi–³ŒÀ‚É‰Á‘¬‚µ‚È‚¢‚æ‚¤‚É§ŒÀj")]
+    [Tooltip("ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Û‚ÌÅ‘ï¿½Íiï¿½ï¿½ï¿½ï¿½ï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½Éï¿½ï¿½ï¿½ï¿½j")]
     [SerializeField] float maxHitForce = 50f;
-    [Tooltip("¶ƒNƒŠƒbƒN‰Ÿ‰º’†‚Ì‚İ‚Í‚¶‚­‹@”\‚ğ—LŒø‰»")]
+    [Tooltip("LeftClick")]
     [SerializeField] bool requireLeftClick = true;
-
-    [Header("’Ç]§Œä")]
-    [Tooltip("¶ƒNƒŠƒbƒN’†‚É’Ç]‚ğ’â~‚·‚é")]
+    [Header("ï¿½Ç]ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½É’Ç]ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] bool stopFollowOnLeftClick = true;
-    [Tooltip("¶ƒNƒŠƒbƒN‰ğœŒã‚ÌˆÚ“®‘¬“xi0=‘¦ÀA1=”ñí‚É‚ä‚Á‚­‚èj")]
+    [Tooltip("ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½xï¿½i0=ï¿½ï¿½ï¿½ï¿½ï¿½A1=ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j")]
     [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
 
     Camera cam;
@@ -40,17 +39,19 @@ public class BarController : MonoBehaviour
     Vector2 lastPhysicsPos;
     float currentAngle;
 
-    [SerializeField] float deadZoneEnter = 0.02f;
+    [Header("ãƒ‡ãƒƒãƒ‰ã‚¾ãƒ¼ãƒ³è¨­å®š")]
+    [SerializeField] float deadZoneEnter = 0.01f;
     [SerializeField] float deadZoneExit = 0.01f;
     [SerializeField, Range(0f, 1f)] float smoothing = 0.25f;
     bool inChase = false;
     Vector2 holdPos;
     Vector2 filteredTarget;
 
+
     private Vector2 barVelocity;
     private Vector2 previousPosition;
     private Vector2 frozenPosition;
-    // š ’Ç‰Á: ¶ƒNƒŠƒbƒN‰ğœŒã‚ÌŠŠ‚ç‚©ˆÚ“®—p
+    // ï¿½ï¿½ ï¿½Ç‰ï¿½: ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ÌŠï¿½ï¿½ç‚©ï¿½Ú“ï¿½ï¿½p
     private bool isReturningToMouse = false;
     private Vector2 returnStartPos;
     
@@ -58,12 +59,10 @@ public class BarController : MonoBehaviour
     {
         cam = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.useFullKinematicContacts = true;
     }
-
     void Start()
     {
         fixedY = transform.position.y;
@@ -75,61 +74,57 @@ public class BarController : MonoBehaviour
         previousPosition = rb.position;
         frozenPosition = rb.position;
     }
-
     void Update()
     {
         if (!cam) return;
 
-        // ƒ}ƒEƒX‚Ìƒ[ƒ‹ƒhÀ•W‚ğæ“¾
         var mp = Input.mousePosition;
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
-
         var target = rb.position;
 
         if (followX) target.x = world.x;
         if (followY) target.y = world.y; else target.y = fixedY;
-
         if (useBounds)
         {
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
 
-        // š C³: ¶ƒNƒŠƒbƒN’†‚Í’Ç]‚ğ’â~
+        // ï¿½ï¿½ ï¿½Cï¿½ï¿½: ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Í’Ç]ï¿½ï¿½ï¿½~
         if (stopFollowOnLeftClick && Input.GetMouseButton(0))
         {
-            // ¶ƒNƒŠƒbƒN‰Ÿ‰ºŠJn‚ÉŒ»İˆÊ’u‚ğ‹L˜^
+            // ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ÉŒï¿½ï¿½İˆÊ’uï¿½ï¿½Lï¿½^
             if (Input.GetMouseButtonDown(0))
             {
                 frozenPosition = rb.position;
-                isReturningToMouse = false; // ƒŠƒ^[ƒ“ó‘Ô‚ğƒLƒƒƒ“ƒZƒ‹
+                isReturningToMouse = false; // ï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½
             }
             
-            // ŒÅ’èˆÊ’u‚ğ–Ú•WˆÊ’u‚Éİ’è
+            // ï¿½Å’ï¿½Ê’uï¿½ï¿½Ú•Wï¿½Ê’uï¿½Éİ’ï¿½
             desiredPos = frozenPosition;
-            return; // ˆÈ~‚Ì’Ç]ˆ—‚ğƒXƒLƒbƒv
+            return; // ï¿½È~ï¿½Ì’Ç]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Lï¿½bï¿½v
         }
 
-        // š ’Ç‰Á: ¶ƒNƒŠƒbƒN‰ğœ‚Ìˆ—
+        // ï¿½ï¿½ ï¿½Ç‰ï¿½: ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
         if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
         {
-            // ŠŠ‚ç‚©ˆÚ“®ƒ‚[ƒh‚ğŠJn
+            // ï¿½ï¿½ï¿½ç‚©ï¿½Ú“ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½Jï¿½n
             isReturningToMouse = true;
             returnStartPos = rb.position;
-            filteredTarget = rb.position; // ƒtƒBƒ‹ƒ^‚ğƒŠƒZƒbƒg
+            filteredTarget = rb.position; // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
         }
 
-        // š ’Ç‰Á: ŠŠ‚ç‚©ˆÚ“®’†‚Ìˆ—
+        // ï¿½ï¿½ ï¿½Ç‰ï¿½: ï¿½ï¿½ï¿½ç‚©ï¿½Ú“ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
         if (isReturningToMouse)
         {
-            // –Ú•WˆÊ’uiƒ}ƒEƒXˆÊ’uj‚ÉŒü‚©‚Á‚ÄŠŠ‚ç‚©‚ÉˆÚ“®
+            // ï¿½Ú•Wï¿½Ê’uï¿½iï¿½}ï¿½Eï¿½Xï¿½Ê’uï¿½jï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄŠï¿½ï¿½ç‚©ï¿½ÉˆÚ“ï¿½
             filteredTarget = Vector2.Lerp(filteredTarget, target, 
                 1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
             
             desiredPos = filteredTarget;
             
-            // ƒ}ƒEƒXˆÊ’u‚É\•ª‹ß‚Ã‚¢‚½‚ç’Êí’Ç]ƒ‚[ƒh‚É–ß‚é
+            // ï¿½}ï¿½Eï¿½Xï¿½Ê’uï¿½É\ï¿½ï¿½ï¿½ß‚Ã‚ï¿½ï¿½ï¿½ï¿½ï¿½Êï¿½Ç]ï¿½ï¿½ï¿½[ï¿½hï¿½É–ß‚ï¿½
             float distanceToTarget = Vector2.Distance(filteredTarget, target);
             if (distanceToTarget < 2f)
             {
@@ -140,7 +135,6 @@ public class BarController : MonoBehaviour
             return;
         }
 
-        // š ’Êí‚Ì’Ç]ˆ—iƒfƒbƒhƒ][ƒ“•t‚«j
         float d = Vector2.Distance(holdPos, target);
 
         if (!inChase && d >= deadZoneEnter)
@@ -155,9 +149,9 @@ public class BarController : MonoBehaviour
         filteredTarget = Vector2.Lerp(filteredTarget, target, 1f - Mathf.Pow(1f - smoothing, Time.deltaTime * 60f));
         desiredPos = inChase ? filteredTarget : holdPos;
     }
-
     void FixedUpdate()
     {
+
         barVelocity = (desiredPos - previousPosition) / Time.fixedDeltaTime;
 
         if (rotateToDirection)
@@ -165,15 +159,24 @@ public class BarController : MonoBehaviour
             Vector2 delta = desiredPos - lastPhysicsPos;
             if (delta.sqrMagnitude > 0.005f)
             {
+                // ç›®æ¨™è§’åº¦ã‚’è¨ˆç®—
                 float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 
-                    1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
-                
+
+                // ç¾åœ¨ã®è§’åº¦ã¨ç›®æ¨™è§’åº¦ã®å·®ã‚’è¨ˆç®—ï¼ˆ-180ã€œ180ã®ç¯„å›²ã«æ­£è¦åŒ–ï¼‰
+                float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
+
+                // è§’åº¦å·®ã«å¿œã˜ã¦è£œé–“é€Ÿåº¦ã‚’èª¿æ•´
+                float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDifference) / angleDeltaThreshold);
+                float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
+
+                // æ»‘ã‚‰ã‹ã«è£œé–“
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
+
+
                 rb.MoveRotation(currentAngle);
             }
         }
         rb.MovePosition(desiredPos);
-
         lastPhysicsPos = desiredPos;
         previousPosition = desiredPos;
     }
@@ -223,7 +226,5 @@ public class BarController : MonoBehaviour
 
         Vector2 newVelocity = ballRb.velocity + hitDirection * hitForce;
         ballRb.velocity = newVelocity;
-
-        Debug.Log($"ƒ{[ƒ‹‚ğ‚Í‚¶‚¢‚½I ƒo[‘¬“x: {barSpeed:F2}, —Í: {hitForce:F2}, •ûŒü: {hitDirection}");
     }
 }
