@@ -1,8 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Collider2D))]
-public class BarFollowMouse : MonoBehaviour
+public class BarMovement : MonoBehaviour
 {
     // 追従停止フラグ
     [HideInInspector] public bool stopFollow = false;
@@ -15,12 +14,6 @@ public class BarFollowMouse : MonoBehaviour
     [SerializeField] private bool followY = false;
     [SerializeField] private float fixedY;
 
-    [Header("回転設定")]
-    [SerializeField] private bool rotateToDirection = true;
-    [SerializeField, Range(0f, 1f)] private float rotationSmoothingMin = 0.01f;
-    [SerializeField, Range(0f, 1f)] private float rotationSmoothingMax = 1f;
-    [SerializeField] private float angleDeltaThreshold = 30f;
-
     [Header("デッドゾーン設定")]
     [SerializeField, Range(0f, 1f)] private float smoothing = 0.25f;
     [SerializeField] private float deadZoneEnter = 0.01f;
@@ -30,10 +23,13 @@ public class BarFollowMouse : MonoBehaviour
     private Vector2 desiredPos;
     private Vector2 filteredTarget;
     private Vector2 holdPos;
-    private Vector2 lastPhysicsPos;
-    private float currentAngle;
-    private bool inChase = false;
     private Vector2 previousPosition;
+    private bool inChase = false;
+
+    // 他のスクリプトから参照できるプロパティ
+    public Vector2 DesiredPosition => desiredPos;
+    public Vector2 PreviousPosition => previousPosition;
+    public Rigidbody2D Rigidbody => rb;
 
     void Awake()
     {
@@ -63,9 +59,7 @@ public class BarFollowMouse : MonoBehaviour
         desiredPos = rb.position;
         filteredTarget = rb.position;
         holdPos = rb.position;
-        lastPhysicsPos = rb.position;
         previousPosition = rb.position;
-        currentAngle = rb.rotation;
     }
 
     void Update()
@@ -96,35 +90,9 @@ public class BarFollowMouse : MonoBehaviour
         desiredPos = inChase ? filteredTarget : holdPos;
     }
 
-    /// <summary>
-    /// バーの前方向を取得
-    /// </summary>
-    public Vector2 GetForwardDirection()
-    {
-        float angleRad = currentAngle * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-    }
-
     void FixedUpdate()
     {
-        Vector2 barVelocity = (desiredPos - previousPosition) / Time.fixedDeltaTime;
-
-        if (rotateToDirection)
-        {
-            Vector2 delta = desiredPos - lastPhysicsPos;
-            if (delta.sqrMagnitude > 0.0001f)
-            {
-                float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);
-                float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDiff) / angleDeltaThreshold);
-                float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
-                rb.MoveRotation(currentAngle);
-            }
-        }
-
         rb.MovePosition(desiredPos);
-        lastPhysicsPos = desiredPos;
         previousPosition = desiredPos;
     }
 }
