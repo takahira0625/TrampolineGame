@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "D:\\Unity\\tranpoline_smartphone\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|d:\\unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|d:\\unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\gimmickblocks\\gimmickblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\gimmickblocks\\gimmickblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\variousblocks\\gimmickblocks\\gimmickblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -200,7 +200,7 @@
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
               "ToolTip": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
               "RelativeToolTip": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAqwFMAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-15T12:23:29.616Z",
               "EditorCaption": ""
@@ -215,8 +215,7 @@
               "RelativeToolTip": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GimmickBlock.cs",
               "ViewState": "AgIAADQAAAAAAAAAAAAUwEMAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T12:40:13.605Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T12:40:13.605Z"
             },
             {
               "$type": "Document",

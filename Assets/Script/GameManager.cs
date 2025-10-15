@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro; // TextMeshProを扱うために必要
+using System.Collections.Generic;//PlayerList管理用
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,9 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController; // プレイヤーのスクリプト
 
     private int currentCoins = 0; // 現在のコイン取得数
+    
+    // ==== Doubleブロックによるプレイヤー管理用 ====
+    private List<PlayerController> activePlayers = new List<PlayerController>();
 
     // ==== タイマー関連 ====
     [SerializeField] private bool autoStartTimer = false; // ゲーム開始で自動計測するか
@@ -46,6 +50,16 @@ public class GameManager : MonoBehaviour
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
         BGMManager.Instance.Play(gameBGM);
+
+        //DoubleBlock用：シーン開始時にプレイヤー登録
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+        }
+        if (playerController != null)
+        {
+            RegisterPlayer(playerController);
+        }
     }
 
     private void Update()
@@ -115,6 +129,57 @@ public class GameManager : MonoBehaviour
         }
     }*/
 
+    // ==== 以下、Doubleブロックによるプレイヤー管理用 ====
+    // プレイヤーを登録（シーン開始時に呼ぶ）
+    public void RegisterPlayer(PlayerController player)
+    {
+        if (!activePlayers.Contains(player))
+        {
+            activePlayers.Add(player);
+        }
+    }   
+    // プレイヤーが死んだときに呼ぶ
+    public void UnregisterPlayer(PlayerController player)
+    {
+        if (activePlayers.Contains(player))
+        {
+            activePlayers.Remove(player);
+        }
+
+        // 全員が死んだらゲームオーバー
+        if (activePlayers.Count == 0)
+        {
+            Debug.Log("全プレイヤーが死亡しました。GameOver。");
+            GameOver();
+        }
+    }
+    public void SpawnAdditionalPlayer(Transform originalPlayer)
+    {
+        if (playerController == null)
+        {
+            Debug.LogWarning("PlayerController が未設定のため複製できません");
+            return;
+        }
+
+        // 元プレイヤーの位置を基準に新しいプレイヤーを生成
+        GameObject clone = Instantiate(playerController.gameObject, originalPlayer.position, Quaternion.identity);
+
+        // 少しずらして重ならないように
+        Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f), 0.5f, 0f);
+        clone.transform.position += offset;
+
+        // clone も PlayerController を持つので独立して動く
+        PlayerController cloneController = clone.GetComponent<PlayerController>();
+        if (cloneController != null)
+        {
+            cloneController.canMove = true;
+            RegisterPlayer(cloneController);
+        }
+
+        Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
+    }
+
+    // ==== ゴール・ゲームオーバー処理 ====
     // ゴール処理を行う関数
     void Goal()
     {

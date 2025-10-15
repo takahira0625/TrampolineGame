@@ -1,37 +1,41 @@
-using UnityEngine;
-
+ï»¿using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class BarController : MonoBehaviour
 {
-    [Header("’Ç]²")]
+    [Header("è¿½å¾“è»¸")]
     [SerializeField] bool followX = true;
     [SerializeField] bool followY = false;
     [SerializeField] float fixedY;
-
-    [Header("”ÍˆÍ§ŒÀi”CˆÓj")]
+    [Header("ç¯„å›²åˆ¶é™ï¼ˆä»»æ„ï¼‰")]
     [SerializeField] bool useBounds = false;
-    [SerializeField] Vector2 minPos = new Vector2(-8f, -4f);
-    [SerializeField] Vector2 maxPos = new Vector2(8f, 4f);
 
-    [Header("‰ñ“]i”CˆÓj")]
+    [SerializeField] Vector2 minPos = new Vector2(-1f, -1f);
+    [SerializeField] Vector2 maxPos = new Vector2(1f, 1f);
+
+    [Header("å›è»¢è¨­å®š")]
     [SerializeField] bool rotateToDirection = false;
-    [SerializeField, Range(0f, 1f)] float rotationSmoothing = 0.15f;
-
-    [Header("ƒ{[ƒ‹‚ğ‚Í‚¶‚­İ’è")]
-    [Tooltip("ƒo[‚Ì‘¬“x‚ğƒ{[ƒ‹‚É“`‚¦‚é”{—¦")]
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMin = 0.01f; // å°ã•ã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField, Range(0f, 1f)] float rotationSmoothingMax = 1f;  // å¤§ãã„è§’åº¦å¤‰åŒ–æ™‚ã®è£œé–“é€Ÿåº¦
+    [SerializeField] float angleDeltaThreshold = 30f; // ã“ã®è§’åº¦å·®ä»¥ä¸Šã§ç´ æ—©ãå›è»¢
+    [Header("ãƒœãƒ¼ãƒ«åç™ºè¨­å®š")]
+    [Tooltip("ãƒãƒ¼ã®é€Ÿåº¦ã‚’ãƒœãƒ¼ãƒ«ã«åŠ ãˆã‚‹å€ç‡")]
     [SerializeField] float hitForceMultiplier = 1.5f;
-    [Tooltip("‚Í‚¶‚­Û‚ÌÅ¬ƒo[‘¬“xi‚±‚êˆÈ‰º‚¾‚Æ’Êí‚Ì”½Ëj")]
+
+    [Tooltip("ãƒãƒ¼ã®é€Ÿåº¦ãŒã“ã®å€¤æœªæº€ã®å ´åˆã¯åç™ºã—ãªã„")]
     [SerializeField] float minHitSpeed = 2f;
-    [Tooltip("‚Í‚¶‚­Û‚ÌÅ‘å—Íi–³ŒÀ‚É‰Á‘¬‚µ‚È‚¢‚æ‚¤‚É§ŒÀj")]
+
+    [Tooltip("ãƒãƒ¼ãŒä¸ãˆã‚‹æœ€å¤§åç™ºåŠ›ï¼ˆä¸Šé™ï¼‰")]
     [SerializeField] float maxHitForce = 50f;
-    [Tooltip("¶ƒNƒŠƒbƒN‰Ÿ‰º’†‚Ì‚İ‚Í‚¶‚­‹@”\‚ğ—LŒø‰»")]
+
+    [Tooltip("å·¦ã‚¯ãƒªãƒƒã‚¯ä¸­ã®ã¿åç™ºã‚’æœ‰åŠ¹ã«ã™ã‚‹")]
     [SerializeField] bool requireLeftClick = true;
 
-    [Header("’Ç]§Œä")]
-    [Tooltip("¶ƒNƒŠƒbƒN’†‚É’Ç]‚ğ’â~‚·‚é")]
+    [Header("è¿½å¾“æŒ™å‹•è¨­å®š")]
+    [Tooltip("å·¦ã‚¯ãƒªãƒƒã‚¯ä¸­ã¯è¿½å¾“ã‚’åœæ­¢ã™ã‚‹")]
     [SerializeField] bool stopFollowOnLeftClick = true;
-    [Tooltip("¶ƒNƒŠƒbƒN‰ğœŒã‚ÌˆÚ“®‘¬“xi0=‘¦ÀA1=”ñí‚É‚ä‚Á‚­‚èj")]
+
+    [Tooltip("ã‚¯ãƒªãƒƒã‚¯å¾Œã€è¿½å¾“ã‚’å†é–‹ã™ã‚‹éš›ã®ã‚¹ãƒ ãƒ¼ã‚¸ãƒ³ã‚°ï¼ˆ0ï¼ã‚†ã£ãã‚Šã€1ï¼ç¬æ™‚ï¼‰")]
     [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
 
     Camera cam;
@@ -40,17 +44,18 @@ public class BarController : MonoBehaviour
     Vector2 lastPhysicsPos;
     float currentAngle;
 
-    [SerializeField] float deadZoneEnter = 0.02f;
+    [Header("ãƒ‡ãƒƒãƒ‰ã‚¾ãƒ¼ãƒ³è¨­å®š")]
+    [SerializeField] float deadZoneEnter = 0.01f;
     [SerializeField] float deadZoneExit = 0.01f;
     [SerializeField, Range(0f, 1f)] float smoothing = 0.25f;
     bool inChase = false;
     Vector2 holdPos;
     Vector2 filteredTarget;
 
+
     private Vector2 barVelocity;
     private Vector2 previousPosition;
     private Vector2 frozenPosition;
-    // š ’Ç‰Á: ¶ƒNƒŠƒbƒN‰ğœŒã‚ÌŠŠ‚ç‚©ˆÚ“®—p
     private bool isReturningToMouse = false;
     private Vector2 returnStartPos;
     
@@ -58,12 +63,10 @@ public class BarController : MonoBehaviour
     {
         cam = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.useFullKinematicContacts = true;
     }
-
     void Start()
     {
         fixedY = transform.position.y;
@@ -75,61 +78,49 @@ public class BarController : MonoBehaviour
         previousPosition = rb.position;
         frozenPosition = rb.position;
     }
-
     void Update()
     {
         if (!cam) return;
 
-        // ƒ}ƒEƒX‚Ìƒ[ƒ‹ƒhÀ•W‚ğæ“¾
         var mp = Input.mousePosition;
         mp.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
         var world = cam.ScreenToWorldPoint(mp);
-
         var target = rb.position;
 
         if (followX) target.x = world.x;
         if (followY) target.y = world.y; else target.y = fixedY;
-
         if (useBounds)
         {
             target.x = Mathf.Clamp(target.x, minPos.x, maxPos.x);
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
 
-        // š C³: ¶ƒNƒŠƒbƒN’†‚Í’Ç]‚ğ’â~
         if (stopFollowOnLeftClick && Input.GetMouseButton(0))
         {
-            // ¶ƒNƒŠƒbƒN‰Ÿ‰ºŠJn‚ÉŒ»İˆÊ’u‚ğ‹L˜^
             if (Input.GetMouseButtonDown(0))
             {
                 frozenPosition = rb.position;
-                isReturningToMouse = false; // ƒŠƒ^[ƒ“ó‘Ô‚ğƒLƒƒƒ“ƒZƒ‹
+                isReturningToMouse = false;
             }
             
-            // ŒÅ’èˆÊ’u‚ğ–Ú•WˆÊ’u‚Éİ’è
             desiredPos = frozenPosition;
-            return; // ˆÈ~‚Ì’Ç]ˆ—‚ğƒXƒLƒbƒv
+            return;
         }
 
-        // š ’Ç‰Á: ¶ƒNƒŠƒbƒN‰ğœ‚Ìˆ—
         if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
         {
-            // ŠŠ‚ç‚©ˆÚ“®ƒ‚[ƒh‚ğŠJn
             isReturningToMouse = true;
             returnStartPos = rb.position;
-            filteredTarget = rb.position; // ƒtƒBƒ‹ƒ^‚ğƒŠƒZƒbƒg
+            filteredTarget = rb.position;
         }
 
-        // š ’Ç‰Á: ŠŠ‚ç‚©ˆÚ“®’†‚Ìˆ—
         if (isReturningToMouse)
         {
-            // –Ú•WˆÊ’uiƒ}ƒEƒXˆÊ’uj‚ÉŒü‚©‚Á‚ÄŠŠ‚ç‚©‚ÉˆÚ“®
             filteredTarget = Vector2.Lerp(filteredTarget, target, 
                 1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
             
             desiredPos = filteredTarget;
             
-            // ƒ}ƒEƒXˆÊ’u‚É\•ª‹ß‚Ã‚¢‚½‚ç’Êí’Ç]ƒ‚[ƒh‚É–ß‚é
             float distanceToTarget = Vector2.Distance(filteredTarget, target);
             if (distanceToTarget < 2f)
             {
@@ -140,7 +131,6 @@ public class BarController : MonoBehaviour
             return;
         }
 
-        // š ’Êí‚Ì’Ç]ˆ—iƒfƒbƒhƒ][ƒ“•t‚«j
         float d = Vector2.Distance(holdPos, target);
 
         if (!inChase && d >= deadZoneEnter)
@@ -155,9 +145,9 @@ public class BarController : MonoBehaviour
         filteredTarget = Vector2.Lerp(filteredTarget, target, 1f - Mathf.Pow(1f - smoothing, Time.deltaTime * 60f));
         desiredPos = inChase ? filteredTarget : holdPos;
     }
-
     void FixedUpdate()
     {
+
         barVelocity = (desiredPos - previousPosition) / Time.fixedDeltaTime;
 
         if (rotateToDirection)
@@ -165,15 +155,24 @@ public class BarController : MonoBehaviour
             Vector2 delta = desiredPos - lastPhysicsPos;
             if (delta.sqrMagnitude > 0.005f)
             {
+                // ç›®æ¨™è§’åº¦ã‚’è¨ˆç®—
                 float targetAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90f;
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 
-                    1f - Mathf.Pow(1f - rotationSmoothing, Time.fixedDeltaTime * 60f));
-                
+
+                // ç¾åœ¨ã®è§’åº¦ã¨ç›®æ¨™è§’åº¦ã®å·®ã‚’è¨ˆç®—ï¼ˆ-180ã€œ180ã®ç¯„å›²ã«æ­£è¦åŒ–ï¼‰
+                float angleDifference = Mathf.DeltaAngle(currentAngle, targetAngle);
+
+                // è§’åº¦å·®ã«å¿œã˜ã¦è£œé–“é€Ÿåº¦ã‚’èª¿æ•´
+                float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDifference) / angleDeltaThreshold);
+                float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
+
+                // æ»‘ã‚‰ã‹ã«è£œé–“
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, 1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
+
+
                 rb.MoveRotation(currentAngle);
             }
         }
         rb.MovePosition(desiredPos);
-
         lastPhysicsPos = desiredPos;
         previousPosition = desiredPos;
     }
@@ -187,43 +186,5 @@ public class BarController : MonoBehaviour
                 GameManager.instance.StartTimerOnce();
             }
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.StartTimerOnce();
-            }
-
-            ApplyHitForce(collision);
-        }
-    }
-
-    private void ApplyHitForce(Collision2D collision)
-    {
-        if (requireLeftClick && !Input.GetMouseButton(0))
-        {
-            return;
-        }
-
-        float barSpeed = barVelocity.magnitude;
-        if (barSpeed < minHitSpeed)
-        {
-            return;
-        }
-
-        Rigidbody2D ballRb = collision.rigidbody;
-        if (ballRb == null) return;
-
-        Vector2 hitDirection = barVelocity.normalized;
-        float hitForce = Mathf.Min(barSpeed * hitForceMultiplier, maxHitForce);
-
-        Vector2 newVelocity = ballRb.velocity + hitDirection * hitForce;
-        ballRb.velocity = newVelocity;
-
-        Debug.Log($"ƒ{[ƒ‹‚ğ‚Í‚¶‚¢‚½I ƒo[‘¬“x: {barSpeed:F2}, —Í: {hitForce:F2}, •ûŒü: {hitDirection}");
     }
 }

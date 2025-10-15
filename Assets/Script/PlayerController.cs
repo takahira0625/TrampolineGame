@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
     }
 
     void Start()
@@ -51,6 +53,10 @@ public class PlayerController : MonoBehaviour
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 GameManager.instance.GameOver();
+                // ゲームマネージャーに死亡を通知して自分を破壊
+                GameManager.instance.UnregisterPlayer(this);
+                Destroy(gameObject);
+                return;
             }
         }
         else
