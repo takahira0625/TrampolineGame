@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     private bool hasStarted = false;        // ← 追記：一度だけ開始管理
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f; // ゴール時の確定タイム
+    // BGM関連
+    public AudioClip gameBGM;
     void Awake()
     {
         // シングルトンの設定
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour
         goalTextObject.SetActive(false); // ゴールテキストを非表示に
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
+        BGMManager.Instance.Play(gameBGM);
     }
 
     private void Update()
