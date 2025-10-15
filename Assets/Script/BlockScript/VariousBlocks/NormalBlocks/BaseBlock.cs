@@ -12,12 +12,20 @@ public class BaseBlock : MonoBehaviour
     [Tooltip("このブロック専用の効果音（設定した場合はタグに関係なくこの音を再生）")]
     [SerializeField] protected AudioClip customHitSound;
 
+    [Header("エフェクト設定")]
+    [Tooltip("Playerとの接触時にエフェクトを再生する")]
+    [SerializeField] protected bool playEffectOnHit = true;
+
     protected int health;
 
     // ★ 追加: 効果音キャッシュ（クラス全体で共有）
     private static Dictionary<string, AudioClip> soundCache = new Dictionary<string, AudioClip>();
     private static AudioClip defaultSound;
     private static bool isSoundCacheInitialized = false;
+
+    // ★ 追加: 共通エフェクト（クラス全体で共有）
+    private static ParticleSystem hitEffectPrefab;
+    private static bool isEffectLoaded = false;
 
     // ★ 追加: このインスタンスで使用する効果音（Awakeで事前ロード）
     private AudioClip cachedHitSound;
@@ -54,6 +62,9 @@ public class BaseBlock : MonoBehaviour
 
         // ★ 追加: 効果音の事前ロード
         PreloadHitSound();
+        
+        // ★ 追加: エフェクトの事前ロード（初回のみ）
+        PreloadHitEffect();
     }
 
     // ★ 新規追加: 効果音を事前にロードしてキャッシュ
@@ -101,6 +112,21 @@ public class BaseBlock : MonoBehaviour
         }
     }
 
+    // ★ 新規追加: エフェクトを事前にロード（初回のみ、全ブロック共通）
+    private void PreloadHitEffect()
+    {
+        if (!isEffectLoaded)
+        {
+            hitEffectPrefab = Resources.Load<ParticleSystem>("Effects/CFXR3 Hit Fire B (Air)");
+            isEffectLoaded = true;
+
+            if (hitEffectPrefab == null)
+            {
+                Debug.LogWarning("HitSparkエフェクトが見つかりません: Resources/Effects/CFXR3 Hit Fire B (Air)");
+            }
+        }
+    }
+
     // スプライトを変更
     protected virtual void SetSprite(Sprite sprite)
     {
@@ -130,8 +156,14 @@ public class BaseBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            // ★ 追加: 接触位置を取得
+            Vector2 contactPoint = collision.contacts[0].point;
+
             // ★ 修正: 効果音を再生
             PlayHitSound();
+
+            // ★ 追加: エフェクトを再生
+            PlayHitEffect(contactPoint);
 
             // 体力を減らす
             TakeDamage(1);
@@ -160,5 +192,17 @@ public class BaseBlock : MonoBehaviour
         {
             SEManager.Instance.PlayOneShot(cachedHitSound);
         }
+    }
+
+    // ★ 新規追加: 衝突位置にエフェクトを生成（シンプル実装）
+    protected virtual void PlayHitEffect(Vector2 position)
+    {
+        if (!playEffectOnHit || hitEffectPrefab == null) return;
+
+        // エフェクトを生成して再生
+        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+        
+        // 自動削除
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
     }
 }

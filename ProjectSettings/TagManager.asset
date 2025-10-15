@@ -11,6 +11,16 @@ TagManager:
   - Block
   - Bar
   - SlowZone
+  - BlackBlock
+  - NormalBlock
+  - BombBlock
+  - DoubleBlock
+  - GoalBlock
+  - GrayBlock
+  - KeyBlock
+  - SpeedDoubleBlock
+  - SpeedHalfBlock
+  - WarpBlock
   layers:
   - Default
   - TransparentFX
