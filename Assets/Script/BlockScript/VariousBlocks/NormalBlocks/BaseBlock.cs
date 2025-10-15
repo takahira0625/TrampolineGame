@@ -39,7 +39,7 @@ public class BaseBlock : MonoBehaviour
     }
 
     // スプライトを変更
-    protected void SetSprite(Sprite sprite)
+    protected virtual void SetSprite(Sprite sprite)
     {
         if (sprite == null || parameter == null) return;
 
@@ -54,7 +54,6 @@ public class BaseBlock : MonoBehaviour
 
         // サイズを適用
         sr.size = new Vector2(parameter.Width, parameter.Height);
-        Debug.Log(sr.size);
 
         // BoxCollider2Dのサイズも合わせる
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
