@@ -8,6 +8,9 @@ TagManager:
   - GoalTop
   - Trampoline
   - Ground
+  - Block
+  - Bar
+  - SlowZone
   layers:
   - Default
   - TransparentFX
