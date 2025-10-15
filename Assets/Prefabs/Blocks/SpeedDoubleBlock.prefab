@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2697385957223999570}
   m_Layer: 0
   m_Name: SpeedDoubleBlock
-  m_TagString: Block
+  m_TagString: SpeedDoubleBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,4 +145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: {fileID: 0}
   breakBlock: {fileID: 0}
+  playSoundOnHit: 1
+  customHitSound: {fileID: 0}
   cooldown: {fileID: 0}

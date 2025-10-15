@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -981827292495983889}
   m_Layer: 0
   m_Name: GrayBlock
-  m_TagString: Block
+  m_TagString: GrayBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,6 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: {fileID: 0}
   breakBlock: {fileID: 0}
+  playSoundOnHit: 1
+  customHitSound: {fileID: 0}
   extraHealth: 3
 --- !u!1 &5616716021223577167
 GameObject:

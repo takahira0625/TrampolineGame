@@ -7,22 +7,26 @@ public class Goal : BaseBlock
     protected override void Awake()
     {
         base.Awake();
+
+        // シーン内の KeyBlock の数を取得して requiredKeys に設定
+        KeyBlock[] keyBlocks = FindObjectsOfType<KeyBlock>();
+        requiredKeys = keyBlocks.Length;
+
         SetSprite(parameter.GoalSprite);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerInventory inventory = collision.GetComponent<PlayerInventory>();
+            PlayerInventory inventory = collision.gameObject.GetComponent<PlayerInventory>();
             if (inventory != null && inventory.KeyCount >= requiredKeys)
             {
+                Debug.Log("Goal! " + inventory.KeyCount);
                 SceneManager.LoadScene("ResultScene");
-                Debug.Log("Goal!" + inventory.KeyCount);
             }
             else
             {
-                Debug.Log("キーの数が足りません" );
-
+                Debug.Log("キーの数が足りません");
             }
         }
     }

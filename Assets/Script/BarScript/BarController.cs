@@ -18,19 +18,24 @@ public class BarController : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float rotationSmoothingMin = 0.01f; // 小さい角度変化時の補間速度
     [SerializeField, Range(0f, 1f)] float rotationSmoothingMax = 1f;  // 大きい角度変化時の補間速度
     [SerializeField] float angleDeltaThreshold = 30f; // この角度差以上で素早く回転
-    [Header("�{�[����͂����ݒ�")]
-    [Tooltip("�o�[�̑��x��{�[���ɓ`����{��")]
+    [Header("ボール反発設定")]
+    [Tooltip("バーの速度をボールに加える倍率")]
     [SerializeField] float hitForceMultiplier = 1.5f;
-    [Tooltip("�͂����ۂ̍ŏ��o�[���x�i����ȉ����ƒʏ�̔��ˁj")]
+
+    [Tooltip("バーの速度がこの値未満の場合は反発しない")]
     [SerializeField] float minHitSpeed = 2f;
-    [Tooltip("�͂����ۂ̍ő�́i�����ɉ������Ȃ��悤�ɐ����j")]
+
+    [Tooltip("バーが与える最大反発力（上限）")]
     [SerializeField] float maxHitForce = 50f;
-    [Tooltip("LeftClick")]
+
+    [Tooltip("左クリック中のみ反発を有効にする")]
     [SerializeField] bool requireLeftClick = true;
-    [Header("�Ǐ]����")]
-    [Tooltip("���N���b�N���ɒǏ]���~����")]
+
+    [Header("追従挙動設定")]
+    [Tooltip("左クリック中は追従を停止する")]
     [SerializeField] bool stopFollowOnLeftClick = true;
-    [Tooltip("���N���b�N�����̈ړ����x�i0=�����A1=���ɂ������j")]
+
+    [Tooltip("クリック後、追従を再開する際のスムージング（0＝ゆっくり、1＝瞬時）")]
     [SerializeField, Range(0f, 1f)] float releaseSmoothing = 0.3f;
 
     Camera cam;
@@ -51,7 +56,6 @@ public class BarController : MonoBehaviour
     private Vector2 barVelocity;
     private Vector2 previousPosition;
     private Vector2 frozenPosition;
-    // �� �ǉ�: ���N���b�N�����̊��炩�ړ��p
     private bool isReturningToMouse = false;
     private Vector2 returnStartPos;
     
@@ -91,40 +95,32 @@ public class BarController : MonoBehaviour
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
 
-        // �� �C��: ���N���b�N���͒Ǐ]���~
         if (stopFollowOnLeftClick && Input.GetMouseButton(0))
         {
-            // ���N���b�N�����J�n���Ɍ��݈ʒu��L�^
             if (Input.GetMouseButtonDown(0))
             {
                 frozenPosition = rb.position;
-                isReturningToMouse = false; // ���^�[����Ԃ�L�����Z��
+                isReturningToMouse = false;
             }
             
-            // �Œ�ʒu��ڕW�ʒu�ɐݒ�
             desiredPos = frozenPosition;
-            return; // �ȍ~�̒Ǐ]������X�L�b�v
+            return;
         }
 
-        // �� �ǉ�: ���N���b�N������̏���
         if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
         {
-            // ���炩�ړ����[�h��J�n
             isReturningToMouse = true;
             returnStartPos = rb.position;
-            filteredTarget = rb.position; // �t�B���^����Z�b�g
+            filteredTarget = rb.position;
         }
 
-        // �� �ǉ�: ���炩�ړ����̏���
         if (isReturningToMouse)
         {
-            // �ڕW�ʒu�i�}�E�X�ʒu�j�Ɍ������Ċ��炩�Ɉړ�
             filteredTarget = Vector2.Lerp(filteredTarget, target, 
                 1f - Mathf.Pow(1f - releaseSmoothing, Time.deltaTime * 60f));
             
             desiredPos = filteredTarget;
             
-            // �}�E�X�ʒu�ɏ\���߂Â�����ʏ�Ǐ]���[�h�ɖ߂�
             float distanceToTarget = Vector2.Distance(filteredTarget, target);
             if (distanceToTarget < 2f)
             {
@@ -190,41 +186,5 @@ public class BarController : MonoBehaviour
                 GameManager.instance.StartTimerOnce();
             }
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.StartTimerOnce();
-            }
-
-            ApplyHitForce(collision);
-        }
-    }
-
-    private void ApplyHitForce(Collision2D collision)
-    {
-        if (requireLeftClick && !Input.GetMouseButton(0))
-        {
-            return;
-        }
-
-        float barSpeed = barVelocity.magnitude;
-        if (barSpeed < minHitSpeed)
-        {
-            return;
-        }
-
-        Rigidbody2D ballRb = collision.rigidbody;
-        if (ballRb == null) return;
-
-        Vector2 hitDirection = barVelocity.normalized;
-        float hitForce = Mathf.Min(barSpeed * hitForceMultiplier, maxHitForce);
-
-        Vector2 newVelocity = ballRb.velocity + hitDirection * hitForce;
-        ballRb.velocity = newVelocity;
     }
 }
