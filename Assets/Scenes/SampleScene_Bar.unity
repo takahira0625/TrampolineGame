@@ -1134,7 +1134,6 @@ MonoBehaviour:
   goalTextObject: {fileID: 633067703}
   playerController: {fileID: 0}
   autoStartTimer: 0
-  gameBGM: {fileID: 8300000, guid: 8d456e8ed9fe55e48b41b1eb2891e27c, type: 3}
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
@@ -4764,9 +4763,7 @@ MonoBehaviour:
   minPos: {x: -8, y: -4}
   maxPos: {x: 8, y: 4}
   rotateToDirection: 1
-  rotationSmoothingMin: 0.01
-  rotationSmoothingMax: 1
-  angleDeltaThreshold: 30
+  rotationSmoothing: 0.15
   hitForceMultiplier: 1.5
   minHitSpeed: 2
   maxHitForce: 50
