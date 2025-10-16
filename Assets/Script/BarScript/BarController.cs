@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
+
 public class BarController : MonoBehaviour
 {
     [Header("追従軸")]
