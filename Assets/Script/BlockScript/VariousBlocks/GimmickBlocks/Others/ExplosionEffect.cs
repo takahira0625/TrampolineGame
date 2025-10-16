@@ -1,10 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosionEffect : MonoBehaviour
 {
     [SerializeField] private GameObject vfxPrefab; // 実際のエフェクト（例：CFXR Impact Glowing HDR）
     [SerializeField] private float vfxLifetime = 2f;
-
+    [SerializeField] private List<string> destroyableTags = new List<string>
+    {
+        "Block",
+        "NormalBlock",
+        "SpeedHalfBlock",
+        "DoubleBlock",
+        "SpeedDoubleBlock",
+        "WarpBlock"
+    };
     private float radius;
 
     public void Initialize(float radius)
@@ -28,7 +37,7 @@ public class ExplosionEffect : MonoBehaviour
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Block"))
+            if (destroyableTags.Contains(hit.tag))
             {
                 Destroy(hit.gameObject);
             }
