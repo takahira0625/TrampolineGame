@@ -7,7 +7,7 @@ public class ParameterConfig : ScriptableObject
     public int Health = 3;
 
     [Header("サイズ設定")]
-    public float Width = 1f;
+    public float Width = 5f;
     public float Height = 1f;
 
     [Header("クールタイム設定")]
