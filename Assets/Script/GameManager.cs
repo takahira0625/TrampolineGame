@@ -136,6 +136,11 @@ public class GameManager : MonoBehaviour
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
+            Debug.Log($"【Register】プレイヤー登録: {player.name} / 現在のプレイヤー数: {activePlayers.Count}");
+        }
+        else
+        {
+            Debug.LogWarning($"【Register】既に登録済み: {player.name}");
         }
     }   
     // プレイヤーが死んだときに呼ぶ
@@ -144,6 +149,11 @@ public class GameManager : MonoBehaviour
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
+            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
+        }
+        else
+        {
+            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
         }
 
         // 全員が死んだらゲームオーバー
