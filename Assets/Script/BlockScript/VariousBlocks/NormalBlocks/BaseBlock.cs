@@ -1,34 +1,42 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class BaseBlock : MonoBehaviour
 {
     [SerializeField] protected ParameterConfig parameter;
-    [SerializeField] protected BreakBlock breakBlock; // ‰‰o’S“–‚ÌƒXƒNƒŠƒvƒg
+    [SerializeField] protected BreakBlock breakBlock; // ãƒ–ãƒ­ãƒƒã‚¯ç ´å£Šã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 
-    [Header("Œø‰Ê‰¹İ’è")]
-    [Tooltip("Player‚Æ‚ÌÚG‚ÉŒø‰Ê‰¹‚ğÄ¶‚·‚é")]
+    [Header("åŠ¹æœéŸ³è¨­å®š")]
+    [Tooltip("Playerã¨ã®æ¥è§¦æ™‚ã«åŠ¹æœéŸ³ã‚’å†ç”Ÿã™ã‚‹")]
     [SerializeField] protected bool playSoundOnHit = true;
-    [Tooltip("‚±‚ÌƒuƒƒbƒNê—p‚ÌŒø‰Ê‰¹iİ’è‚µ‚½ê‡‚Íƒ^ƒO‚ÉŠÖŒW‚È‚­‚±‚Ì‰¹‚ğÄ¶j")]
+    [Tooltip("ã“ã®ãƒ–ãƒ­ãƒƒã‚¯å°‚ç”¨ã®åŠ¹æœéŸ³(è¨­å®šã—ãŸå ´åˆã¯ã‚¿ã‚°ã«é–¢ä¿‚ãªãã“ã®éŸ³ã‚’å†ç”Ÿ)")]
     [SerializeField] protected AudioClip customHitSound;
+
+    [Header("ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š")]
+    [Tooltip("Playerã¨ã®æ¥è§¦æ™‚ã«ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å†ç”Ÿã™ã‚‹")]
+    [SerializeField] protected bool playEffectOnHit = true;
 
     protected int health;
 
-    // š ’Ç‰Á: Œø‰Ê‰¹ƒLƒƒƒbƒVƒ…iƒNƒ‰ƒX‘S‘Ì‚Å‹¤—Lj
+    // â˜… è¿½åŠ : åŠ¹æœéŸ³ã‚­ãƒ£ãƒƒã‚·ãƒ¥(ã‚¯ãƒ©ã‚¹å…¨ä½“ã§å…±æœ‰)
     private static Dictionary<string, AudioClip> soundCache = new Dictionary<string, AudioClip>();
     private static AudioClip defaultSound;
     private static bool isSoundCacheInitialized = false;
 
-    // š ’Ç‰Á: ‚±‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Åg—p‚·‚éŒø‰Ê‰¹iAwake‚Å–‘Oƒ[ƒhj
+    // â˜… è¿½åŠ : è¡çªã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(ã‚¯ãƒ©ã‚¹å…¨ä½“ã§å…±æœ‰)
+    private static ParticleSystem hitEffectPrefab;
+    private static bool isEffectLoaded = false;
+
+    // â˜… è¿½åŠ : ã“ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ä½¿ç”¨ã™ã‚‹åŠ¹æœéŸ³(Awakeã§äº‹å‰ãƒ­ãƒ¼ãƒ‰)
     private AudioClip cachedHitSound;
 
     protected virtual void Awake()
     {
         Physics.bounceThreshold = 0.0f;
-        //‡@ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ’Ç‰ÁiBreakBlock.cs,ParameterConfig.csj
+        //ã€€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ (BreakBlock.cs,ParameterConfig.cs)
 
         // -------------------------------
-        // BreakBlock ‚ğ©“®æ“¾E’Ç‰Á
+        // BreakBlock ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå–å¾—ãƒ»è¿½åŠ 
         // -------------------------------
         if (breakBlock == null)
         {
@@ -39,51 +47,54 @@ public class BaseBlock : MonoBehaviour
             }
         }
         // -------------------------------
-        // ParameterConfig ‚ğ©“®æ“¾
+        // ParameterConfig ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå–å¾—
         // -------------------------------
         if (parameter == null)
         {
-            // Resources ƒtƒHƒ‹ƒ_‚É ParameterConfig ‚ğ’u‚­‘z’è
+            // Resources ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰ ParameterConfig ã‚’èª­ã¿è¾¼ã‚€
             parameter = Resources.Load<ParameterConfig>("ParameterConfig");
         }
-        // health İ’è
+        // health è¨­å®š
         if (parameter != null)
             health = parameter.Health;
 
         SetSprite(parameter.baseSprite);
 
-        // š ’Ç‰Á: Œø‰Ê‰¹‚Ì–‘Oƒ[ƒh
+        // â˜… è¿½åŠ : åŠ¹æœéŸ³ã®äº‹å‰ãƒ­ãƒ¼ãƒ‰
         PreloadHitSound();
+
+        // â˜… è¿½åŠ : ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®äº‹å‰ãƒ­ãƒ¼ãƒ‰(ä¸€åº¦ã®ã¿)
+        PreloadHitEffect();
     }
 
-    // š V‹K’Ç‰Á: Œø‰Ê‰¹‚ğ–‘O‚Éƒ[ƒh‚µ‚ÄƒLƒƒƒbƒVƒ…
+    // â˜… æ–°è¦è¿½åŠ : åŠ¹æœéŸ³ã‚’äº‹å‰ã«ãƒ­ãƒ¼ãƒ‰ã—ã¦ã‚­ãƒ£ãƒƒã‚·ãƒ¥
     private void PreloadHitSound()
     {
-        // ƒJƒXƒ^ƒ€Œø‰Ê‰¹‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡
+        // ã‚«ã‚¹ã‚¿ãƒ åŠ¹æœéŸ³ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆ
         if (customHitSound != null)
         {
             cachedHitSound = customHitSound;
             return;
         }
 
-        // ‰‰ñ‚Ì‚İƒfƒtƒHƒ‹ƒgŒø‰Ê‰¹‚ğƒ[ƒh
+        // ä¸€åº¦ã®ã¿ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåŠ¹æœéŸ³ã‚’ãƒ­ãƒ¼ãƒ‰
         if (!isSoundCacheInitialized)
         {
             defaultSound = Resources.Load<AudioClip>("Audio/SE/NormalBlock");
             isSoundCacheInitialized = true;
         }
 
-        // ƒ^ƒO‚É‰‚¶‚½Œø‰Ê‰¹‚ğæ“¾
+        // ã‚¿ã‚°ã«å¿œã˜ãŸåŠ¹æœéŸ³ã‚’å–å¾—
         string blockTag = gameObject.tag;
 
-        // ƒLƒƒƒbƒVƒ…‚É‘¶İ‚·‚é‚©Šm”F
+        // ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«å­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
         if (soundCache.ContainsKey(blockTag))
         {
             cachedHitSound = soundCache[blockTag];
         }
         else
         {
-            // V‹Kƒ[ƒh‚µ‚ÄƒLƒƒƒbƒVƒ…‚É•Û‘¶
+            // æ–°è¦ãƒ­ãƒ¼ãƒ‰ã—ã¦ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ä¿å­˜
             string soundPath = "Audio/SE/" + blockTag;
             AudioClip clip = Resources.Load<AudioClip>(soundPath);
 
@@ -94,14 +105,29 @@ public class BaseBlock : MonoBehaviour
             }
             else
             {
-                // ƒfƒtƒHƒ‹ƒgŒø‰Ê‰¹‚ğg—p
+                // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåŠ¹æœéŸ³ã‚’ä½¿ç”¨
                 cachedHitSound = defaultSound;
-                soundCache[blockTag] = defaultSound; // ƒLƒƒƒbƒVƒ…‚É•Û‘¶
+                soundCache[blockTag] = defaultSound; // ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ä¿å­˜
             }
         }
     }
 
-    // ƒXƒvƒ‰ƒCƒg‚ğ•ÏX
+    // â˜… æ–°è¦è¿½åŠ : ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’äº‹å‰ã«ãƒ­ãƒ¼ãƒ‰(ä¸€åº¦ã®ã¿ã€å…¨ãƒ–ãƒ­ãƒƒã‚¯å…±é€š)
+    private void PreloadHitEffect()
+    {
+        if (!isEffectLoaded)
+        {
+            hitEffectPrefab = Resources.Load<ParticleSystem>("Effects/CFXR3 Hit Fire B (Air)");
+            isEffectLoaded = true;
+
+            if (hitEffectPrefab == null)
+            {
+                Debug.LogWarning("HitSparkã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: Resources/Effects/CFXR3 Hit Fire B (Air)");
+            }
+        }
+    }
+
+    // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’å¤‰æ›´
     protected virtual void SetSprite(Sprite sprite)
     {
         if (sprite == null || parameter == null) return;
@@ -109,16 +135,16 @@ public class BaseBlock : MonoBehaviour
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr == null) return;
 
-        // ƒXƒvƒ‰ƒCƒg‚ğİ’è
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’è¨­å®š
         sr.sprite = sprite;
 
-        // Slicedƒ‚[ƒh‚Éİ’è
+        // Slicedãƒ¢ãƒ¼ãƒ‰ã«è¨­å®š
         sr.drawMode = SpriteDrawMode.Sliced;
 
-        // ƒTƒCƒY‚ğ“K—p
+        // ã‚µã‚¤ã‚ºã‚’é©ç”¨
         sr.size = new Vector2(parameter.Width, parameter.Height);
 
-        // BoxCollider2D‚ÌƒTƒCƒY‚à‡‚í‚¹‚é
+        // BoxCollider2Dã®ã‚µã‚¤ã‚ºã‚‚åˆã‚ã›ã‚‹
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
         if (boxCollider != null)
         {
@@ -130,10 +156,16 @@ public class BaseBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // š C³: Œø‰Ê‰¹‚ğÄ¶
+            // â˜… è¿½åŠ : æ¥è§¦ä½ç½®ã‚’å–å¾—
+            Vector2 contactPoint = collision.contacts[0].point;
+
+            // â˜… æ”¹å–„: åŠ¹æœéŸ³ã‚’å†ç”Ÿ
             PlayHitSound();
 
-            // ‘Ì—Í‚ğŒ¸‚ç‚·
+            // â˜… è¿½åŠ : ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å†ç”Ÿ
+            PlayHitEffect(contactPoint);
+
+            // è€åŠ›ã‚’æ¸›ã‚‰ã™
             TakeDamage(1);
         }
     }
@@ -144,21 +176,33 @@ public class BaseBlock : MonoBehaviour
 
         if (health <= 0)
         {
-            // ”j‰óˆ—‚ğBreakBlock‚É’Ê’m
+            // ç ´å£Šå‡¦ç†ã‚’BreakBlockã«é€šçŸ¥
             if (breakBlock != null)
                 breakBlock.OnBreak();
         }
     }
 
-    // š C³: ƒLƒƒƒbƒVƒ…‚³‚ê‚½Œø‰Ê‰¹‚ğ‘¦À‚ÉÄ¶
+    // â˜… æ”¹å–„: ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã•ã‚ŒãŸåŠ¹æœéŸ³ã‚’å³åº§ã«å†ç”Ÿ
     protected virtual void PlayHitSound()
     {
         if (!playSoundOnHit) return;
 
-        // ƒLƒƒƒbƒVƒ…‚³‚ê‚½Œø‰Ê‰¹‚ğÄ¶i‘¦À‚ÉÄ¶‚³‚ê‚éj
+        // ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã•ã‚ŒãŸåŠ¹æœéŸ³ã‚’å†ç”Ÿ(ç¬æ™‚ã«å†ç”Ÿã•ã‚Œã‚‹)
         if (cachedHitSound != null && SEManager.Instance != null)
         {
             SEManager.Instance.PlayOneShot(cachedHitSound);
         }
+    }
+
+    // â˜… æ–°è¦è¿½åŠ : è¡çªä½ç½®ã«ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ(ã‚·ãƒ³ãƒ—ãƒ«ç‰ˆ)
+    protected virtual void PlayHitEffect(Vector2 position)
+    {
+        if (!playEffectOnHit || hitEffectPrefab == null) return;
+
+        // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦å†ç”Ÿ
+        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+
+        // è‡ªå‹•å‰Šé™¤
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
     }
 }

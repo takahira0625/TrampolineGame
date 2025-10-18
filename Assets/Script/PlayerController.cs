@@ -29,16 +29,47 @@ public class PlayerController : MonoBehaviour
     private bool isSlowMotionOnCooldown = false; // クールダウン中フラグ
     private float slowMotionCooldownTimer = 0f; // クールダウンタイマー
 
+    [Header("残像色変更設定")]
+    [Tooltip("残像の色を変更する速度の閾値 (m/s)")]
+    [SerializeField] private float speedThresholdForAfterImage = 20f;
+    [Tooltip("通常時の残像の色（水色）")]
+    [SerializeField] private Color normalAfterImageColor = new Color(0.3f, 0.8f, 1f, 0.6f);
+    [Tooltip("高速時の残像の色（赤色）")]
+    [SerializeField] private Color highSpeedAfterImageColor = new Color(1f, 0.3f, 0.3f, 0.7f);
+
+    [Header("高速エフェクト設定")]
+    [Tooltip("高速時に再生するパーティクルエフェクト")]
+    [SerializeField] private ParticleSystem highSpeedEffectPrefab;
+    [Tooltip("エフェクトをプレイヤーの子オブジェクトとして配置")]
+    [SerializeField] private bool attachEffectToPlayer = true;
+    [Tooltip("エフェクトのローカル位置オフセット")]
+    [SerializeField] private Vector3 effectOffset = Vector3.zero;
+
+    private AIE2D.DynamicAfterImageEffect2DPlayer afterImagePlayer;
+    private bool isHighSpeed = false;
+    private ParticleSystem currentSpeedEffect;
+
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
+        // 残像コンポーネントを取得
+        afterImagePlayer = GetComponent<AIE2D.DynamicAfterImageEffect2DPlayer>();
+        if (afterImagePlayer == null)
+        {
+            Debug.LogWarning("DynamicAfterImageEffect2DPlayerが見つかりません");
+        }
     }
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        // 初期色を設定（通常時は水色）
+        if (afterImagePlayer != null)
+        {
+            afterImagePlayer.SetColorIfneeded(normalAfterImageColor);
+        }
     }
 
     void Update()
@@ -75,6 +106,12 @@ public class PlayerController : MonoBehaviour
 
         // スローモーション制御
         UpdateSlowMotion();
+
+        // 残像の色を速度に応じて変更
+        UpdateAfterImageColor();
+
+        // 高速エフェクトの制御
+        UpdateHighSpeedEffect();
     }
 
     void FixedUpdate()
@@ -142,6 +179,72 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 速度に応じて残像の色を更新する
+    /// </summary>
+    private void UpdateAfterImageColor()
+    {
+        if (afterImagePlayer == null || rb == null) return;
+
+        float currentSpeed = rb.velocity.magnitude;
+
+        // 速度が閾値を超えているかチェック
+        bool shouldBeHighSpeed = currentSpeed >= speedThresholdForAfterImage;
+
+        // 状態が変わった場合のみ色を更新
+        if (shouldBeHighSpeed != isHighSpeed)
+        {
+            isHighSpeed = shouldBeHighSpeed;
+            Color targetColor = isHighSpeed ? highSpeedAfterImageColor : normalAfterImageColor;
+            afterImagePlayer.SetColorIfneeded(targetColor);
+            Debug.Log($"残像色変更: {(isHighSpeed ? "高速（赤）" : "通常（水色）")} 速度={currentSpeed:F1}m/s");
+        }
+    }
+
+    /// <summary>
+    /// 速度に応じて高速エフェクトを制御する
+    /// </summary>
+    private void UpdateHighSpeedEffect()
+    {
+        if (highSpeedEffectPrefab == null || rb == null) return;
+
+        float currentSpeed = rb.velocity.magnitude;
+        bool shouldPlayEffect = currentSpeed >= speedThresholdForAfterImage;
+
+        if (shouldPlayEffect && currentSpeedEffect == null)
+        {
+            // エフェクトを生成して再生
+            if (attachEffectToPlayer)
+            {
+                // プレイヤーの子オブジェクトとして配置
+                currentSpeedEffect = Instantiate(highSpeedEffectPrefab, transform);
+                currentSpeedEffect.transform.localPosition = effectOffset;
+            }
+            else
+            {
+                // ワールド座標に配置
+                Vector3 effectPosition = transform.position + effectOffset;
+                currentSpeedEffect = Instantiate(highSpeedEffectPrefab, effectPosition, Quaternion.identity);
+            }
+
+            currentSpeedEffect.Play();
+            Debug.Log("高速エフェクト開始");
+        }
+        else if (!shouldPlayEffect && currentSpeedEffect != null)
+        {
+            // エフェクトを停止して削除
+            currentSpeedEffect.Stop();
+            Destroy(currentSpeedEffect.gameObject, currentSpeedEffect.main.duration);
+            currentSpeedEffect = null;
+            Debug.Log("高速エフェクト停止");
+        }
+        else if (shouldPlayEffect && currentSpeedEffect != null && !attachEffectToPlayer)
+        {
+            // エフェクトがプレイヤーに追従しない場合は位置を更新
+            currentSpeedEffect.transform.position = transform.position + effectOffset;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("SlowZone"))
@@ -173,7 +276,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ★ 追加: Barとの衝突検出
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bar"))
@@ -194,6 +296,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
+        // エフェクトのクリーンアップ
+        if (currentSpeedEffect != null)
+        {
+            Destroy(currentSpeedEffect.gameObject);
+        }
+
         // オブジェクト破棄時に必ずTimeScaleをリセット
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
@@ -206,7 +314,10 @@ public class PlayerController : MonoBehaviour
         Time.fixedDeltaTime = 0.02f;
     }
 
-    // ★ 追加: 外部からクールダウン状態を確認するためのプロパティ
+    // 外部からクールダウン状態を確認するためのプロパティ
     public bool IsSlowMotionOnCooldown => isSlowMotionOnCooldown;
     public float SlowMotionCooldownRemaining => slowMotionCooldownTimer;
+
+    // 現在の速度を取得するためのプロパティ
+    public float CurrentSpeed => rb != null ? rb.velocity.magnitude : 0f;
 }
