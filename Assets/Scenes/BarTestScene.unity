@@ -1830,7 +1830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   outTimeToLose: 0.1
-  maxSpeed: 50
+  maxSpeed: 100
   slowSpeed: 5
   savedVelocity: {x: 0, y: 0}
   rightClick: {fileID: 1135507975}
