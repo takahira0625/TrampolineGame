@@ -28,7 +28,7 @@ public class BombBlock : GimmickBlock
 
     private void TriggerExplosion()
     {
-        // ?? ”š”­Prefab‚ğ¶¬‚µ‚ÄÀs
+        // ”š”­Prefab‚ğ¶¬‚µ‚ÄÀs
         if (explosionEffectPrefab != null)
         {
             ExplosionEffect effect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);

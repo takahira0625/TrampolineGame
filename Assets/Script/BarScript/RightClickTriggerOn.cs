@@ -1,31 +1,34 @@
 using System.Collections;
 using UnityEngine;
 
-//Trigger2Dにしたらヒットストップの動機ずれが解消できるかも
-public class RightClick : MonoBehaviour
+public class RightClickTriggerOn : MonoBehaviour
 {
     [SerializeField] private BarMovement barFollow;
     [Header("前進距離と時間")]
-    [SerializeField] private float forwardDistance = 20.0f;
+    [SerializeField] private float forwardDistance = 10.0f;
     [SerializeField] private float forwardTime = 0.1f;
     [SerializeField] private float returnTime = 0.3f;
+
     [Header("反射設定")]
     [SerializeField] private float reboundCoefficient = 0.7f;
+    [SerializeField] private float reboundExitSpeed = 25f; // Exit時に飛ばす速度
     [SerializeField] private float pushSpeed = 20f;
+
     [SerializeField, Header("ヒットストップ設定")]
-    private float hitStopDuration = 0.1f; // ヒットストップの時間（秒）
-    //private float StartHitStopTime = 0.03f; // ヒットストップ開始までの時間（秒）
+    private float hitStopDuration = 0.1f;
+
     private bool isMoving = false;
     public bool IsMoving => isMoving;
     private bool hasHitThisPush = false;
 
     private Vector2 originalPosition;
     private Quaternion startRotation;
+    private Collider2D col;
     private Rigidbody2D rb;
 
-    // ボール速度の遅延適用
-    private Rigidbody2D pendingBallRb = null;
-    private Vector2 pendingVelocity = Vector2.zero;
+    // 反射データの記録
+    private Rigidbody2D lastBallRb;
+    private Vector2 lastNormal;
 
     void Awake()
     {
@@ -34,9 +37,15 @@ public class RightClick : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
+
+    void Start()
+    {
+        col = GetComponent<Collider2D>();
+    }
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isMoving)
+        if (Input.GetMouseButtonDown(1) && !isMoving && !col.isTrigger)
         {
             startRotation = transform.rotation;
             StartCoroutine(MoveForwardAndBack());
@@ -46,23 +55,23 @@ public class RightClick : MonoBehaviour
     private IEnumerator MoveForwardAndBack()
     {
         if (barFollow != null)
-        {
             barFollow.stopFollow = true;
-        }
 
         isMoving = true;
+        col.isTrigger = true;
 
         originalPosition = rb.position;
         Vector2 forward = (startRotation * Vector2.up).normalized;
         Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
+
         float elapsed = 0f;
+
         // --- 前進 ---
         while (elapsed < forwardTime)
         {
             Vector2 newPos = Vector2.Lerp(originalPosition, targetForwardPos, elapsed / forwardTime);
             rb.MovePosition(newPos);
             elapsed += Time.fixedDeltaTime;
-
             yield return new WaitForFixedUpdate();
         }
         rb.MovePosition(targetForwardPos);
@@ -74,79 +83,75 @@ public class RightClick : MonoBehaviour
             Vector2 newPos = Vector2.Lerp(targetForwardPos, originalPosition, elapsed / returnTime);
             rb.MovePosition(newPos);
             elapsed += Time.fixedDeltaTime;
-
             yield return new WaitForFixedUpdate();
         }
         rb.MovePosition(originalPosition);
 
-
         isMoving = false;
+        col.isTrigger = false;
         hasHitThisPush = false;
         if (barFollow != null) barFollow.stopFollow = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    // --- Trigger中の押し出し ---
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!collision.gameObject.CompareTag("Player")) return;
+        if (other.transform.IsChildOf(transform)) return;
+        if (!other.CompareTag("Player")) return;
 
-        Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
-        PlayerController playerCtrl = collision.gameObject.GetComponent<PlayerController>();
-        if (ballRb == null || playerCtrl == null) return;
-        pendingBallRb = ballRb;
-        if (isMoving && hasHitThisPush) return; // 一度押し出し済みなら無視
+        Rigidbody2D ballRb = other.attachedRigidbody;
+        PlayerController playerCtrl = other.GetComponent<PlayerController>();
+        if (ballRb == null || playerCtrl == null || (isMoving && hasHitThisPush)) return;
 
-        Vector2 normal = collision.contacts[0].normal;
-
-        //押し出し中なら
+        // --- 押し出し中 ---
         if (isMoving)
         {
             hasHitThisPush = true;
             Vector2 forward = transform.up.normalized;
 
-            // 触れたボールがActive化されているなら
-            // 通常の押し出し速度よりも速く押し出す
             if (playerCtrl.isActive)
             {
-                // ヒットストップを開始
                 StartCoroutine(HitStop());
-                Debug.Log("ヒットストップ");
-                Debug.Log("Active押し出し");
+                Debug.Log("ヒットストップ: Active押し出し");
+
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
-                if (savedSpeed > pushSpeed)
-                {
-                    // savedVelocityより早くして、加速させる
-                    pendingVelocity = forward * (savedSpeed * 1.1f);
-                }
-                else
-                {
-                    // 押し出し速度より早く返す
-                    pendingVelocity = forward * (pushSpeed+1);
-                }
-                playerCtrl.isActive = false; // Active化を解除
-                Debug.Log("Active解除");
+                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
+
+                playerCtrl.isActive = false;
             }
-            else //非Active化だけど押し出しはしているなら
+            else
             {
                 Debug.Log("非Active押し出し");
-                // 押し出し速度で返す
-                pendingVelocity = forward * pushSpeed;
+                ballRb.velocity = forward * pushSpeed;
             }
         }
-        else  // 通常の反射
-        {
-            Debug.Log("通常反射");
-            Vector2 reflected = Vector2.Reflect(ballRb.velocity, normal);
-            pendingVelocity = reflected * reboundCoefficient;
-        }
     }
+
+
+
+    // --- Exitで法線方向に飛ばす ---
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (isMoving) return; // Trigger中はスキップ
+
+        Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
+        if (ballRb == null) return;
+
+        // 速度が0なら向きがわからないので適当に上方向に飛ばす
+        Vector2 dir = ballRb.velocity.normalized;
+        if (dir == Vector2.zero)
+            dir = Vector2.up;
+
+        // magnitudeを指定して速度を変更
+        ballRb.velocity = dir * reboundExitSpeed;
+    }
+
+
     private IEnumerator HitStop()
     {
-        //yield return new WaitForSecondsRealtime(StartHitStopTime);
         float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0f; // ゲームを止める
-        yield return new WaitForSecondsRealtime(hitStopDuration); // リアルタイムで待つ
-        Time.timeScale = originalTimeScale; // 元に戻す
-        pendingBallRb.velocity = pendingVelocity;
-
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(hitStopDuration);
+        Time.timeScale = originalTimeScale;
     }
 }
