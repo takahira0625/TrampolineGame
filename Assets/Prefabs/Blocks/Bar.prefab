@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7254595007854023088}
   - component: {fileID: 5533666384263582103}
   - component: {fileID: 888043553311788355}
-  - component: {fileID: 8949893892715028547}
   - component: {fileID: 909902077667980980}
   - component: {fileID: 7712493372238256815}
   m_Layer: 0
@@ -133,30 +132,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8949893892715028547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383152512889467349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eeb2f0a3b9f18941b200a5d39526866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stopFollow: 0
-  virtualMouseTransform: {fileID: 0}
-  followX: 1
-  followY: 1
-  fixedY: 0
-  rotateToDirection: 1
-  rotationSmoothingMin: 0.01
-  rotationSmoothingMax: 1
-  angleDeltaThreshold: 30
-  smoothing: 0.25
-  deadZoneEnter: 0.01
-  deadZoneExit: 0.01
 --- !u!114 &909902077667980980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,11 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcefffae01062540850e8bf8a4875c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barFollow: {fileID: 8949893892715028547}
+  barFollow: {fileID: 0}
   forwardDistance: 3
   forwardTime: 0.1
-  waitTime: 0.1
   returnTime: 0.3
+  reboundCoefficient: 0.9
+  pushPower: 30
 --- !u!50 &7712493372238256815
 Rigidbody2D:
   serializedVersion: 4
