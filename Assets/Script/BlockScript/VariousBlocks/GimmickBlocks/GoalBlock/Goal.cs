@@ -21,6 +21,7 @@ public class Goal : BaseBlock
             PlayerInventory inventory = collision.gameObject.GetComponent<PlayerInventory>();
             if (inventory != null && inventory.KeyCount >= requiredKeys)
             {
+                GameManager.instance.Goal();
                 Debug.Log("Goal! " + inventory.KeyCount);
                 SceneManager.LoadScene("ResultScene");
             }

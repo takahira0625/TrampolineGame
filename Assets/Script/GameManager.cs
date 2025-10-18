@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 
     // ==== ゴール・ゲームオーバー処理 ====
     // ゴール処理を行う関数
-    void Goal()
+    public void Goal()
     {
         StopTimer(); // ← タイマー確定
         SceneManager.LoadScene("ResultScene");

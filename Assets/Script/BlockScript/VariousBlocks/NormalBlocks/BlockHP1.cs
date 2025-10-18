@@ -1,15 +1,15 @@
 using System.Data.Common;
 using UnityEngine;
 
-public class GrayBlock : BaseBlock
+public class BlockHP1 : BaseBlock
 {
-    [SerializeField] private int extraHealth = 1;
+    [SerializeField] private int extraHealth = -2;
 
     protected override void Awake()
     {
         base.Awake();
         health += extraHealth;
 
-        SetSprite(parameter.graySprite);
+        SetSprite(parameter.hp1Sprite);
     }
 }
