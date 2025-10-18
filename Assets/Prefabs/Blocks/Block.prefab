@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2195392306719398946}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Block
+  m_TagString: NormalBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.86, y: -1.7193432, z: 0}
-  m_LocalScale: {x: 10.95, y: 10.95, z: 1}
+  m_LocalScale: {x: 15, y: 15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4580164788727937290}
@@ -146,6 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: {fileID: 0}
   breakBlock: {fileID: 0}
+  playSoundOnHit: 1
+  customHitSound: {fileID: 0}
 --- !u!1 &5616716021223577167
 GameObject:
   m_ObjectHideFlags: 0
