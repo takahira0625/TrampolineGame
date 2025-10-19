@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     private float slowSpeed = 5f;
     public Vector2 savedVelocity = Vector2.zero;
 
+    //矢印表示用
+    private ArrowDirection arrow;
+    private float entrySpeedRatio = 0f;
+
     [SerializeField] private RightClickTriggerOn rightClick;
 
     [Header("SlowZone")]
@@ -45,6 +49,10 @@ public class PlayerController : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        arrow = GetComponentInChildren<ArrowDirection>(true);
+        if (arrow != null)
+            arrow.gameObject.SetActive(false);
+
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
 
         // 残像コンポーネントを取得
@@ -99,13 +107,32 @@ public class PlayerController : MonoBehaviour
             rb.velocity = velocity.normalized * slowSpeed;
             //Active化
             isActive = true;
-        }
+            DisplayArrow();
 
+        }
+        else
+        {
+            arrow.gameObject.SetActive(false);
+        }
         // 残像の色を速度に応じて変更
         UpdateAfterImageColor();
 
         // 高速エフェクトの制御
         UpdateHighSpeedEffect();
+
+    }
+    void DisplayArrow()
+    {
+        if (arrow == null) return;
+
+        arrow.gameObject.SetActive(true);
+
+        Vector2 barPos = rightClick.transform.position;
+        Vector2 ballPos = transform.position;
+        float ratio = Mathf.Clamp01(rb.velocity.magnitude / maxSpeed);
+
+        arrow.UpdateArrow(barPos, ballPos, ratio);
+        
     }
     void FixedUpdate()
     {
@@ -192,12 +219,18 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("SlowZone"))
         {
-            //①スローゾーン内に入った時点での速度を取得
+            // ①スローゾーン内に入った時点での速度を取得
             isInSlowZone = true;
             savedVelocity = rb.velocity;
-        }
 
+            // ②最大速度に対する割合（0～1）
+            float currentSpeed = rb.velocity.magnitude;
+            entrySpeedRatio = Mathf.Clamp01(currentSpeed / maxSpeed);
+
+            Debug.Log($"スローゾーン突入速度={currentSpeed:F2}, 比率={entrySpeedRatio:F2}");
+        }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         isInSlowZone = false;

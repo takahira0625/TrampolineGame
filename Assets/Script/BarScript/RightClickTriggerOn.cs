@@ -127,8 +127,6 @@ public class RightClickTriggerOn : MonoBehaviour
         }
     }
 
-
-
     // --- Exitで法線方向に飛ばす ---
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -137,10 +135,7 @@ public class RightClickTriggerOn : MonoBehaviour
         Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
         if (ballRb == null) return;
 
-        // 速度が0なら向きがわからないので適当に上方向に飛ばす
         Vector2 dir = ballRb.velocity.normalized;
-        if (dir == Vector2.zero)
-            dir = Vector2.up;
 
         // magnitudeを指定して速度を変更
         ballRb.velocity = dir * reboundExitSpeed;

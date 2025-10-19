@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Warp : BaseBlock
+public class WarpRandom: BaseBlock
 {
-    private static Warp[] allWarps;
+    private static WarpRandom[] allWarps;
     private bool isDisabled = false;
 
     [SerializeField] private float disableDuration = 0.5f; // ワープ元・先を一時無効化
@@ -13,10 +13,10 @@ public class Warp : BaseBlock
     protected override void Awake()
     {
         base.Awake();
-        SetSprite(parameter.WarpSprite);
+        SetSprite(parameter.WarpRandomSprite);
 
         // 全Warpをキャッシュ
-        allWarps = FindObjectsOfType<Warp>();
+        allWarps = FindObjectsOfType<WarpRandom>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -24,17 +24,17 @@ public class Warp : BaseBlock
         if (!other.CompareTag("Player")) return;
         if (isDisabled) return; // 無効化中は何もしない
 
-        Warp destination = GetRandomWarpExcludingSelf();
+        WarpRandom destination = GetRandomWarpExcludingSelf();
         if (destination == null) return;
 
         StartCoroutine(WarpPlayer(other.transform, destination));
     }
 
-    private Warp GetRandomWarpExcludingSelf()
+    private WarpRandom GetRandomWarpExcludingSelf()
     {
         if (allWarps == null || allWarps.Length <= 1) return null;
 
-        List<Warp> list = new List<Warp>();
+        List<WarpRandom> list = new List<WarpRandom>();
         foreach (var w in allWarps)
         {
             if (w != this && !w.isDisabled)
@@ -45,7 +45,7 @@ public class Warp : BaseBlock
         return list[Random.Range(0, list.Count)];
     }
 
-    private IEnumerator WarpPlayer(Transform player, Warp destination)
+    private IEnumerator WarpPlayer(Transform player, WarpRandom destination)
     {
         // ワープ元・先を一時的に無効化（戻り防止）
         isDisabled = true;
