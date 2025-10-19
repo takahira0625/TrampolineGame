@@ -1,20 +1,22 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
+using UnityEngine.XR;
 
-//Trigger2D‚É‚µ‚½‚çƒqƒbƒgƒXƒgƒbƒv‚Ì“®‹@‚¸‚ê‚ª‰ğÁ‚Å‚«‚é‚©‚à
+//Trigger2Dã«ã—ãŸã‚‰ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã®å‹•æ©Ÿãšã‚ŒãŒè§£æ¶ˆã§ãã‚‹ã‹ã‚‚
 public class RightClick : MonoBehaviour
 {
+
     [SerializeField] private BarMovement barFollow;
-    [Header("‘Oi‹——£‚ÆŠÔ")]
+    [Header("å‰é€²è·é›¢ã¨æ™‚é–“")]
     [SerializeField] private float forwardDistance = 20.0f;
     [SerializeField] private float forwardTime = 0.1f;
     [SerializeField] private float returnTime = 0.3f;
-    [Header("”½Ëİ’è")]
+    [Header("åå°„è¨­å®š")]
     [SerializeField] private float reboundCoefficient = 0.7f;
     [SerializeField] private float pushSpeed = 20f;
-    [SerializeField, Header("ƒqƒbƒgƒXƒgƒbƒvİ’è")]
-    private float hitStopDuration = 0.1f; // ƒqƒbƒgƒXƒgƒbƒv‚ÌŠÔi•bj
-    //private float StartHitStopTime = 0.03f; // ƒqƒbƒgƒXƒgƒbƒvŠJn‚Ü‚Å‚ÌŠÔi•bj
+    [SerializeField, Header("ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—è¨­å®š")]
+    private float hitStopDuration = 0.1f; // ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã®æ™‚é–“ï¼ˆç§’ï¼‰
+    //private float StartHitStopTime = 0.03f; // ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—é–‹å§‹ã¾ã§ã®æ™‚é–“ï¼ˆç§’ï¼‰
     private bool isMoving = false;
     public bool IsMoving => isMoving;
     private bool hasHitThisPush = false;
@@ -23,9 +25,47 @@ public class RightClick : MonoBehaviour
     private Quaternion startRotation;
     private Rigidbody2D rb;
 
-    // ƒ{[ƒ‹‘¬“x‚Ì’x‰„“K—p
+    // ãƒœãƒ¼ãƒ«é€Ÿåº¦ã®é…å»¶é©ç”¨
     private Rigidbody2D pendingBallRb = null;
     private Vector2 pendingVelocity = Vector2.zero;
+
+    private AudioClip SmashSE;
+    private AudioClip CollisionSE;
+
+    private void LoadSmashSE()
+    {
+        if (SmashSE == null)
+        {
+            SmashSE = Resources.Load<AudioClip>("Audio/SE/Block/Smash");
+
+            if (SmashSE == null)
+            {
+                Debug.LogWarning("SmashSEãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: Resources/Audio/SE/Block/Smash");
+            }
+            else
+            {
+                Debug.Log("SmashSEã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ: " + SmashSE.name);
+            }
+        }
+    }
+
+    private void LoadCollisionSE()
+    {
+        if (CollisionSE == null)
+        {
+            // âœ… ä¿®æ­£: CollisionSEã«æ­£ã—ãä»£å…¥
+            CollisionSE = Resources.Load<AudioClip>("Audio/SE/Block/Collision");
+
+            if (CollisionSE == null)
+            {
+                Debug.LogWarning("CollisionSEãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: Resources/Audio/SE/Block/Collision");
+            }
+            else
+            {
+                Debug.Log("CollisionSEã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ: " + CollisionSE.name);
+            }
+        }
+    }
 
     void Awake()
     {
@@ -33,7 +73,21 @@ public class RightClick : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        
+        LoadSmashSE();
+        LoadCollisionSE();
+
+        // âœ… SEManageråˆæœŸåŒ–ç¢ºèª
+        if (SEManager.Instance == null)
+        {
+            Debug.LogError("SEManagerãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ï¼");
+        }
+        else
+        {
+            Debug.Log("SEManagerãŒæ­£å¸¸ã«åˆæœŸåŒ–ã•ã‚Œã¾ã—ãŸ");
+        }
     }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(1) && !isMoving)
@@ -56,29 +110,27 @@ public class RightClick : MonoBehaviour
         Vector2 forward = (startRotation * Vector2.up).normalized;
         Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
         float elapsed = 0f;
-        // --- ‘Oi ---
+        
+        // --- å‰é€² ---
         while (elapsed < forwardTime)
         {
             Vector2 newPos = Vector2.Lerp(originalPosition, targetForwardPos, elapsed / forwardTime);
             rb.MovePosition(newPos);
             elapsed += Time.fixedDeltaTime;
-
             yield return new WaitForFixedUpdate();
         }
         rb.MovePosition(targetForwardPos);
 
-        // --- –ß‚é ---
+        // --- æˆ»ã‚‹ ---
         elapsed = 0f;
         while (elapsed < returnTime)
         {
             Vector2 newPos = Vector2.Lerp(targetForwardPos, originalPosition, elapsed / returnTime);
             rb.MovePosition(newPos);
             elapsed += Time.fixedDeltaTime;
-
             yield return new WaitForFixedUpdate();
         }
         rb.MovePosition(originalPosition);
-
 
         isMoving = false;
         hasHitThisPush = false;
@@ -92,61 +144,91 @@ public class RightClick : MonoBehaviour
         Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
         PlayerController playerCtrl = collision.gameObject.GetComponent<PlayerController>();
         if (ballRb == null || playerCtrl == null) return;
+        
         pendingBallRb = ballRb;
-        if (isMoving && hasHitThisPush) return; // ˆê“x‰Ÿ‚µo‚µÏ‚İ‚È‚ç–³‹
+        if (isMoving && hasHitThisPush) return; // ä¸€åº¦æŠ¼ã—å‡ºã—æ¸ˆã¿ãªã‚‰ç„¡è¦–
 
         Vector2 normal = collision.contacts[0].normal;
 
-        //‰Ÿ‚µo‚µ’†‚È‚ç
+        // æŠ¼ã—å‡ºã—ä¸­ãªã‚‰
         if (isMoving)
         {
             hasHitThisPush = true;
             Vector2 forward = transform.up.normalized;
 
-            // G‚ê‚½ƒ{[ƒ‹‚ªActive‰»‚³‚ê‚Ä‚¢‚é‚È‚ç
-            // ’Êí‚Ì‰Ÿ‚µo‚µ‘¬“x‚æ‚è‚à‘¬‚­‰Ÿ‚µo‚·
+            // ActiveåŒ–ã•ã‚Œã¦ã„ã‚‹ãªã‚‰
             if (playerCtrl.isActive)
             {
-                // ƒqƒbƒgƒXƒgƒbƒv‚ğŠJn
                 StartCoroutine(HitStop());
-                Debug.Log("ƒqƒbƒgƒXƒgƒbƒv");
-                Debug.Log("Active‰Ÿ‚µo‚µ");
+                Debug.Log("ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ— - ActiveæŠ¼ã—å‡ºã—2");
+                PlaySE(SmashSE, "CollisionSE");
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
+                
                 if (savedSpeed > pushSpeed)
                 {
-                    // savedVelocity‚æ‚è‘‚­‚µ‚ÄA‰Á‘¬‚³‚¹‚é
                     pendingVelocity = forward * (savedSpeed * 1.1f);
                 }
                 else
                 {
-                    // ‰Ÿ‚µo‚µ‘¬“x‚æ‚è‘‚­•Ô‚·
-                    pendingVelocity = forward * (pushSpeed+1);
+                    pendingVelocity = forward * (pushSpeed + 1);
                 }
-                playerCtrl.isActive = false; // Active‰»‚ğ‰ğœ
-                Debug.Log("Active‰ğœ");
+                
+                playerCtrl.isActive = false;
+                Debug.Log("Activeè§£é™¤");
+                
             }
-            else //”ñActive‰»‚¾‚¯‚Ç‰Ÿ‚µo‚µ‚Í‚µ‚Ä‚¢‚é‚È‚ç
+            else // éActiveåŒ–ã ã‘ã©æŠ¼ã—å‡ºã—ã¯ã—ã¦ã„ã‚‹
             {
-                Debug.Log("”ñActive‰Ÿ‚µo‚µ");
-                // ‰Ÿ‚µo‚µ‘¬“x‚Å•Ô‚·
+                Debug.Log("éActiveæŠ¼ã—å‡ºã—");
+                
+                // âœ… SEã‚’å†ç”Ÿ(nullãƒã‚§ãƒƒã‚¯è¿½åŠ )
+                PlaySE(CollisionSE, "CollisionSE");
+                
                 pendingVelocity = forward * pushSpeed;
             }
         }
-        else  // ’Êí‚Ì”½Ë
+        else  // é€šå¸¸ã®åå°„
         {
-            Debug.Log("’Êí”½Ë");
+            Debug.Log("é€šå¸¸åå°„");
+
+            // âœ… SEã‚’å†ç”Ÿ(nullãƒã‚§ãƒƒã‚¯è¿½åŠ )
+            PlaySE(CollisionSE, "CollisionSE");
+
             Vector2 reflected = Vector2.Reflect(ballRb.velocity, normal);
             pendingVelocity = reflected * reboundCoefficient;
         }
     }
+
+    /// <summary>
+    /// SEã‚’å®‰å…¨ã«å†ç”Ÿã™ã‚‹
+    /// </summary>
+    private void PlaySE(AudioClip clip, string clipName)
+    {
+        if (clip == null)
+        {
+            Debug.LogWarning($"{clipName}ãŒnullã®ãŸã‚å†ç”Ÿã§ãã¾ã›ã‚“");
+            return;
+        }
+
+        if (SEManager.Instance == null)
+        {
+            Debug.LogError("SEManager.InstanceãŒnullã®ãŸã‚å†ç”Ÿã§ãã¾ã›ã‚“");
+            return;
+        }
+
+        Debug.Log($"{clipName}ã‚’å†ç”Ÿã—ã¾ã™");
+        SEManager.Instance.PlayOneShot(clip);
+    }
+
     private IEnumerator HitStop()
     {
-        //yield return new WaitForSecondsRealtime(StartHitStopTime);
         float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0f; // ƒQ[ƒ€‚ğ~‚ß‚é
-        yield return new WaitForSecondsRealtime(hitStopDuration); // ƒŠƒAƒ‹ƒ^ƒCƒ€‚Å‘Ò‚Â
-        Time.timeScale = originalTimeScale; // Œ³‚É–ß‚·
-        pendingBallRb.velocity = pendingVelocity;
-
+        Time.timeScale = 0f; // ã‚²ãƒ¼ãƒ ã‚’æ­¢ã‚ã‚‹
+        yield return new WaitForSecondsRealtime(hitStopDuration); // ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ ã§å¾…ã¤
+        Time.timeScale = originalTimeScale; // å…ƒã«æˆ»ã™
+        if (pendingBallRb != null)
+        {
+            pendingBallRb.velocity = pendingVelocity;
+        }
     }
 }

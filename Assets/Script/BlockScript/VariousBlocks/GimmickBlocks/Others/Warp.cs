@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
 public class Warp : BaseBlock
 {
@@ -15,51 +14,46 @@ public class Warp : BaseBlock
     {
         base.Awake();
         SetSprite(parameter.WarpSprite);
-        LoadWarpSE();
-        // 全Warpをキャッシュ
-        allWarps = FindObjectsOfType<Warp>();
-    }
-    /// <summary>
-    /// 鍵取得時の効果音を読み込む
-    /// </summary>
-    private void LoadWarpSE()
-    {
-        // カスタムSEが設定されていない場合のみ自動ロード
+        
         if (warpSE == null)
         {
-            // Resources/Audio/SE/Key から読み込み
             warpSE = Resources.Load<AudioClip>("Audio/SE/Block/WarpBlock");
-
-            if (warpSE == null)
-            {
-                Debug.LogWarning("鍵のSEが見つかりません: Resources/Audio/SE/Block/WarpBlock");
-            }
         }
+        
+        allWarps = FindObjectsOfType<Warp>();
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
-        if (isDisabled) return; // 無効化中は何もしない
+        if (!other.CompareTag("Player") || isDisabled) return;
+
+        // SE再生
+        if (warpSE != null && SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayOneShot(warpSE);
+        }
 
         Warp destination = GetRandomWarpExcludingSelf();
-        if (destination == null) return;
-        SEManager.Instance.PlayOneShot(warpSE);
-        StartCoroutine(WarpPlayer(other.transform, destination));
+        if (destination != null)
+        {
+            StartCoroutine(WarpPlayer(other.transform, destination));
+        }
     }
 
     private Warp GetRandomWarpExcludingSelf()
     {
         if (allWarps == null || allWarps.Length <= 1) return null;
 
-        List<Warp> list = new List<Warp>();
-        foreach (var w in allWarps)
+        List<Warp> availableWarps = new List<Warp>();
+        foreach (var warp in allWarps)
         {
-            if (w != this && !w.isDisabled)
-                list.Add(w);
+            if (warp != this && !warp.isDisabled)
+            {
+                availableWarps.Add(warp);
+            }
         }
 
-        if (list.Count == 0) return null;
-        return list[Random.Range(0, list.Count)];
+        return availableWarps.Count > 0 ? availableWarps[Random.Range(0, availableWarps.Count)] : null;
     }
 
     private IEnumerator WarpPlayer(Transform player, Warp destination)
