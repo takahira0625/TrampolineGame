@@ -174,11 +174,36 @@ public class BaseBlock : MonoBehaviour
     {
         health -= damage;
 
+        // 残りHPに応じてスプライトを更新
+        UpdateBlockAppearance();
+
         if (health <= 0)
         {
             // 破壊処理をBreakBlockに通知
             if (breakBlock != null)
                 breakBlock.OnBreak();
+        }
+    }
+
+    /// <summary>
+    /// 残りHPに応じてスプライトを変更
+    /// </summary>
+    protected virtual void UpdateBlockAppearance()
+    {
+        if (parameter == null) return;
+
+        // 残りHPによってスプライトを切り替え
+        if (health >= 3)
+        {
+            SetSprite(parameter.baseSprite);
+        }
+        else if (health == 2)
+        {
+            SetSprite(parameter.hp2Sprite);
+        }
+        else if (health == 1)
+        {
+            SetSprite(parameter.hp1Sprite);
         }
     }
 

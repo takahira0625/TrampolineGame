@@ -149,4 +149,4 @@ MonoBehaviour:
   customHitSound: {fileID: 0}
   cooldown: {fileID: 0}
   explosionEffectPrefab: {fileID: 8777462857694897634, guid: a0d7c627e20aac04fbe538593ac877af, type: 3}
-  explosionRadius: 3
+  explosionRadius: 1

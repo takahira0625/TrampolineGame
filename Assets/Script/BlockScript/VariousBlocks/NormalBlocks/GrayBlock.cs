@@ -1,9 +1,9 @@
 using System.Data.Common;
 using UnityEngine;
 
-public class Block : BaseBlock
+public class GrayBlock : BaseBlock
 {
-    [SerializeField] private int extraHealth = 3;
+    [SerializeField] private int extraHealth = 1;
 
     protected override void Awake()
     {

@@ -19,6 +19,8 @@ public class ParameterConfig : ScriptableObject
     public float DownBounce = 0.5f;
 
     [Header("テクスチャ設定")]
+    public Sprite hp1Sprite;
+    public Sprite hp2Sprite;
     public Sprite baseSprite;
     public Sprite graySprite;
     public Sprite blackSprite;
