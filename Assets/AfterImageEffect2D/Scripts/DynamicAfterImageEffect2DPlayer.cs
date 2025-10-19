@@ -30,6 +30,13 @@ namespace AIE2D{
       }
     }
 
+    private void update()
+    {
+            DynamicAfterImageEffect2D afterImage = new GameObject("AfterImage0").AddComponent<DynamicAfterImageEffect2D>();
+            afterImage.transform.SetParent(_afterImagerParent.transform);
+            Debug.Log(afterImage.transform);
+    }
+
     /// <summary>
     /// 残像を生成する(既に残像がある場は削除する)
     /// </summary>
@@ -58,6 +65,7 @@ namespace AIE2D{
       //残像の複製元を作成
       DynamicAfterImageEffect2D afterImage = new GameObject("AfterImage0").AddComponent<DynamicAfterImageEffect2D>();
       afterImage.transform.SetParent(_afterImagerParent.transform);
+      Debug.Log(afterImage.transform);
       afterImage.CreateSpriteRenderer(_targetSpriteRenderer);
       _afterImageList.Add(afterImage);
 

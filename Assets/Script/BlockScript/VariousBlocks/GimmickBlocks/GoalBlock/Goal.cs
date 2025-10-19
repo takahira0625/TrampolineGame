@@ -4,6 +4,13 @@ using UnityEngine.SceneManagement;
 public class Goal : BaseBlock
 {
     [SerializeField] private int requiredKeys = 3; // 必要キー数
+    [Header("ゴール見た目設定")]
+    [SerializeField] private Sprite lockedSprite;   // 鍵未取得時の見た目
+    [SerializeField] private Sprite unlockedSprite; // 全取得後の見た目
+
+    private SpriteRenderer spriteRenderer;
+    private bool isUnlocked = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -12,18 +19,41 @@ public class Goal : BaseBlock
         KeyBlock[] keyBlocks = FindObjectsOfType<KeyBlock>();
         requiredKeys = keyBlocks.Length;
 
-        SetSprite(parameter.GoalSprite);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = lockedSprite; // 初期状態はロック見た目
     }
+
+    private void OnEnable()
+    {
+        // PlayerInventory のイベント購読
+        PlayerInventory.OnKeyCountChanged += HandleKeyCountChanged;
+    }
+
+    private void OnDisable()
+    {
+        //イベント購読解除（メモリリーク防止）
+        PlayerInventory.OnKeyCountChanged -= HandleKeyCountChanged;
+    }
+
+    //鍵の数が変わったときに呼ばれる関数
+    private void HandleKeyCountChanged(int currentKeyCount)
+    {
+        if (!isUnlocked && currentKeyCount >= requiredKeys)
+        {
+            isUnlocked = true;
+            spriteRenderer.sprite = unlockedSprite;
+            Debug.Log("ゴールが開放されました！");
+        }
+    }
+
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerInventory inventory = collision.gameObject.GetComponent<PlayerInventory>();
-            if (inventory != null && inventory.KeyCount >= requiredKeys)
+            if (GameManager.instance.TotalKeys >= requiredKeys)
             {
                 GameManager.instance.Goal();
-                Debug.Log("Goal! " + inventory.KeyCount);
-                SceneManager.LoadScene("ResultScene");
+                Debug.Log("Goal! " + GameManager.instance.TotalKeys);
             }
             else
             {

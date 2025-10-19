@@ -167,8 +167,10 @@ MonoBehaviour:
   canMove: 1
   outTimeToLose: 0.1
   maxSpeed: 20
-  slowMotionTimeScale: 0.3
-  slowMotionCooldownTime: 3
+  slowSpeed: 5
+  savedVelocity: {x: 0, y: 0}
+  rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
+  isActive: 0
   speedThresholdForAfterImage: 20
   normalAfterImageColor: {r: 0.26240644, g: 0.6369531, b: 0.7132075, a: 0.5}
   highSpeedAfterImageColor: {r: 0.78113204, g: 0.19896752, b: 0.19896752, a: 0.7}
