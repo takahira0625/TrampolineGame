@@ -83,6 +83,7 @@ public class RightClickTriggerOn : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && !isMoving && !col.isTrigger)
         {
+            Debug.Log("右クリックで前進開始");
             startRotation = transform.rotation;
             StartCoroutine(MoveForwardAndBack());
         }
@@ -98,8 +99,8 @@ public class RightClickTriggerOn : MonoBehaviour
 
         originalPosition = rb.position;
         Vector2 forward = (startRotation * Vector2.up).normalized;
-        Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
 
+        Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
         float elapsed = 0f;
 
         // --- 前進 ---

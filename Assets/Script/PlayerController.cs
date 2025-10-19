@@ -206,8 +206,6 @@ public class PlayerController : MonoBehaviour
             float currentSpeed = rb.velocity.magnitude;
             entrySpeedRatio = Mathf.Clamp01(currentSpeed / maxSpeed);
 
-            Debug.Log($"スローゾーン突入速度={currentSpeed:F2}, 比率={entrySpeedRatio:F2}");
-
         }
     }
 
