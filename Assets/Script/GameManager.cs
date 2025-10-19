@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour
     // このクラスの唯一のインスタンスを保持する（シングルトン）
     public static GameManager instance;
 
+    // 複数のボールで鍵の共有を行うためのもの
+    private int totalKeys = 0; // 全プレイヤー共通の鍵数
+    public int TotalKeys => totalKeys; // 参照用プロパティ
+
     // インスペクターから設定する項目
     public int requiredCoins = 5; // ゴールに必要なコインの数
     public GameObject goalTextObject; // ゴールテキストのUIオブジェクト
@@ -136,6 +140,11 @@ public class GameManager : MonoBehaviour
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
+            Debug.Log($"【Register】プレイヤー登録: {player.name} / 現在のプレイヤー数: {activePlayers.Count}");
+        }
+        else
+        {
+            Debug.LogWarning($"【Register】既に登録済み: {player.name}");
         }
     }   
     // プレイヤーが死んだときに呼ぶ
@@ -144,6 +153,11 @@ public class GameManager : MonoBehaviour
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
+            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
+        }
+        else
+        {
+            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
         }
 
         // 全員が死んだらゲームオーバー
@@ -179,9 +193,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
     }
 
+    // 鍵を取得した際の処理
+    public void AddKeyGlobal()
+    {
+        totalKeys++;
+        Debug.Log($"鍵を取得しました（合計: {totalKeys}）");
+
+        // Goalなどに通知
+        PlayerInventory.RaiseKeyCountChanged(totalKeys);
+    }
+
     // ==== ゴール・ゲームオーバー処理 ====
     // ゴール処理を行う関数
-    void Goal()
+    public void Goal()
     {
         StopTimer(); // ← タイマー確定
         SceneManager.LoadScene("ResultScene");

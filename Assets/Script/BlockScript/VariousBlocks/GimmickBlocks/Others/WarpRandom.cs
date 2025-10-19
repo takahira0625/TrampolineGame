@@ -1,12 +1,12 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class WarpRandom: BaseBlock
 {
     private static WarpRandom[] allWarps;
     private bool isDisabled = false;
-
+    [SerializeField] private AudioClip warpSE;        // ワープ音
     [SerializeField] private float disableDuration = 0.5f; // ワープ元・先を一時無効化
     [SerializeField] private float offsetY = 1.0f;         // プレイヤーを少し上に出す
 
@@ -17,12 +17,23 @@ public class WarpRandom: BaseBlock
 
         // 全Warpをキャッシュ
         allWarps = FindObjectsOfType<WarpRandom>();
+
+        
+        if (warpSE == null)
+        {
+            warpSE = Resources.Load<AudioClip>("Audio/SE/Block/WarpBlock");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
-        if (isDisabled) return; // 無効化中は何もしない
+        if (!other.CompareTag("Player") || isDisabled) return;
+
+        // SE再生
+        if (warpSE != null && SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayOneShot(warpSE);
+        }
 
         WarpRandom destination = GetRandomWarpExcludingSelf();
         if (destination == null) return;
@@ -35,14 +46,16 @@ public class WarpRandom: BaseBlock
         if (allWarps == null || allWarps.Length <= 1) return null;
 
         List<WarpRandom> list = new List<WarpRandom>();
-        foreach (var w in allWarps)
+
+        foreach (var warp in allWarps)
         {
-            if (w != this && !w.isDisabled)
-                list.Add(w);
+            if (warp != this && !warp.isDisabled)
+            {
+                list.Add(warp);
+            }
         }
 
-        if (list.Count == 0) return null;
-        return list[Random.Range(0, list.Count)];
+        return list.Count > 0 ? list[Random.Range(0, list.Count)] : null;
     }
 
     private IEnumerator WarpPlayer(Transform player, WarpRandom destination)

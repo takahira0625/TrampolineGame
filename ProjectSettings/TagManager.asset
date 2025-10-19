@@ -11,6 +11,17 @@ TagManager:
   - Block
   - Bar
   - SlowZone
+  - KeyBlock
+  - NormalBlock
+  - BombBlock
+  - GrayBlock
+  - BlackBlock
+  - FxTemporaire
+  - DoubleBlock
+  - SpeedDoubleBlock
+  - GoalBlock
+  - WarpBlock
+  - SpeedHalfBlock
   layers:
   - Default
   - TransparentFX
@@ -47,4 +58,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Trampoline
+    uniqueID: 2878064403
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 693734513
     locked: 0

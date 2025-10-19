@@ -147,4 +147,7 @@ MonoBehaviour:
   breakBlock: {fileID: 0}
   playSoundOnHit: 1
   customHitSound: {fileID: 0}
+  playEffectOnHit: 1
   requiredKeys: 3
+  lockedSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
+  unlockedSprite: {fileID: 21300000, guid: cf69cab0cc654d649a16cf9c8ba0f9d5, type: 3}
