@@ -4,11 +4,18 @@ public class BombBlock : GimmickBlock
 {
     [SerializeField] private ExplosionEffect explosionEffectPrefab; // VFX{”j‰ó§Œä‚ÌPrefab
     [SerializeField] private float explosionRadius = 3f;
+    [SerializeField] private AudioClip explosionSound;
 
     protected override void Awake()
     {
         base.Awake();
         SetActiveState();
+        
+        // ”š”­SE‚ğ©“®ƒ[ƒh
+        if (explosionSound == null)
+        {
+            explosionSound = Resources.Load<AudioClip>("Audio/SE/Block/Bomb");
+        }
     }
 
     protected override void SetActiveState()
@@ -28,6 +35,12 @@ public class BombBlock : GimmickBlock
 
     private void TriggerExplosion()
     {
+        // ”š”­SE‚ğÄ¶
+        if (explosionSound != null && SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayOneShot(explosionSound);
+        }
+
         // ”š”­Prefab‚ğ¶¬‚µ‚ÄÀs
         if (explosionEffectPrefab != null)
         {

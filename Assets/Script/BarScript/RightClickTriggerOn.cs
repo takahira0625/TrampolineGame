@@ -1,20 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class RightClickTriggerOn : MonoBehaviour
 {
     [SerializeField] private BarMovement barFollow;
-    [Header("‘Oi‹——£‚ÆŠÔ")]
+    [Header("å‰é€²è·é›¢ã¨æ™‚é–“")]
     [SerializeField] private float forwardDistance = 10.0f;
     [SerializeField] private float forwardTime = 0.1f;
     [SerializeField] private float returnTime = 0.3f;
 
-    [Header("”½Ëİ’è")]
+    [Header("åå°„è¨­å®š")]
     [SerializeField] private float reboundCoefficient = 0.7f;
-    [SerializeField] private float reboundExitSpeed = 25f; // Exit‚É”ò‚Î‚·‘¬“x
+    [SerializeField] private float reboundExitSpeed = 25f; // Exitæ™‚ã«é£›ã°ã™é€Ÿåº¦
     [SerializeField] private float pushSpeed = 20f;
 
-    [SerializeField, Header("ƒqƒbƒgƒXƒgƒbƒvİ’è")]
+    [SerializeField, Header("ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—è¨­å®š")]
     private float hitStopDuration = 0.1f;
 
     private bool isMoving = false;
@@ -26,10 +26,11 @@ public class RightClickTriggerOn : MonoBehaviour
     private Collider2D col;
     private Rigidbody2D rb;
 
-    // ”½Ëƒf[ƒ^‚Ì‹L˜^
+    // åå°„ãƒ‡ãƒ¼ã‚¿ã®è¨˜éŒ²
     private Rigidbody2D lastBallRb;
     private Vector2 lastNormal;
-
+    private AudioClip SmashSE;
+    private AudioClip CollisionSE;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,10 +38,45 @@ public class RightClickTriggerOn : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
+    private void LoadSmashSE()
+    {
+        if (SmashSE == null)
+        {
+            SmashSE = Resources.Load<AudioClip>("Audio/SE/Block/Smash");
 
+            if (SmashSE == null)
+            {
+                Debug.LogWarning("SmashSEãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: Resources/Audio/SE/Block/Smash");
+            }
+            else
+            {
+                Debug.Log("SmashSEã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ: " + SmashSE.name);
+            }
+        }
+    }
+
+    private void LoadCollisionSE()
+    {
+        if (CollisionSE == null)
+        {
+            // âœ… ä¿®æ­£: CollisionSEã«æ­£ã—ãä»£å…¥
+            CollisionSE = Resources.Load<AudioClip>("Audio/SE/Block/Collision");
+
+            if (CollisionSE == null)
+            {
+                Debug.LogWarning("CollisionSEãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: Resources/Audio/SE/Block/Collision");
+            }
+            else
+            {
+                Debug.Log("CollisionSEã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ: " + CollisionSE.name);
+            }
+        }
+    }
     void Start()
     {
         col = GetComponent<Collider2D>();
+        LoadSmashSE();
+        LoadCollisionSE();
     }
 
     void Update()
@@ -66,7 +102,7 @@ public class RightClickTriggerOn : MonoBehaviour
 
         float elapsed = 0f;
 
-        // --- ‘Oi ---
+        // --- å‰é€² ---
         while (elapsed < forwardTime)
         {
             Vector2 newPos = Vector2.Lerp(originalPosition, targetForwardPos, elapsed / forwardTime);
@@ -76,7 +112,7 @@ public class RightClickTriggerOn : MonoBehaviour
         }
         rb.MovePosition(targetForwardPos);
 
-        // --- –ß‚é ---
+        // --- æˆ»ã‚‹ ---
         elapsed = 0f;
         while (elapsed < returnTime)
         {
@@ -92,8 +128,24 @@ public class RightClickTriggerOn : MonoBehaviour
         hasHitThisPush = false;
         if (barFollow != null) barFollow.stopFollow = false;
     }
+    private void PlaySE(AudioClip clip, string clipName)
+    {
+        if (clip == null)
+        {
+            Debug.LogWarning($"{clipName}ãŒnullã®ãŸã‚å†ç”Ÿã§ãã¾ã›ã‚“");
+            return;
+        }
 
-    // --- Trigger’†‚Ì‰Ÿ‚µo‚µ ---
+        if (SEManager.Instance == null)
+        {
+            Debug.LogError("SEManager.InstanceãŒnullã®ãŸã‚å†ç”Ÿã§ãã¾ã›ã‚“");
+            return;
+        }
+
+        Debug.Log($"{clipName}ã‚’å†ç”Ÿã—ã¾ã™");
+        SEManager.Instance.PlayOneShot(clip);
+    }
+    // --- Triggerä¸­ã®æŠ¼ã—å‡ºã— ---
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.IsChildOf(transform)) return;
@@ -103,7 +155,7 @@ public class RightClickTriggerOn : MonoBehaviour
         PlayerController playerCtrl = other.GetComponent<PlayerController>();
         if (ballRb == null || playerCtrl == null || (isMoving && hasHitThisPush)) return;
 
-        // --- ‰Ÿ‚µo‚µ’† ---
+        // --- æŠ¼ã—å‡ºã—ä¸­ ---
         if (isMoving)
         {
             hasHitThisPush = true;
@@ -112,8 +164,8 @@ public class RightClickTriggerOn : MonoBehaviour
             if (playerCtrl.isActive)
             {
                 StartCoroutine(HitStop());
-                Debug.Log("ƒqƒbƒgƒXƒgƒbƒv: Active‰Ÿ‚µo‚µ");
-
+                Debug.Log("ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—: ActiveæŠ¼ã—å‡ºã—");
+                PlaySE(SmashSE, "CollisionSE");
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
                 ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
 
@@ -121,7 +173,8 @@ public class RightClickTriggerOn : MonoBehaviour
             }
             else
             {
-                Debug.Log("”ñActive‰Ÿ‚µo‚µ");
+                PlaySE(CollisionSE, "CollisionSE");
+                Debug.Log("éActiveæŠ¼ã—å‡ºã—");
                 ballRb.velocity = forward * pushSpeed;
             }
         }
@@ -129,20 +182,20 @@ public class RightClickTriggerOn : MonoBehaviour
 
 
 
-    // --- Exit‚Å–@ü•ûŒü‚É”ò‚Î‚· ---
+    // --- Exitã§æ³•ç·šæ–¹å‘ã«é£›ã°ã™ ---
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (isMoving) return; // Trigger’†‚ÍƒXƒLƒbƒv
+        if (isMoving) return; // Triggerä¸­ã¯ã‚¹ã‚­ãƒƒãƒ—
 
         Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
         if (ballRb == null) return;
 
-        // ‘¬“x‚ª0‚È‚çŒü‚«‚ª‚í‚©‚ç‚È‚¢‚Ì‚Å“K“–‚Éã•ûŒü‚É”ò‚Î‚·
+        // é€Ÿåº¦ãŒ0ãªã‚‰å‘ããŒã‚ã‹ã‚‰ãªã„ã®ã§é©å½“ã«ä¸Šæ–¹å‘ã«é£›ã°ã™
         Vector2 dir = ballRb.velocity.normalized;
         if (dir == Vector2.zero)
             dir = Vector2.up;
 
-        // magnitude‚ğw’è‚µ‚Ä‘¬“x‚ğ•ÏX
+        // magnitudeã‚’æŒ‡å®šã—ã¦é€Ÿåº¦ã‚’å¤‰æ›´
         ballRb.velocity = dir * reboundExitSpeed;
     }
 

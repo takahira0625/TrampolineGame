@@ -95,7 +95,7 @@ public class BaseBlock : MonoBehaviour
         else
         {
             // 新規ロードしてキャッシュに保存
-            string soundPath = "Audio/SE/" + blockTag;
+            string soundPath = "Audio/SE/Block/" + blockTag;
             AudioClip clip = Resources.Load<AudioClip>(soundPath);
 
             if (clip != null)

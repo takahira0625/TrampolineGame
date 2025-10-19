@@ -1,13 +1,16 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.XR;
 
 public class BreakBlock : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _rend;
     [SerializeField] private ParticleSystem _particle;
     [SerializeField] private Collider2D _col;
+    [SerializeField] private AudioClip BreakBlockSE; // ブロック破壊時の効果音
     private void Awake()
     {
+        LoadBreakBlockSE();
         if (_rend == null)
             _rend = GetComponent<SpriteRenderer>();
 
@@ -17,9 +20,22 @@ public class BreakBlock : MonoBehaviour
         if (_particle == null)
             _particle = GetComponentInChildren<ParticleSystem>();
     }
+    private void LoadBreakBlockSE()
+    {
+        // カスタムSEが設定されていない場合のみ自動ロード
+        if (BreakBlockSE == null)
+        {
+            BreakBlockSE = Resources.Load<AudioClip>("Audio/SE/Block/BreakBlock");
 
+            if (BreakBlockSE == null)
+            {
+                Debug.LogWarning("鍵のSEが見つかりません: Audio/SE/Block/BreakBlock");
+            }
+        }
+    }
     public void OnBreak()
     {
+        SEManager.Instance.PlayOneShot(BreakBlockSE);
         StartCoroutine(BreakSequence());
     }
 
