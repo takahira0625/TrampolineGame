@@ -1,33 +1,26 @@
 using UnityEngine;
-using UnityEngine.UI;          // Button
-using Steamworks;              // SteamAPI.IsSteamRunning()
+using UnityEngine.UI;
+using Steamworks;
 
 public class SteamGatekeeper : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] GameObject steamGatePanel;  // Steamに促すパネル（未ログイン時だけ表示）
-    [SerializeField] Button startButton;      // 「スタート」ボタン
+    [SerializeField] GameObject steamGatePanel;
+    [SerializeField] Button startButton;
 
     [Header("Options")]
-    [SerializeField] bool autoHideWhenSteamReady = true; // 起動時にSteamOKなら自動で閉じる
+    [SerializeField] bool autoHideWhenSteamReady = true;
 
     void Start()
     {
-        ApplyState(SteamAPI.IsSteamRunning());
+        ApplyState(SteamAPI.IsSteamRunning());　//ここでbool steamReadyの値を返す
     }
-
-    // 「Steamでログイン」ボタンから呼ぶ想定（任意）
-    public void OnClickLoginSteam() => ApplyState(SteamAPI.IsSteamRunning());
-
-    // 「ゲストで始める」ボタンは別途シーン遷移へ繋いでOK
 
     void ApplyState(bool steamReady)
     {
-        // Panelの表示/非表示
         if (steamGatePanel)
             steamGatePanel.SetActive(!steamReady || !autoHideWhenSteamReady);
 
-        // Startボタンの無効化/有効化
         if (startButton)
             startButton.interactable = steamReady;
     }

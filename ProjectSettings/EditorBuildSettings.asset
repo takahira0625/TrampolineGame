@@ -23,4 +23,76 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StageSelectScene.unity
     guid: 8f9d46f290c787d4ba4a5191bef0f4f2
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene12.unity
+    guid: 7a44f076dba4e3b43b6c212a13427fe9
+  - enabled: 1
+    path: Assets/Scenes/Stage01.unity
+    guid: da9650a63fc6d3144a43bdcd4beb8231
+  - enabled: 1
+    path: Assets/Scenes/Stage02.unity
+    guid: 48b3257fb2fd5a842be565559b761833
+  - enabled: 1
+    path: Assets/Scenes/Stage03.unity
+    guid: f6e5758931dcf64418836f1c39e6a51c
+  - enabled: 1
+    path: Assets/Scenes/Stage04.unity
+    guid: ca3bafad0d552df4c876b7310f4a2d26
+  - enabled: 1
+    path: Assets/Scenes/Stage05.unity
+    guid: 5e6d346a633394f4297dbf41f39f58c3
+  - enabled: 1
+    path: Assets/Scenes/Stage06.unity
+    guid: f480f2e01dc023e42bd385ee4d97f4cb
+  - enabled: 1
+    path: Assets/Scenes/Stage07.unity
+    guid: 883bd21e1c6b4b84792fd0d3eba36977
+  - enabled: 1
+    path: Assets/Scenes/Stage08.unity
+    guid: a6a8faabbe9b48949b65cb6afb747ef4
+  - enabled: 1
+    path: Assets/Scenes/Stage09.unity
+    guid: 66cd7101ab6b29d46a9cd7e825e7fb10
+  - enabled: 1
+    path: Assets/Scenes/Stage10.unity
+    guid: 72575c15edfce0a46bc1ba92163b26fc
+  - enabled: 1
+    path: Assets/Scenes/Stage11.unity
+    guid: ad142860bd47ee749a729dae901752dc
+  - enabled: 1
+    path: Assets/Scenes/Stage12.unity
+    guid: bcfebc80e9e3c944685e3ca88baaa075
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene01.unity
+    guid: 4564e9242ea2f9c43a927d3ddbc3126a
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene02.unity
+    guid: d72e9f9f6651eaf479ff0e9d11aa7456
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene03.unity
+    guid: 0fa55b294a4a10f468c78dd52574b0af
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene04.unity
+    guid: d1474d56223c9424daf0552de847d94d
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene05.unity
+    guid: b82b5d3f5932f7545975c8bb409c0bef
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene06.unity
+    guid: 220f603969744744ab0faa58294dae22
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene07.unity
+    guid: e2c8751652a2b4841988efed7c6b2d56
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene08.unity
+    guid: 7732205c7cf7ac54b9c0458782773010
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene09.unity
+    guid: c84d0cb8d30454b4c85b7180308a89b0
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene10.unity
+    guid: 16c95a2db37dc7149ba627633cc0e932
+  - enabled: 1
+    path: Assets/Scenes/RankingsScene11.unity
+    guid: b718768f1194f9c458e9361c17d47f34
   m_configObjects: {}

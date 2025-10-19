@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
-using Steamworks;                // Steamworks.NET
+using Steamworks;
 using TMPro;
 
 public class SteamLoginManager : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] GameObject loginPanel;  // ログインUI（成功時に隠す）
+    [SerializeField] GameObject loginPanel;  
 
     [Header("Events")]
     public UnityEvent<string /*personaName*/, string /*steamId64*/> OnSteamLoggedIn;
@@ -17,7 +17,6 @@ public class SteamLoginManager : MonoBehaviour
 
     void Awake()
     {
-        // 既にどこかで初期化しているなら省略可
         try
         {
             inited = SteamAPI.Init();
@@ -40,13 +39,6 @@ public class SteamLoginManager : MonoBehaviour
 
     public void LoginWithSteam()
     {
-        // Init は既に SteamInit.cs が実行している前提
-        if (!SteamAPI.IsSteamRunning())
-        {
-            Debug.LogError("Steam クライアントが起動/ログインしていません。");
-            return;
-        }
-
         string persona = SteamFriends.GetPersonaName();
         string steamId = SteamUser.GetSteamID().m_SteamID.ToString();
 

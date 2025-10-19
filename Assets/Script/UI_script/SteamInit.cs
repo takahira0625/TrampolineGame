@@ -17,7 +17,7 @@ public class SteamInit : MonoBehaviour
             if (inited)
             {
                 Debug.Log($"[Steam] OK Persona={SteamFriends.GetPersonaName()} / ID={SteamUser.GetSteamID().m_SteamID}");
-                OnReady?.Invoke(); // š€”õŠ®—¹‚ğ’Ê’m
+                OnReady?.Invoke();
             }
             else
             {
