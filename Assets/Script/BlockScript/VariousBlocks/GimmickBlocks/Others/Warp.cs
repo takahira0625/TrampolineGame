@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.XR;
 
 public class Warp : BaseBlock
 {
@@ -14,11 +15,27 @@ public class Warp : BaseBlock
     {
         base.Awake();
         SetSprite(parameter.WarpSprite);
-
+        LoadWarpSE();
         // 全Warpをキャッシュ
         allWarps = FindObjectsOfType<Warp>();
     }
+    /// <summary>
+    /// 鍵取得時の効果音を読み込む
+    /// </summary>
+    private void LoadWarpSE()
+    {
+        // カスタムSEが設定されていない場合のみ自動ロード
+        if (warpSE == null)
+        {
+            // Resources/Audio/SE/Key から読み込み
+            warpSE = Resources.Load<AudioClip>("Audio/SE/Block/WarpBlock");
 
+            if (warpSE == null)
+            {
+                Debug.LogWarning("鍵のSEが見つかりません: Resources/Audio/SE/Block/WarpBlock");
+            }
+        }
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;

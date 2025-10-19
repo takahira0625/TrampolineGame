@@ -148,6 +148,6 @@ MonoBehaviour:
   playSoundOnHit: 1
   customHitSound: {fileID: 0}
   playEffectOnHit: 1
-  warpSE: {fileID: 8300000, guid: f0dfb0af3f4a97046b49423ff5301f21, type: 3}
+  warpSE: {fileID: 0}
   disableDuration: 0.5
   offsetY: 1
