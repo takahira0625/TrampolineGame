@@ -6,7 +6,7 @@ public class Warp : BaseBlock
 {
     private static Warp[] allWarps;
     private bool isDisabled = false;
-
+    [SerializeField] private AudioClip warpSE;        // ワープ音
     [SerializeField] private float disableDuration = 0.5f; // ワープ元・先を一時無効化
     [SerializeField] private float offsetY = 1.0f;         // プレイヤーを少し上に出す
 
@@ -26,7 +26,7 @@ public class Warp : BaseBlock
 
         Warp destination = GetRandomWarpExcludingSelf();
         if (destination == null) return;
-
+        SEManager.Instance.PlayOneShot(warpSE);
         StartCoroutine(WarpPlayer(other.transform, destination));
     }
 

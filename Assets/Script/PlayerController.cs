@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public bool canMove = true;
     [Header("画面外判定")]
     [Tooltip("画面外に出てからゲームオーバーになるまでの猶予秒数")]
-    public float outTimeToLose = 0.1f;
+    public float outTimeToLose = 0.5f;
     private float outTimer = 0f;
     private SpriteRenderer sr;
     [Header("速度制限")]
