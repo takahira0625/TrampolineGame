@@ -4,6 +4,7 @@ using System; // イベント(Action)を使うために必要
 public class KeyBlock : MonoBehaviour
 {
     [SerializeField] private Vector2 targetSize = new Vector2(0.1f, 0.1f);
+    [SerializeField] private AudioClip KeySE; // 鍵取得時の効果音
 
     [Header("鍵部品設定")]
     [Tooltip("このブロックが対応する鍵部品の番号 (0から始まるインデックス)")]
@@ -15,6 +16,25 @@ public class KeyBlock : MonoBehaviour
     protected void Awake()
     {
         SetSprite();
+        LoadKeySE();
+    }
+
+    /// <summary>
+    /// 鍵取得時の効果音を読み込む
+    /// </summary>
+    private void LoadKeySE()
+    {
+        // カスタムSEが設定されていない場合のみ自動ロード
+        if (KeySE == null)
+        {
+            // Resources/Audio/SE/Key から読み込み
+            KeySE = Resources.Load<AudioClip>("Audio/SE/Block/Key");
+            
+            if (KeySE == null)
+            {
+                Debug.LogWarning("鍵のSEが見つかりません: Resources/Audio/SE/BlockKey");
+            }
+        }
     }
 
     private void SetSprite()
@@ -44,6 +64,12 @@ public class KeyBlock : MonoBehaviour
             if (inventory != null)
             {
                 inventory.AddKey();
+                
+                // SEを再生
+                if (KeySE != null && SEManager.Instance != null)
+                {
+                    SEManager.Instance.PlayOneShot(KeySE);
+                }
             }
 
             // --- UI用の新しい通知（部品番号を通知）---

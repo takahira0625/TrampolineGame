@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class ExplosionEffect : MonoBehaviour
 {
-    [SerializeField] private GameObject vfxPrefab; // 実際のエフェクト（例：CFXR Impact Glowing HDR）
+    [SerializeField] private GameObject vfxPrefab;
     [SerializeField] private float vfxLifetime = 2f;
-    [SerializeField] private List<string> destroyableTags = new List<string>
+    [SerializeField] private float chainDelay = 0.1f; // 連鎖爆発のディレイ
+    [SerializeField]
+    private List<string> destroyableTags = new List<string>
     {
         "Block",
         "NormalBlock",
@@ -14,13 +17,17 @@ public class ExplosionEffect : MonoBehaviour
         "SpeedDoubleBlock",
         "WarpBlock"
     };
-    private float radius;
 
-    public void Initialize(float radius)
+    private float radius;
+    private BombBlock originBomb; // 元の爆弾
+
+    public void Initialize(float radius, BombBlock originBomb = null)
     {
         this.radius = radius;
+        this.originBomb = originBomb;
         PlayEffect();
         DestroyBlocks();
+        TriggerChainExplosions();
     }
 
     private void PlayEffect()
@@ -41,6 +48,30 @@ public class ExplosionEffect : MonoBehaviour
             {
                 Destroy(hit.gameObject);
             }
+        }
+    }
+
+    private void TriggerChainExplosions()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
+        foreach (var hit in hits)
+        {
+            BombBlock bomb = hit.GetComponent<BombBlock>();
+            // 自分以外のBombBlockを検出
+            if (bomb != null && bomb != originBomb)
+            {
+                // chainDelayの時間後に爆発を起動
+                StartCoroutine(DelayedExplosion(bomb));
+            }
+        }
+    }
+
+    private IEnumerator DelayedExplosion(BombBlock bomb)
+    {
+        yield return new WaitForSeconds(chainDelay);
+        if (bomb != null) // 既に破壊されていないかチェック
+        {
+            bomb.TriggerExplosion();
         }
     }
 
