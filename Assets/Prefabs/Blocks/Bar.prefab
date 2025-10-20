@@ -327,7 +327,7 @@ MonoBehaviour:
   rotationSmoothingMin: 0.01
   rotationSmoothingMax: 1
   angleDeltaThreshold: 30
-  rightClick: {fileID: 0}
+  rightClick: {fileID: 8460906794975558630}
   playerController: {fileID: 4899980963031003792, guid: 6bbcaeb70a9368d4f830ab871b6f5eb8, type: 3}
 --- !u!114 &8460906794975558630
 MonoBehaviour:

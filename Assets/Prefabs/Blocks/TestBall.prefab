@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 500
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   savedVelocity: {x: 0, y: 0}
   rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
   isActive: 0
+  afterImageOrderOffset: 1
   speedThresholdForAfterImage: 20
   normalAfterImageColor: {r: 0.26240644, g: 0.6369531, b: 0.7132075, a: 0.5}
   highSpeedAfterImageColor: {r: 0.78113204, g: 0.19896752, b: 0.19896752, a: 0.7}
@@ -222,6 +223,10 @@ PrefabInstance:
     - target: {fileID: 2946223095280311965, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: m_Name
       value: Spherical
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946223095280311966, guid: 16966713336d54d4a96c67725c97301c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.key0.g

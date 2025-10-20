@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "D:\\Unity\\tranpoline_smartphone\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|d:\\unity\\tranpoline_smartphone\\assets\\script\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|d:\\unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\variousblocks\\normalblocks\\baseblock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\barscript\\rightclicktriggeron.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\barscript\\rightclicktriggeron.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\gimmickblocks\\others\\warp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\variousblocks\\gimmickblocks\\others\\warp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\gimmickblocks\\others\\bomb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -89,10 +85,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\parameterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\blockscript\\parameterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\ui_script\\steamloginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\ui_script\\steamloginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\audioscript\\semanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -165,6 +157,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|D:\\Unity\\tranpoline_smartphone\\assets\\script\\bgmtestscript\\bgmtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C59A465D-C54A-3E18-4047-B04A2681EF9B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\bgmtestscript\\bgmtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Unity\\tranpoline_smartphone\\assets\\script\\blockscript\\variousblocks\\gimmickblocks\\others\\warp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\script\\blockscript\\variousblocks\\gimmickblocks\\others\\warp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Unity\\tranpoline_smartphone\\assets\\script\\ui_script\\steamloginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\script\\ui_script\\steamloginmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -174,7 +174,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 26,
           "Children": [
             {
               "$type": "Bookmark",
@@ -182,7 +182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "Bomb.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Bomb.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Bomb.cs",
@@ -194,7 +194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Particle Standard Glow.shader",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Andtech\\Star Pack\\Runtime\\Shaders\\Particle Standard Glow.shader",
               "RelativeDocumentMoniker": "Assets\\Andtech\\Star Pack\\Runtime\\Shaders\\Particle Standard Glow.shader",
@@ -206,7 +206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "DynamicAfterImageEffect2DPlayer.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\AfterImageEffect2D\\Scripts\\DynamicAfterImageEffect2DPlayer.cs",
               "RelativeDocumentMoniker": "Assets\\AfterImageEffect2D\\Scripts\\DynamicAfterImageEffect2DPlayer.cs",
@@ -230,7 +230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "RightClick.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BarScript\\RightClick.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BarScript\\RightClick.cs",
@@ -242,7 +242,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 39,
               "Title": "Warp.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Warp.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Warp.cs",
@@ -254,7 +254,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "Double.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Double.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\Others\\Double.cs",
@@ -266,7 +266,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 38,
               "Title": "BGMTest.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BGMTestScript\\BGMTest.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BGMTestScript\\BGMTest.cs",
@@ -278,7 +278,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "PlayerInventory.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GoalBlock\\PlayerInventory.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GoalBlock\\PlayerInventory.cs",
@@ -290,7 +290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "KeyBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GoalBlock\\KeyBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GoalBlock\\KeyBlock.cs",
@@ -302,7 +302,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 13,
               "Title": "TouchToLoadScene.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\TouchToLoadScene.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\TouchToLoadScene.cs",
@@ -314,20 +314,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "BaseBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
               "ToolTip": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
               "RelativeToolTip": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BaseBlock.cs",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAIwHcAAABTAAAAAAAAAA==",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAIwHcAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-15T12:23:29.616Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "GrayBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\GrayBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\GrayBlock.cs",
@@ -339,7 +339,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "BlackBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BlackBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BlackBlock.cs",
@@ -351,7 +351,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "BreakBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BreakBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\NormalBlocks\\BreakBlock.cs",
@@ -371,12 +371,11 @@
               "RelativeToolTip": "Assets\\Script\\GameManager.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAUwGUAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-06T14:23:20.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-06T14:23:20.465Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 12,
               "Title": "ResultTimeDisplay.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\ResultTimeDisplay.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\ResultTimeDisplay.cs",
@@ -388,7 +387,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "SpeedChangeBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\SpeedChange\\SpeedChangeBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\SpeedChange\\SpeedChangeBlock.cs",
@@ -400,7 +399,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 14,
               "Title": "BarController.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BarScript\\BarController.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BarScript\\BarController.cs",
@@ -412,7 +411,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 20,
               "Title": "ParameterConfig.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\ParameterConfig.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\ParameterConfig.cs",
@@ -424,7 +423,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 15,
               "Title": "GimmickBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GimmickBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\GimmickBlock.cs",
@@ -436,7 +435,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 26,
               "Title": "SpeedDoubleCoolTime.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\CoolTimeScript\\SpeedDoubleCoolTime.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\CoolTimeScript\\SpeedDoubleCoolTime.cs",
@@ -448,7 +447,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 24,
               "Title": "BreakBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\BreakBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\BreakBlock.cs",
@@ -459,7 +458,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 35,
               "Title": "BaseBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\BaseBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\BaseBlock.cs",
@@ -471,7 +470,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 37,
               "Title": "BarController.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BarController.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BarController.cs",
@@ -483,20 +482,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "PlayerController.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\PlayerController.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\PlayerController.cs",
               "ToolTip": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\PlayerController.cs",
               "RelativeToolTip": "Assets\\Script\\PlayerController.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAIwDoAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAWwDUAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-07T17:44:31.559Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 19,
               "Title": "SpeedHalfBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\SpeedChange\\SpeedHalfBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BlockScript\\VariousBlocks\\GimmickBlocks\\SpeedChange\\SpeedHalfBlock.cs",
@@ -508,7 +507,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 22,
               "Title": "BGMManager.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\AudioScript\\BGMManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\AudioScript\\BGMManager.cs",
@@ -520,7 +519,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 21,
               "Title": "SEManager.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\AudioScript\\SEManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\AudioScript\\SEManager.cs",
@@ -532,7 +531,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 40,
               "Title": "SteamLoginManager.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\UI_script\\SteamLoginManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\UI_script\\SteamLoginManager.cs",
@@ -544,7 +543,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 23,
               "Title": "SlowZone.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\SlowZone.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\SlowZone.cs",
@@ -555,7 +554,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 31,
               "Title": "TrampolineScript.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\TrampolineScript.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\TrampolineScript.cs",
@@ -567,7 +566,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 34,
               "Title": "BreakBlock.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\BreakBlock.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BreakBlock.cs",
@@ -579,7 +578,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 25,
               "Title": "Trampoline.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\Trampoline.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Trampoline.cs",
@@ -591,7 +590,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 28,
               "Title": "LineDrawer.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\LineDrawer.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\LineDrawer.cs",
@@ -603,7 +602,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 36,
               "Title": "Coin.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\Coin.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Coin.cs",
@@ -615,7 +614,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 27,
               "Title": "PullAndLaunch.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\PullAndLaunch.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\PullAndLaunch.cs",
@@ -627,7 +626,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 30,
               "Title": "CameraFollow.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\CameraFollow.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\CameraFollow.cs",
@@ -639,7 +638,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 29,
               "Title": "ResultScene.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\ResultScene.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\ResultScene.cs",
@@ -650,7 +649,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 33,
               "Title": "SkyBeans.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\SkyBeans.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\SkyBeans.cs",
@@ -662,7 +661,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 32,
               "Title": "SkyBeansManager.cs",
               "DocumentMoniker": "D:\\Unity\\tranpoline_smartphone\\Assets\\Script\\SkyBeansManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\SkyBeansManager.cs",
