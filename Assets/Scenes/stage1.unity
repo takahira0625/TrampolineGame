@@ -8223,6 +8223,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1077639697}
     m_Modifications:
+    - target: {fileID: 2880220166904177166, guid: f6745fcb0143dc448abaaf438cba09ca, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ed0b45560dbeb140addde290dfb40c9, type: 3}
     - target: {fileID: 4573443150775263353, guid: f6745fcb0143dc448abaaf438cba09ca, type: 3}
       propertyPath: m_Name
       value: KeyUI1
