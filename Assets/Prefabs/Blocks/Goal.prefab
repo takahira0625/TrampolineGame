@@ -151,3 +151,5 @@ MonoBehaviour:
   requiredKeys: 3
   lockedSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
   unlockedSprite: {fileID: 21300000, guid: cf69cab0cc654d649a16cf9c8ba0f9d5, type: 3}
+  unlockEffectPrefab: {fileID: 2513661457047019541, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+  effectOffset: {x: 0, y: 0, z: 0}
