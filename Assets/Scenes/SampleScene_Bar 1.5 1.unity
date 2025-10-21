@@ -7989,6 +7989,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bar
       objectReference: {fileID: 0}
+    - target: {fileID: 5533666384263582103, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
+      propertyPath: m_SortingOrder
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 7254595007854023088, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.052698
