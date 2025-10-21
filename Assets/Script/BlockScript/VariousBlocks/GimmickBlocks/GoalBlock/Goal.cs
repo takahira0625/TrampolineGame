@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 public class Goal : BaseBlock
 {
     [SerializeField] private int requiredKeys = 3; // 必要キー数
+    
     [Header("ゴール見た目設定")]
     [SerializeField] private Sprite lockedSprite;   // 鍵未取得時の見た目
     [SerializeField] private Sprite unlockedSprite; // 全取得後の見た目
+    
+    [Header("解放エフェクト設定")]
+    [SerializeField] private ParticleSystem unlockEffectPrefab;
+    [SerializeField] private Vector3 effectOffset = Vector3.zero;
 
     private SpriteRenderer spriteRenderer;
     private bool isUnlocked = false;
@@ -42,8 +47,18 @@ public class Goal : BaseBlock
         {
             isUnlocked = true;
             spriteRenderer.sprite = unlockedSprite;
+            SpawnUnlockEffect();
             Debug.Log("ゴールが開放されました！");
         }
+    }
+
+    private void SpawnUnlockEffect()
+    {
+        if (unlockEffectPrefab == null) return;
+
+        ParticleSystem effect = Instantiate(unlockEffectPrefab, transform);
+        effect.transform.localPosition = effectOffset;
+        effect.Play();
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)
