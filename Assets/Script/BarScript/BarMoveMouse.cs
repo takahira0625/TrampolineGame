@@ -22,8 +22,8 @@ public class BarMovement : MonoBehaviour
     private Vector2 previousPosition;
     private bool inChase = false;
     private Camera mainCamera;
+    private bool isActivated = false; // クリック済みフラグ
 
-    // 公開プロパティ
     public Vector2 DesiredPosition => desiredPos;
     public Vector2 PreviousPosition => previousPosition;
     public Rigidbody2D Rigidbody => rb;
@@ -56,9 +56,22 @@ public class BarMovement : MonoBehaviour
         if (stopFollow) return;
         if (mainCamera == null) return;
 
-        // === マウス座標をワールド座標に変換 ===
-        Vector3 mouseScreenPos = Input.mousePosition;
-        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
+        // クリック判定（一度だけ）
+        if (!isActivated && Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D col = GetComponent<Collider2D>();
+            if (col != null && col.OverlapPoint(mousePos))
+            {
+                isActivated = true;
+            }
+        }
+
+        // 未アクティブなら追従しない
+        if (!isActivated) return;
+
+        // マウス座標をワールド座標に変換
+        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 target = rb.position;
 
         if (followX) target.x = mouseWorldPos.x;
@@ -88,5 +101,4 @@ public class BarMovement : MonoBehaviour
         rb.MovePosition(desiredPos);
         previousPosition = desiredPos;
     }
-
 }
