@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
         elapsedTime = 0f;
         FinalTime = -1f;
     }
+
     public static string FormatTime(float t)
     {
         if (t < 0f) return "--:--.--";
@@ -160,62 +161,63 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
         }
 
-        // 全員が死んだらゲームオーバー
         if (activePlayers.Count == 0)
         {
             Debug.Log("全プレイヤーが死亡しました。GameOver。");
             GameOver();
         }
     }
-    public void SpawnAdditionalPlayer(Transform originalPlayer)
+
+    public PlayerController SpawnAdditionalPlayer(Transform originalPlayer, Vector2 velocity)
     {
         if (playerController == null)
         {
             Debug.LogWarning("PlayerController が未設定のため複製できません");
-            return;
+            return null;
         }
 
-        // 元プレイヤーの位置を基準に新しいプレイヤーを生成
         GameObject clone = Instantiate(playerController.gameObject, originalPlayer.position, Quaternion.identity);
 
-        // 少しずらして重ならないように
         Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f), 0.5f, 0f);
         clone.transform.position += offset;
 
-        // clone も PlayerController を持つので独立して動く
         PlayerController cloneController = clone.GetComponent<PlayerController>();
         if (cloneController != null)
         {
             cloneController.canMove = true;
             RegisterPlayer(cloneController);
+
+            Rigidbody2D cloneRb = clone.GetComponent<Rigidbody2D>();
+            if (cloneRb != null)
+            {
+                cloneRb.velocity = velocity;
+            }
         }
 
         Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
+        
+        return cloneController;
     }
 
-    // 鍵を取得した際の処理
     public void AddKeyGlobal()
     {
         totalKeys++;
         Debug.Log($"鍵を取得しました（合計: {totalKeys}）");
 
-        // Goalなどに通知
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
-    // ==== ゴール・ゲームオーバー処理 ====
-    // ゴール処理を行う関数
     public void Goal()
     {
-        StopTimer(); // ← タイマー確定
+        StopTimer();
         SceneManager.LoadScene("ResultScene");
 
-        // プレイヤーの動きを止める
         if (playerController != null)
         {
             playerController.canMove = false;
         }
     }
+
     public void GameOver()
     {
         Debug.Log("Game Over!");
