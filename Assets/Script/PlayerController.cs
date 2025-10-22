@@ -207,6 +207,10 @@ public class PlayerController : MonoBehaviour
             entrySpeedRatio = Mathf.Clamp01(currentSpeed / maxSpeed);
 
         }
+        if (collision.CompareTag("Bar"))
+        {
+            GameManager.instance.StartTimerOnce();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -229,5 +233,12 @@ public class PlayerController : MonoBehaviour
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bar"))
+        {
+            GameManager.instance.StartTimerOnce();
+        }
     }
 }
