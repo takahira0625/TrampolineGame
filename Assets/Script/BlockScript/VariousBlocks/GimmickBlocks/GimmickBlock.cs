@@ -31,7 +31,7 @@ public abstract class GimmickBlock : BaseBlock
     {
         if (isOnCooldown)
         {
-            SetSprite(parameter.blackSprite);//このコードはOK
+            //SetSprite(parameter.blackSprite);//このコードはOK
             OnCooldownStart();
         }
         else
@@ -42,10 +42,10 @@ public abstract class GimmickBlock : BaseBlock
     protected virtual void OnPlayerTouch(GameObject player)
     {
         // 共通の「プレイヤー接触時」処理（クールタイムなど）
-        if (cooldown != null && !cooldown.IsOnCooldown)
-        {
-            cooldown.StartCooldown(parameter.cooldownTime);
-        }
+        //if (cooldown != null && !cooldown.IsOnCooldown)
+        //{
+        //    cooldown.StartCooldown(parameter.cooldownTime);
+        //}
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)
@@ -69,6 +69,25 @@ public abstract class GimmickBlock : BaseBlock
     {
         if (cooldown != null && cooldown.IsOnCooldown) return; // クールタイム中は無敵
         base.TakeDamage(damage);  // 通常処理
+
+        if (health > 0) // 'health' は BaseBlock から継承
+        {
+            if (cooldown != null)
+            {
+                // これが OnCooldownStart() をトリガーする
+                cooldown.StartCooldown(parameter.cooldownTime);
+            }
+        }
+    }
+
+    /// <summary>
+    /// BaseBlockのHP連動スプライト変更を「無効化」する
+    /// </summary>
+    protected override void UpdateBlockAppearance()
+    {
+        // GimmickBlock は SetActiveState / OnCooldownStart で
+        // 独自にスプライトを管理するため、BaseBlock の処理は呼ばない。
+        // (ここを空にすることで、TakeDamage 時にスプライトが勝手に変わるのを防ぐ)
     }
 
     protected virtual void OnCooldownStart() { }

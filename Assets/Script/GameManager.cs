@@ -112,17 +112,17 @@ public class GameManager : MonoBehaviour
     }
 
     // コインが取得された時に呼ばれる関数
-    public void AddCoin()
-    {
-        currentCoins++;
-        /*UpdateCoinCounter();*/
+    //public void AddCoin()
+    //{
+    //    currentCoins++;
+    //    /*UpdateCoinCounter();*/
 
-        // ゴール条件を満たしたかチェック
-        if (currentCoins >= requiredCoins)
-        {
-            Goal();
-        }
-    }
+    //    // ゴール条件を満たしたかチェック
+    //    if (currentCoins >= requiredCoins)
+    //    {
+    //        Goal();
+    //    }
+    //}
 
     // コインカウンターUIを更新する関数
     /*void UpdateCoinCounter()

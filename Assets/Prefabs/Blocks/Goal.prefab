@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2ffb0184de1e87247b15d49b22a4658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -122,7 +122,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 12.1, y: 12.1}
+    oldSize: {x: 10.24, y: 10.24}
     newSize: {x: 0.1, y: 0.1}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
@@ -149,5 +149,5 @@ MonoBehaviour:
   customHitSound: {fileID: 0}
   playEffectOnHit: 1
   requiredKeys: 3
-  lockedSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
-  unlockedSprite: {fileID: 21300000, guid: cf69cab0cc654d649a16cf9c8ba0f9d5, type: 3}
+  lockedSprite: {fileID: 21300000, guid: 2ffb0184de1e87247b15d49b22a4658b, type: 3}
+  unlockedSprite: {fileID: 21300000, guid: ea22e216c239c5b46b1647e1e878f18a, type: 3}

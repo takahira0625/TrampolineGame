@@ -147,4 +147,10 @@ MonoBehaviour:
   breakBlock: {fileID: 0}
   playSoundOnHit: 1
   customHitSound: {fileID: 0}
+  playEffectOnHit: 1
   cooldown: {fileID: 0}
+  activeSpriteHP3: {fileID: 21300000, guid: 639fb40d2bc39b541b8ee13b346db792, type: 3}
+  activeSpriteHP2: {fileID: 21300000, guid: 639fb40d2bc39b541b8ee13b346db792, type: 3}
+  activeSpriteHP1: {fileID: 21300000, guid: 639fb40d2bc39b541b8ee13b346db792, type: 3}
+  coolTimeSpriteHP2: {fileID: 21300000, guid: 9019cdcf437b9f24d83f3a8cce9cfcd8, type: 3}
+  coolTimeSpriteHP1: {fileID: 21300000, guid: 9019cdcf437b9f24d83f3a8cce9cfcd8, type: 3}
