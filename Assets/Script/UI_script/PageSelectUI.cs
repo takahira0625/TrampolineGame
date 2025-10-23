@@ -12,12 +12,14 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickStageSelect()
     {
+        SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("StageSelectScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickHome()
     {
+        SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("TitleScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
@@ -35,6 +37,7 @@ public class PageSelectUI : MonoBehaviour
                       .Invoke(GameManager.instance, null),
                 1, 12);
             SEManager.Instance.PlayOneShot(clickSE);
+            SceneBGMManager.instance.PlayStageBGM();
         }
 
         SceneManager.LoadScene($"stage{stage:00}");

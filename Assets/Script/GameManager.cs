@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
+
     // ==== ランキング送信 ====
     [Header("Ranking")]
     [Tooltip("シーン名 Stage01..12 から自動抽出。手動で固定したい場合は 1..12 を指定")]
@@ -178,7 +179,6 @@ public class GameManager : MonoBehaviour
         StopTimer(); 
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
-
         StartCoroutine(SubmitAndGotoRanking());
     }
 
@@ -210,6 +210,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        BGMManager.Instance.SetVolume(0.5f);
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
     }

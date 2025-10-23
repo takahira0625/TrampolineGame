@@ -3171,6 +3171,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1875980885942040792, guid: 09a001c8feaad914399492353762e57f, type: 3}
+      propertyPath: lockedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b1b52b68a7e130946a57d4974e4cc45e, type: 3}
     - target: {fileID: 3797651389120414331, guid: 09a001c8feaad914399492353762e57f, type: 3}
       propertyPath: m_Name
       value: Goal
