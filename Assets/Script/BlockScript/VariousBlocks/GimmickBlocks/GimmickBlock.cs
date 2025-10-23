@@ -1,5 +1,6 @@
 using UnityEngine;
-//GmmickBlock:クールタイムを持つギミックブロックの基底クラス
+
+//GimmickBlock:クールタイムを持つギミックブロックの基底クラス
 //1.クールタイム中は無敵 2.クールタイム中は色を暗くする 3.クールタイム中はバウンスを１にする
 public abstract class GimmickBlock : BaseBlock
 {
@@ -39,6 +40,7 @@ public abstract class GimmickBlock : BaseBlock
             SetActiveState();
         }
     }
+
     protected virtual void OnPlayerTouch(GameObject player)
     {
         // 共通の「プレイヤー接触時」処理（クールタイムなど）

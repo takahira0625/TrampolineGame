@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
     [Tooltip("エフェクトのローカル位置オフセット")]
     [SerializeField] private Vector3 effectOffset = Vector3.zero;
 
+
+    [Header("スローゾーン中エフェクト設定")]
+    [SerializeField] private GameObject lightningAuraPrefab;  // エフェクトPrefab
+    private GameObject currentAuraEffect;
+
     private AIE2D.DynamicAfterImageEffect2DPlayer afterImagePlayer;
     private bool isHighSpeed = false;
     private ParticleSystem currentSpeedEffect;
@@ -98,22 +103,27 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero;
         }
 
-        if (isInSlowZone && Input.GetMouseButton(0) && !rightClick.IsMoving)
+        if (isInSlowZone && Input.GetMouseButton(0) )
         {
-            Vector2 velocity = rb.velocity;
-            rb.velocity = velocity.normalized * slowSpeed;
             isActive = true;
-            DisplayArrow();
+            if (!rightClick.IsMoving)
+            {
 
+                Vector2 velocity = rb.velocity;
+                rb.velocity = velocity.normalized * slowSpeed;
+                DisplayArrow();
+            }
         }
         else
         {
+            isActive = false;
             arrow.gameObject.SetActive(false);
         }
         // 残像の色を速度に応じて変更
 
         UpdateAfterImageColor();
         UpdateHighSpeedEffect();
+        UpdateLightningAuraEffect();
 
     }
     void DisplayArrow()
@@ -129,6 +139,37 @@ public class PlayerController : MonoBehaviour
         arrow.UpdateArrow(barPos, ballPos, ratio);
         
     }
+    private void UpdateLightningAuraEffect()
+    {
+        if (isActive)
+        {
+            // すでにエフェクトがない場合は生成
+            if (currentAuraEffect == null && lightningAuraPrefab != null)
+            {
+                currentAuraEffect = Instantiate(lightningAuraPrefab, transform.position, Quaternion.identity);
+                currentAuraEffect.transform.SetParent(transform); // プレイヤーに追従
+                currentAuraEffect.transform.localPosition = Vector3.zero;
+
+                // 前面に出す（SortingLayerを指定）
+                var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
+                foreach (var r in renderers)
+                {
+                    r.sortingLayerName = "Player"; // 適切なレイヤー名に変更
+                    r.sortingOrder = 10;
+                }
+            }
+        }
+        else
+        {
+            // isActiveがfalseになったら削除
+            if (currentAuraEffect != null)
+            {
+                Destroy(currentAuraEffect);
+                currentAuraEffect = null;
+            }
+        }
+    }
+
 
     void FixedUpdate()
     {
@@ -207,6 +248,10 @@ public class PlayerController : MonoBehaviour
             entrySpeedRatio = Mathf.Clamp01(currentSpeed / maxSpeed);
 
         }
+        if (collision.CompareTag("Bar"))
+        {
+            GameManager.instance.StartTimerOnce();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -229,5 +274,12 @@ public class PlayerController : MonoBehaviour
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bar"))
+        {
+            GameManager.instance.StartTimerOnce();
+        }
     }
 }

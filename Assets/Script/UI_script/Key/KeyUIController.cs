@@ -1,39 +1,50 @@
 using UnityEngine;
-using UnityEngine.UI; // Image‚ğˆµ‚¤‚½‚ß
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class KeyUIController : MonoBehaviour
 {
-    [Header("ƒXƒe[ƒWİ’è")]
-    [Tooltip("‚±‚ÌƒXƒe[ƒW‚Åg—p‚·‚éŒ®İ’èƒtƒ@ƒCƒ‹")]
-    public StageKeyConfig currentStageConfig; // ƒXƒeƒbƒv6‚Åİ’è
+    [Header("ï¿½Xï¿½eï¿½[ï¿½Wï¿½İ’ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½ÌƒXï¿½eï¿½[ï¿½Wï¿½Ågï¿½pï¿½ï¿½ï¿½éŒ®ï¿½İ’ï¿½tï¿½@ï¿½Cï¿½ï¿½")]
+    public StageKeyConfig currentStageConfig;
 
-    [Header("UIQÆ")]
-    [Tooltip("UI‚ÌŒ®•”•iƒCƒ[ƒW‚ÌImageƒRƒ“ƒ|[ƒlƒ“ƒg (Å‘å4‚Â)")]
-    public List<Image> keyPartImages = new List<Image>(); // ƒXƒeƒbƒv6‚Åİ’è
+    [Header("UIï¿½Qï¿½ï¿½")]
+    [Tooltip("UIï¿½ÌŒï¿½ï¿½ï¿½ï¿½iï¿½Cï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½Imageï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g (ï¿½Å‘ï¿½4ï¿½ï¿½)")]
+    public List<Image> keyPartImages = new List<Image>();
 
-    [Header("ƒGƒtƒFƒNƒg")]
-    [Tooltip("Œ®Š®¬‚É•\¦‚·‚éƒGƒtƒFƒNƒgƒIƒuƒWƒFƒNƒg")]
+    [Header("ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½İ’ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½×‚Ä‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½tï¿½Fï¿½Nï¿½g")]
+    [SerializeField] private ParticleSystem completeEffectPrefab;
+    [Tooltip("ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½Ê’uï¿½Iï¿½tï¿½Zï¿½bï¿½g")]
+    [SerializeField] private Vector3 effectOffset = Vector3.zero;
+    [Tooltip("ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½")]
+    [SerializeField] private bool autoDestroyEffect = true;
+
+    [Header("ï¿½Gï¿½tï¿½Fï¿½Nï¿½g")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g")]
     public GameObject keyCompletionEffect;
 
     private ParticleSystem keyEffectParticles;
 
     private int requiredPartsCount = 0;
+    private int collectedPartsCount = 0;
+    private ParticleSystem currentEffect;
 
-    // ’Ç‰ÁFæ“¾ó‹µ‚ğ’ÇÕ‚·‚é”z—ñ
+    // ï¿½ï¿½ï¿½×‚Ä‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÌƒCï¿½xï¿½ï¿½ï¿½g
+    public static event System.Action OnAllKeysCollected;
+
+    // ï¿½Ç‰ï¿½ï¿½Fï¿½æ“¾ï¿½ó‹µ‚ï¿½ÇÕ‚ï¿½ï¿½ï¿½zï¿½ï¿½
     private bool[] hasCollectedPart;
 
-    // ’Ç‰ÁFŠ®—¹ƒtƒ‰ƒOiƒGƒtƒFƒNƒg‚Ìd•¡Às–h~j
+    // ï¿½Ç‰ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½iï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Ìdï¿½ï¿½ï¿½ï¿½ï¿½sï¿½hï¿½~ï¿½j
     private bool isComplete = false;
 
-    // ƒCƒxƒ“ƒgw“Ç
+    // ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½wï¿½ï¿½
     private void OnEnable()
     {
-        // KeyBlock‚ª”­‚·‚éu•”•i”Ô†v‚ÌƒCƒxƒ“ƒg‚ğw“Ç‚·‚é
         KeyBlock.OnKeyPartCollected += HandleKeyPartCollected;
     }
 
-    // ƒCƒxƒ“ƒgw“Ç‰ğœi•K{j
     private void OnDisable()
     {
         KeyBlock.OnKeyPartCollected -= HandleKeyPartCollected;
@@ -43,48 +54,40 @@ public class KeyUIController : MonoBehaviour
     {
         if (currentStageConfig == null)
         {
-            Debug.LogError("KeyUIController‚É StageKeyConfig ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogError("KeyUIControllerï¿½ï¿½ StageKeyConfig ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
 
-        // 1. UI‚ÌƒXƒvƒ‰ƒCƒgİ’è
         SetupUISprites();
-
-        // 2. ‰Šúó‘Ô‚Å‚Í‚·‚×‚Ä”ñ•\¦
         ResetUI();
+        collectedPartsCount = 0;
     }
 
-    // Config‚ÉŠî‚Ã‚«AUI Image‚É³‚µ‚¢Sprite‚ğŠ„‚è“–‚ÄA•s—v‚ÈƒXƒƒbƒg‚ğ”ñ•\¦‚É‚·‚é
     private void SetupUISprites()
     {
-        // Config‚©‚ç•K—v”‚ğæ“¾
         requiredPartsCount = currentStageConfig.keyPartUISprites.Count;
 
-        // ’Ç‰ÁFæ“¾ó‹µ”z—ñ‚ğA•K—v‚È•”•i”‚Å‰Šú‰»
+        // ï¿½Ç‰ï¿½ï¿½Fï¿½æ“¾ï¿½ó‹µ”zï¿½ï¿½ï¿½ï¿½Aï¿½Kï¿½vï¿½È•ï¿½ï¿½iï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½
         hasCollectedPart = new bool[requiredPartsCount];
 
-        // UIƒXƒƒbƒgiÅ‘å4‚Âj‚ğƒ‹[ƒv
+        // UIï¿½Xï¿½ï¿½ï¿½bï¿½gï¿½iï¿½Å‘ï¿½4ï¿½Âjï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½v
         for (int i = 0; i < keyPartImages.Count; i++)
         {
             Image uiImage = keyPartImages[i];
             if (uiImage == null) continue;
 
-            // ‚±‚ÌƒXƒe[ƒW‚Åg‚¤ƒXƒƒbƒg‚©H (i < requiredPartsCount)
             if (i < requiredPartsCount)
             {
-                // Config‚Éİ’è‚³‚ê‚½Sprite‚ğŠ„‚è“–‚Ä
                 uiImage.sprite = currentStageConfig.keyPartUISprites[i];
-                uiImage.gameObject.SetActive(true); // ƒXƒƒbƒg©‘Ì‚Í—LŒø
+                uiImage.gameObject.SetActive(true);
             }
             else
             {
-                // ‚±‚ÌƒXƒe[ƒW‚Å‚Íg‚í‚È‚¢ƒXƒƒbƒg
                 uiImage.gameObject.SetActive(false);
             }
         }
     }
 
-    // UI‚ğ‰Šúó‘Ôi‚·‚×‚Ä”ñ•\¦j‚É‚·‚é
     private void ResetUI()
     {
         foreach (Image img in keyPartImages)
@@ -95,16 +98,16 @@ public class KeyUIController : MonoBehaviour
             }
         }
 
-        // ’Ç‰ÁFƒGƒtƒFƒNƒg‚ğ”ñ•\¦‚É
+        // ï¿½Ç‰ï¿½ï¿½Fï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½
         if (keyCompletionEffect != null)
         {
             keyCompletionEffect.SetActive(false);
             keyEffectParticles = keyCompletionEffect.GetComponentInChildren<ParticleSystem>();
         }
 
-        // ’Ç‰ÁFæ“¾ó‹µ‚ÆŠ®—¹ƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+        // ï¿½Ç‰ï¿½ï¿½Fï¿½æ“¾ï¿½ó‹µ‚ÆŠï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
         isComplete = false;
-        // hasCollectedPart‚ªnull‚Ìê‡‚ª‚ ‚é‚½‚ßAnullƒ`ƒFƒbƒN‚ğ’Ç‰Á
+        // hasCollectedPartï¿½ï¿½nullï¿½Ìê‡ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ßAnullï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½Ç‰ï¿½
         if (hasCollectedPart != null)
         {
             for (int i = 0; i < hasCollectedPart.Length; i++)
@@ -114,68 +117,155 @@ public class KeyUIController : MonoBehaviour
         }
     }
 
-    // KeyBlock.OnKeyPartCollected ‚©‚çŒÄ‚Î‚ê‚éŠÖ”
     private void HandleKeyPartCollected(int partIndex)
     {
-        // Šù‚ÉŠ®—¹‚µ‚Ä‚¢‚é‚©AƒCƒ“ƒfƒbƒNƒX‚ª”ÍˆÍŠO‚È‚ç‰½‚à‚µ‚È‚¢
+        // ï¿½ï¿½ï¿½ÉŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Aï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½ÍˆÍŠOï¿½È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (isComplete || partIndex < 0 || partIndex >= requiredPartsCount)
         {
             return;
         }
 
-        // Šù‚Éæ“¾Ï‚İ‚È‚ç‰½‚à‚µ‚È‚¢ (d•¡–h~)
+        // ï¿½ï¿½ï¿½Éæ“¾ï¿½Ï‚İ‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ (ï¿½dï¿½ï¿½ï¿½hï¿½~)
         if (hasCollectedPart[partIndex])
         {
             return;
         }
 
-        // 1. æ“¾Ï‚İ‚É‚·‚é
+        // 1. ï¿½æ“¾ï¿½Ï‚İ‚É‚ï¿½ï¿½ï¿½
         hasCollectedPart[partIndex] = true;
 
-        // 2. UI‚ğ•\¦‚·‚é
+        // 2. UIï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (partIndex < keyPartImages.Count && keyPartImages[partIndex] != null)
         {
             keyPartImages[partIndex].enabled = true;
         }
 
-        // 3. Š®—¹‚µ‚½‚©ƒ`ƒFƒbƒN‚·‚é
+        // 3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
         CheckCompletion();
     }
 
-    // ’Ç‰ÁFŠ®—¹ƒ`ƒFƒbƒN—pƒƒ\ƒbƒh
+    // ï¿½Ç‰ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½pï¿½ï¿½ï¿½\ï¿½bï¿½h
     private void CheckCompletion()
     {
-        // æ“¾ó‹µ”z—ñ‚ğƒ`ƒFƒbƒN
+        // ï¿½æ“¾ï¿½ó‹µ”zï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
         for (int i = 0; i < requiredPartsCount; i++)
         {
-            // 1‚Â‚Å‚à–¢æ“¾(false)‚ª‚ ‚ê‚ÎA‚Ü‚¾Š®—¹‚Å‚Í‚È‚¢
+            // 1ï¿½Â‚Å‚ï¿½ï¿½ï¿½ï¿½æ“¾(false)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎAï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½
             if (!hasCollectedPart[i])
             {
-                return; // ƒ`ƒFƒbƒNI—¹
+                return; // ï¿½`ï¿½Fï¿½bï¿½Nï¿½Iï¿½ï¿½
             }
         }
 
-        // --- ‚±‚Ìs‚É—ˆ‚½ = ‚·‚×‚Ä true = Š®—¹I ---
+        // --- ï¿½ï¿½ï¿½Ìsï¿½É—ï¿½ï¿½ï¿½ = ï¿½ï¿½ï¿½×‚ï¿½ true = ï¿½ï¿½ï¿½ï¿½ï¿½I ---
 
-        isComplete = true; // Š®—¹ƒtƒ‰ƒO‚ğ—§‚Ä‚é (d•¡Às–h~)
+        isComplete = true; // ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½ (ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½sï¿½hï¿½~)
 
-        // ƒGƒtƒFƒNƒg‚ğ•\¦
+        // ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½\ï¿½ï¿½
         if (keyCompletionEffect != null)
         {
-            Debug.Log("Œ®‚ªŠ®¬IƒGƒtƒFƒNƒg‚ğ•\¦‚µ‚Ü‚·B");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B");
             keyCompletionEffect.SetActive(true);
 
-            // æ“¾Ï‚İ‚Ìƒp[ƒeƒBƒNƒ‹ƒVƒXƒeƒ€ƒRƒ“ƒ|[ƒlƒ“ƒg‚Å Play() ‚ğŒÄ‚Ô
+            // ï¿½æ“¾ï¿½Ï‚İ‚Ìƒpï¿½[ï¿½eï¿½Bï¿½Nï¿½ï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½ Play() ï¿½ï¿½ï¿½Ä‚ï¿½
             if (keyEffectParticles != null)
             {
                 keyEffectParticles.Play();
             }
-            // (‚à‚µæ“¾‚Å‚«‚Ä‚¢‚È‚¯‚ê‚ÎA”O‚Ì‚½‚ßÄ“x’T‚µ‚ÄPlay)
+            // (ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎAï¿½Oï¿½Ì‚ï¿½ï¿½ßÄ“xï¿½Tï¿½ï¿½ï¿½ï¿½Play)
             else if (keyCompletionEffect.GetComponentInChildren<ParticleSystem>() != null)
             {
                 keyEffectParticles = keyCompletionEffect.GetComponentInChildren<ParticleSystem>();
                 keyEffectParticles.Play();
             }
         }
+    }
+
+    /// <summary>
+    /// ï¿½ï¿½ï¿½×‚Ä‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
+    /// </summary>
+    private void CheckAllKeysCollected()
+    {
+        if (collectedPartsCount >= requiredPartsCount)
+        {
+            Debug.Log("ï¿½ï¿½ï¿½×‚Ä‚ÌŒï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½I");
+            
+            // ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ğ¶ï¿½
+            SpawnCompleteEffect();
+            
+            // ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+            OnAllKeysCollected?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ğ¶ï¿½
+    /// </summary>
+    private void SpawnCompleteEffect()
+    {
+        if (completeEffectPrefab == null)
+        {
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
+            return;
+        }
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒGï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îíœ
+        if (currentEffect != null)
+        {
+            Destroy(currentEffect.gameObject);
+        }
+
+        // ï¿½ï¿½ï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìqï¿½Æ‚ï¿½ï¿½ÄƒGï¿½tï¿½Fï¿½Nï¿½gï¿½ğ¶ï¿½
+        currentEffect = Instantiate(completeEffectPrefab, transform);
+        currentEffect.transform.localPosition = effectOffset;
+        currentEffect.transform.localRotation = Quaternion.identity;
+        currentEffect.transform.localScale = Vector3.one;
+
+        // ï¿½Äï¿½
+        currentEffect.Play();
+
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½íœ
+        if (autoDestroyEffect)
+        {
+            float duration = currentEffect.main.duration + currentEffect.main.startLifetime.constantMax;
+            Destroy(currentEffect.gameObject, duration);
+        }
+    }
+
+    /// <summary>
+    /// ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½è“®ï¿½Åíœ
+    /// </summary>
+    public void DestroyEffect()
+    {
+        if (currentEffect != null)
+        {
+            Destroy(currentEffect.gameObject);
+            currentEffect = null;
+        }
+    }
+
+    /// <summary>
+    /// ï¿½ï¿½ï¿½×‚Ä‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½mï¿½F
+    /// </summary>
+    public bool AreAllKeysCollected()
+    {
+        return collectedPartsCount >= requiredPartsCount;
+    }
+
+    /// <summary>
+    /// ï¿½ï¿½ï¿½Wï¿½iï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ (0.0 ~ 1.0)
+    /// </summary>
+    public float GetCollectionProgress()
+    {
+        if (requiredPartsCount == 0) return 0f;
+        return (float)collectedPartsCount / requiredPartsCount;
+    }
+
+    private void OnDestroy()
+    {
+        // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Aï¿½bï¿½v
+        DestroyEffect();
     }
 }

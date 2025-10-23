@@ -1,80 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
-using TMPro; // TextMeshPro‚ğˆµ‚¤‚½‚ß‚É•K—v
-using System.Collections.Generic;//PlayerListŠÇ——p
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
+using URandom = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    // ‚±‚ÌƒNƒ‰ƒX‚Ì—Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Û‚·‚éiƒVƒ“ƒOƒ‹ƒgƒ“j
     public static GameManager instance;
 
-    // •¡”‚Ìƒ{[ƒ‹‚ÅŒ®‚Ì‹¤—L‚ğs‚¤‚½‚ß‚Ì‚à‚Ì
-    private int totalKeys = 0; // ‘SƒvƒŒƒCƒ„[‹¤’Ê‚ÌŒ®”
-    public int TotalKeys => totalKeys; // QÆ—pƒvƒƒpƒeƒB
+    // ï¿½ï¿½ï¿½Eï¿½Rï¿½Cï¿½ï¿½ï¿½Ö˜Aï¿½iï¿½ï¿½ï¿½ï¿½ï¿½j
+    private int totalKeys = 0;
+    public int TotalKeys => totalKeys;
 
-    // ƒCƒ“ƒXƒyƒNƒ^[‚©‚çİ’è‚·‚é€–Ú
-    public int requiredCoins = 5; // ƒS[ƒ‹‚É•K—v‚ÈƒRƒCƒ“‚Ì”
-    public GameObject goalTextObject; // ƒS[ƒ‹ƒeƒLƒXƒg‚ÌUIƒIƒuƒWƒFƒNƒg
-    /*public TextMeshProUGUI coinCounterText;*/ // ƒRƒCƒ“ƒJƒEƒ“ƒ^[‚ÌUIƒeƒLƒXƒg
-    public PlayerController playerController; // ƒvƒŒƒCƒ„[‚ÌƒXƒNƒŠƒvƒg
+    public int requiredCoins = 5;
+    public GameObject goalTextObject;
+    public PlayerController playerController;
 
-    private int currentCoins = 0; // Œ»İ‚ÌƒRƒCƒ“æ“¾”
-    
-    // ==== DoubleƒuƒƒbƒN‚É‚æ‚éƒvƒŒƒCƒ„[ŠÇ——p ====
+    private int currentCoins = 0;
     private List<PlayerController> activePlayers = new List<PlayerController>();
 
-    // ==== ƒ^ƒCƒ}[ŠÖ˜A ====
-    [SerializeField] private bool autoStartTimer = false; // ƒQ[ƒ€ŠJn‚Å©“®Œv‘ª‚·‚é‚©
+    // ==== ï¿½^ï¿½Cï¿½}ï¿½[ï¿½Ö˜A ====
+    [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
-    private bool hasStarted = false;        // © ’Ç‹LFˆê“x‚¾‚¯ŠJnŠÇ—
+    private bool hasStarted = false;
     private float elapsedTime = 0f;
-    public float FinalTime { get; private set; } = -1f; // ƒS[ƒ‹‚ÌŠm’èƒ^ƒCƒ€
-    // BGMŠÖ˜A
+    public float FinalTime { get; private set; } = -1f;
+
+    // ==== ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½M ====
+    [Header("Ranking")]
+    [Tooltip("ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½ Stage01..12 ï¿½ï¿½ï¿½ç©ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Bï¿½è“®ï¿½ÅŒÅ’è‚µï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ 1..12 ï¿½ï¿½ï¿½wï¿½ï¿½")]
+    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 ï¿½È‚ç©ï¿½ï¿½ï¿½ï¿½ï¿½o
+    [SerializeField] private ScoreSender scoreSenderPrefab; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½p
+    private ScoreSender scoreSender; // ï¿½ï¿½ï¿½Ìiï¿½ï¿½ï¿½Vï¿½[ï¿½ï¿½ or DontDestroyï¿½j
+
+    // BGM
     public AudioClip gameBGM;
+
     void Awake()
     {
-        // ƒVƒ“ƒOƒ‹ƒgƒ“‚Ìİ’è
+        // Singleton
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ƒV[ƒ“‚ğŒ×‚¢‚Å•Û
+            DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        else { Destroy(gameObject); return; }
     }
 
     void Start()
     {
-        // ƒQ[ƒ€ŠJn‚ÉUI‚ğ‰Šú‰»
-        /*UpdateCoinCounter();*/
-        goalTextObject.SetActive(false); // ƒS[ƒ‹ƒeƒLƒXƒg‚ğ”ñ•\¦‚É
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
-        BGMManager.Instance.Play(gameBGM);
+        if (BGMManager.Instance != null && gameBGM != null) BGMManager.Instance.Play(gameBGM);
 
-        //DoubleBlock—pFƒV[ƒ“ŠJn‚ÉƒvƒŒƒCƒ„[“o˜^
-        if (playerController == null)
-        {
-            playerController = FindObjectOfType<PlayerController>();
-        }
-        if (playerController != null)
-        {
-            RegisterPlayer(playerController);
-        }
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½oï¿½^
+        if (playerController == null) playerController = FindObjectOfType<PlayerController>();
+        if (playerController != null) RegisterPlayer(playerController);
+
+        // ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½Mï¿½pï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ÌŠmï¿½ï¿½
+        EnsureScoreSender();
+        ApplyStageNumberToScoreSender();
     }
 
-    private void Update()
+    void Update()
     {
-        if (isTiming)
-        {
-            elapsedTime += Time.deltaTime;
-        }
+        if (isTiming) elapsedTime += Time.deltaTime;
     }
 
-    // ==== ƒ^ƒCƒ}[‘€ì ====
+    // ==== ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½ ====
     public void StartTimer()
     {
         elapsedTime = 0f;
@@ -82,20 +78,17 @@ public class GameManager : MonoBehaviour
         isTiming = true;
         hasStarted = true;
     }
-
-    // © ’Ç‹LF“ñd‹N“®–h~—p‚Ìƒ‰ƒbƒp[
     public void StartTimerOnce()
     {
         if (!hasStarted) StartTimer();
     }
-
     public void StopTimer()
     {
         isTiming = false;
         FinalTime = elapsedTime;
     }
-    public float ElapsedTime => elapsedTime; // Œ»İ‚ÌŒo‰ß•b‚ğŠO•”‚©‚çQÆ
-    // ‚à‚µƒŠƒgƒ‰ƒC‚ÅÄŒv‘ª‚µ‚½‚¢ê‡‚ÉŒÄ‚Ô—pi”CˆÓj
+    public float ElapsedTime => elapsedTime;
+
     public void ResetTimerForNewRun()
     {
         isTiming = false;
@@ -103,6 +96,7 @@ public class GameManager : MonoBehaviour
         elapsedTime = 0f;
         FinalTime = -1f;
     }
+
     public static string FormatTime(float t)
     {
         if (t < 0f) return "--:--.--";
@@ -111,114 +105,171 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // ƒRƒCƒ“‚ªæ“¾‚³‚ê‚½‚ÉŒÄ‚Î‚ê‚éŠÖ”
+    // ï¿½Rï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ÉŒÄ‚Î‚ï¿½ï¿½Öï¿½
     //public void AddCoin()
     //{
     //    currentCoins++;
     //    /*UpdateCoinCounter();*/
 
-    //    // ƒS[ƒ‹ğŒ‚ğ–‚½‚µ‚½‚©ƒ`ƒFƒbƒN
+    //    // ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ–‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
     //    if (currentCoins >= requiredCoins)
     //    {
     //        Goal();
     //    }
     //}
 
-    // ƒRƒCƒ“ƒJƒEƒ“ƒ^[UI‚ğXV‚·‚éŠÖ”
-    /*void UpdateCoinCounter()
-    {
-        if (coinCounterText != null)
-        {
-            coinCounterText.text = "Coin: " + currentCoins + " / " + requiredCoins;
-        }
-    }*/
-
-    // ==== ˆÈ‰ºADoubleƒuƒƒbƒN‚É‚æ‚éƒvƒŒƒCƒ„[ŠÇ——p ====
-    // ƒvƒŒƒCƒ„[‚ğ“o˜^iƒV[ƒ“ŠJn‚ÉŒÄ‚Ôj
+    // ==== ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ç—ï¿½ ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"yRegisterzƒvƒŒƒCƒ„[“o˜^: {player.name} / Œ»İ‚ÌƒvƒŒƒCƒ„[”: {activePlayers.Count}");
+            Debug.Log($"ï¿½yRegisterï¿½z{player.name} / cnt={activePlayers.Count}");
         }
-        else
-        {
-            Debug.LogWarning($"yRegisterzŠù‚É“o˜^Ï‚İ: {player.name}");
-        }
-    }   
-    // ƒvƒŒƒCƒ„[‚ª€‚ñ‚¾‚Æ‚«‚ÉŒÄ‚Ô
+    }
     public void UnregisterPlayer(PlayerController player)
     {
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
-            Debug.Log($"yUnregisterzƒvƒŒƒCƒ„[íœ: {player.name} / c‚èƒvƒŒƒCƒ„[”: {activePlayers.Count}");
+
+            Debug.Log($"ï¿½yUnregisterï¿½zï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½íœ: {player.name} / ï¿½cï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½: {activePlayers.Count}");
         }
         else
         {
-            Debug.LogWarning($"yUnregisterzƒŠƒXƒg‚É‘¶İ‚µ‚È‚¢ƒvƒŒƒCƒ„[: {player.name}");
+            Debug.LogWarning($"ï¿½yUnregisterï¿½zï¿½ï¿½ï¿½Xï¿½gï¿½É‘ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[: {player.name}");
         }
 
-        // ‘Sˆõ‚ª€‚ñ‚¾‚çƒQ[ƒ€ƒI[ƒo[
         if (activePlayers.Count == 0)
         {
-            Debug.Log("‘SƒvƒŒƒCƒ„[‚ª€–S‚µ‚Ü‚µ‚½BGameOverB");
+            Debug.Log("ï¿½Sï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½BGameOverï¿½B");
             GameOver();
         }
+        if (activePlayers.Count == 0) GameOver();
     }
-    public void SpawnAdditionalPlayer(Transform originalPlayer)
+
+    public PlayerController SpawnAdditionalPlayer(Transform originalPlayer, Vector2 velocity)
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController ‚ª–¢İ’è‚Ì‚½‚ß•¡»‚Å‚«‚Ü‚¹‚ñ");
-            return;
+            Debug.LogWarning("PlayerController ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Ì‚ï¿½ï¿½ß•ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
+            return null;
         }
 
-        // Œ³ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğŠî€‚ÉV‚µ‚¢ƒvƒŒƒCƒ„[‚ğ¶¬
         GameObject clone = Instantiate(playerController.gameObject, originalPlayer.position, Quaternion.identity);
 
-        // ­‚µ‚¸‚ç‚µ‚Äd‚È‚ç‚È‚¢‚æ‚¤‚É
-        Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f), 0.5f, 0f);
+        Vector3 offset = new Vector3(URandom.Range(-1.0f, 1.0f), 0.5f, 0f);
         clone.transform.position += offset;
 
-        // clone ‚à PlayerController ‚ğ‚Â‚Ì‚Å“Æ—§‚µ‚Ä“®‚­
         PlayerController cloneController = clone.GetComponent<PlayerController>();
         if (cloneController != null)
         {
             cloneController.canMove = true;
             RegisterPlayer(cloneController);
-        }
 
-        Debug.Log($"ƒvƒŒƒCƒ„[‚ğ•ª—ô‚³‚¹‚Ü‚µ‚½I Œ»İ‚ÌƒvƒŒƒCƒ„[”: {activePlayers.Count}");
+            Rigidbody2D cloneRb = clone.GetComponent<Rigidbody2D>();
+            if (cloneRb != null)
+            {
+                cloneRb.velocity = velocity;
+            }
+        }
+        Debug.Log($"ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ğ•ª—ô‚³‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½I ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½: {activePlayers.Count}");
+
+        return cloneController;
     }
 
-    // Œ®‚ğæ“¾‚µ‚½Û‚Ìˆ—
+
+    public void Goal()
+    {
+        StopTimer(); 
+        if (playerController != null) playerController.canMove = false;
+        if (goalTextObject != null) goalTextObject.SetActive(true);
+
+        StartCoroutine(SubmitAndGotoRanking());
+    }
+
+    private System.Collections.IEnumerator SubmitAndGotoRanking()
+    {
+        if (scoreSender != null && FinalTime >= 0f)
+        {
+            int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+            scoreSender.StageNumber = stage;
+
+            scoreSender.SendClearTimeSeconds(FinalTime);
+
+            yield return new WaitForSeconds(0.5f); 
+        }
+
+        int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        string rankingScene = $"RankingScene{targetStage:00}";
+        UnityEngine.SceneManagement.SceneManager.LoadScene(rankingScene);
+    }
+
+
     public void AddKeyGlobal()
     {
         totalKeys++;
-        Debug.Log($"Œ®‚ğæ“¾‚µ‚Ü‚µ‚½i‡Œv: {totalKeys}j");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½v: {totalKeys}ï¿½j");
 
-        // Goal‚È‚Ç‚É’Ê’m
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
-    // ==== ƒS[ƒ‹EƒQ[ƒ€ƒI[ƒo[ˆ— ====
-    // ƒS[ƒ‹ˆ—‚ğs‚¤ŠÖ”
-    public void Goal()
-    {
-        StopTimer(); // © ƒ^ƒCƒ}[Šm’è
-        SceneManager.LoadScene("ResultScene");
-
-        // ƒvƒŒƒCƒ„[‚Ì“®‚«‚ğ~‚ß‚é
-        if (playerController != null)
-        {
-            playerController.canMove = false;
-        }
-    }
     public void GameOver()
     {
         Debug.Log("Game Over!");
-        SceneManager.LoadScene("GameOverScene");
+        StartCoroutine(SubmitAndGotoRanking());
     }
+
+    // ==== ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½Mï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½ ====
+    private void EnsureScoreSender()
+    {
+        if (scoreSender != null) return;
+
+        scoreSender = FindObjectOfType<ScoreSender>();
+        if (scoreSender == null)
+        {
+            if (scoreSenderPrefab != null)
+                scoreSender = Instantiate(scoreSenderPrefab);
+            else
+                scoreSender = new GameObject("ScoreSender(Auto)").AddComponent<ScoreSender>();
+        }
+
+        // ï¿½Vï¿½[ï¿½ï¿½ï¿½×‚ï¿½ï¿½Å‘ï¿½ï¿½Mï¿½ï¿½ï¿½rï¿½Ø‚ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É•Ûï¿½
+        DontDestroyOnLoad(scoreSender.gameObject);
+    }
+
+
+
+    private void ApplyStageNumberToScoreSender()
+    {
+        if (scoreSender == null) return;
+        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        scoreSender.StageNumber = stage;
+    }
+
+
+    private int TryParseStageNumberFromSceneName()
+    {
+        // ï¿½ï¿½: "Stage01", "Stage12" ï¿½ï¿½ 1..12
+        string name = SceneManager.GetActiveScene().name;
+        var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
+        {
+            return Mathf.Clamp(n, 1, 12);
+        }
+        return 1; // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½g
+    }
+
+    private int GetCurrentStageNumber()
+    {
+        // ï¿½ï¿½: ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½ "Stage01" ï¿½` "Stage12" ï¿½ï¿½ï¿½ç©ï¿½ï¿½ï¿½ï¿½ï¿½o
+        if (overrideStageNumber > 0) return overrideStageNumber;
+
+        var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        var m = System.Text.RegularExpressions.Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
+            return Mathf.Clamp(n, 1, 12);
+        return 1;
+    }
+
 }

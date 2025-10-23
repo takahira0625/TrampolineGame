@@ -8,15 +8,41 @@ public class KeyBlock : MonoBehaviour
 
     [Header("鍵部品設定")]
     [Tooltip("このブロックが対応する鍵部品の番号 (0から始まるインデックス)")]
-    public int keyPartIndex; // 追加：インスペクターで 0, 1, 2, 3 のどれかを設定
+    public int keyPartIndex;
 
-    // 追加：UIに「この番号の部品が取られた」と通知するイベント
+    [Header("エフェクト設定")]
+    [Tooltip("Playerとの接触時にエフェクトを再生する")]
+    [SerializeField] private bool playEffectOnHit = true;
+
+    // 衝突エフェクト(クラス全体で共有)
+    private static ParticleSystem hitEffectPrefab;
+    private static bool isEffectLoaded = false;
+
+    // UIに「この番号の部品が取られた」と通知するイベント
     public static event Action<int> OnKeyPartCollected;
 
     protected void Awake()
     {
         SetSprite();
         LoadKeySE();
+        PreloadHitEffect();
+    }
+
+    /// <summary>
+    /// エフェクトを事前にロード(一度のみ)
+    /// </summary>
+    private void PreloadHitEffect()
+    {
+        if (!isEffectLoaded)
+        {
+            hitEffectPrefab = Resources.Load<ParticleSystem>("Effects/CFXR3 Hit Fire B (Air)");
+            isEffectLoaded = true;
+
+            if (hitEffectPrefab == null)
+            {
+                Debug.LogWarning("取得エフェクトが見つかりません: Resources/Effects/CFXR3 Hit Fire B (Air)");
+            }
+        }
     }
 
     /// <summary>
@@ -60,6 +86,9 @@ public class KeyBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            // 接触位置を取得
+            Vector2 contactPoint = collision.contacts[0].point;
+
             PlayerInventory inventory = collision.gameObject.GetComponent<PlayerInventory>();
             if (inventory != null)
             {
@@ -72,10 +101,27 @@ public class KeyBlock : MonoBehaviour
                 }
             }
 
-            // --- UI用の新しい通知（部品番号を通知）---
-            OnKeyPartCollected?.Invoke(keyPartIndex); // UIに「keyPartIndex番が取られた」と通知
+            // エフェクトを再生
+            PlayHitEffect(contactPoint);
+
+            // UIに通知
+            OnKeyPartCollected?.Invoke(keyPartIndex);
 
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// 衝突位置にエフェクトを生成
+    /// </summary>
+    private void PlayHitEffect(Vector2 position)
+    {
+        if (!playEffectOnHit || hitEffectPrefab == null) return;
+
+        // エフェクトを生成して再生
+        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+
+        // 自動削除
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
     }
 }
