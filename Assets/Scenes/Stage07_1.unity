@@ -1544,27 +1544,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-<<<<<<< HEAD:Assets/Scenes/stage7_1.unity
   m_SourcePrefab: {fileID: 100100000, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
 --- !u!4 &402050667 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7420434379190034484, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
   m_PrefabInstance: {fileID: 621835037}
   m_PrefabAsset: {fileID: 0}
-=======
-  m_SourcePrefab: {fileID: 100100000, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
---- !u!114 &415522390 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
-  m_PrefabInstance: {fileID: 372804174}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fa6b164dba9b14ca054b5aa43de23a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
->>>>>>> main:Assets/Scenes/Stage07_1.unity
 --- !u!1 &432947984
 GameObject:
   m_ObjectHideFlags: 0
@@ -2989,7 +2974,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-<<<<<<< HEAD:Assets/Scenes/stage7_1.unity
   m_SourcePrefab: {fileID: 100100000, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
 --- !u!1 &686219634
 GameObject:
@@ -3182,9 +3166,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
-=======
-  m_SourcePrefab: {fileID: 100100000, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
->>>>>>> main:Assets/Scenes/Stage07_1.unity
 --- !u!1001 &695679454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3871,7 +3852,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-<<<<<<< HEAD:Assets/Scenes/stage7_1.unity
   m_SourcePrefab: {fileID: 100100000, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
 --- !u!1 &836506636
 GameObject:
@@ -4003,9 +3983,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
-=======
-  m_SourcePrefab: {fileID: 100100000, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
->>>>>>> main:Assets/Scenes/Stage07_1.unity
 --- !u!1001 &839538307
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8044,7 +8021,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-<<<<<<< HEAD:Assets/Scenes/stage7_1.unity
   m_SourcePrefab: {fileID: 100100000, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
 --- !u!4 &1889032409 stripped
 Transform:
@@ -8066,20 +8042,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7420434379190034484, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
   m_PrefabInstance: {fileID: 1283145660}
   m_PrefabAsset: {fileID: 0}
-=======
-  m_SourcePrefab: {fileID: 100100000, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
---- !u!114 &1919681993 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4899980963031003792, guid: 6bbcaeb70a9368d4f830ab871b6f5eb8, type: 3}
-  m_PrefabInstance: {fileID: 1861344308}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33e7aa0fbc925f544980e5f2687e435a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
->>>>>>> main:Assets/Scenes/Stage07_1.unity
 --- !u!1 &1980682958
 GameObject:
   m_ObjectHideFlags: 0
@@ -8244,7 +8206,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
-<<<<<<< HEAD:Assets/Scenes/stage7_1.unity
 --- !u!1001 &2069752070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8307,8 +8268,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7420434379190034484, guid: 61b9f5aa76b499d45b54672edf5a7e83, type: 3}
   m_PrefabInstance: {fileID: 1578417543}
   m_PrefabAsset: {fileID: 0}
-=======
->>>>>>> main:Assets/Scenes/Stage07_1.unity
 --- !u!1001 &2085938702
 PrefabInstance:
   m_ObjectHideFlags: 0

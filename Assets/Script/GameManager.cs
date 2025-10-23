@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // ���E�R�C���֘A�i�����j
+    // 鍵/コイン関連（集計）
     private int totalKeys = 0;
     public int TotalKeys => totalKeys;
 
@@ -22,19 +22,20 @@ public class GameManager : MonoBehaviour
     private int currentCoins = 0;
     private List<PlayerController> activePlayers = new List<PlayerController>();
 
-    // ==== �^�C�}�[�֘A ====
+    // ==== タイマー関連 ====
+    [Header("Timer")] // ヘッダーを Timer に変更
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
     private bool hasStarted = false;
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
-    // ==== �����L���O���M ====
+    // ==== スコアランキング関連 ====
     [Header("Ranking")]
-    [Tooltip("�V�[���� Stage01..12 ���玩�����o�B�蓮�ŌŒ肵�����ꍇ�� 1..12 ���w��")]
-    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 �Ȃ玩�����o
-    [SerializeField] private ScoreSender scoreSenderPrefab; // ������Ύ��������p
-    private ScoreSender scoreSender; // ���́i���V�[�� or DontDestroy�j
+    [Tooltip("シーン名が Stage01..12 でない場合に上書き指定した場合に 1..12 を指定")]
+    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 なら無視 : 0 なら無視
+    [SerializeField] private ScoreSender scoreSenderPrefab; // スコア送信処理用
+    private ScoreSender scoreSender; // 管理用（別シーン or DontDestroy） : 管理用（別シーン or DontDestroy）
 
     // BGM
     public AudioClip gameBGM;
@@ -56,11 +57,11 @@ public class GameManager : MonoBehaviour
         if (autoStartTimer) StartTimer();
         if (BGMManager.Instance != null && gameBGM != null) BGMManager.Instance.Play(gameBGM);
 
-        // �v���C���[�o�^
+        // プレイヤー登録
         if (playerController == null) playerController = FindObjectOfType<PlayerController>();
         if (playerController != null) RegisterPlayer(playerController);
 
-        // �X�R�A���M�p�R���|�[�l���g�̊m��
+        // スコア送信用コンポーネントの確保
         EnsureScoreSender();
         ApplyStageNumberToScoreSender();
     }
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
         if (isTiming) elapsedTime += Time.deltaTime;
     }
 
-    // ==== �^�C�}�[���� ====
+    // ==== タイマー操作 ====
     public void StartTimer()
     {
         elapsedTime = 0f;
@@ -105,26 +106,26 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // �R�C�����擾���ꂽ���ɌĂ΂��֐�
-    //public void AddCoin()
+    // コインが取得された時に呼ばれる関数
+    //public void AddCoin() : コインが取得された時に呼ばれる関数
     //{
     //    currentCoins++;
     //    /*UpdateCoinCounter();*/
 
-    //    // �S�[�������𖞂��������`�F�b�N
-    //    if (currentCoins >= requiredCoins)
+    //    // ゴール条件を満たしたかチェック
+    //    if (currentCoins >= requiredCoins) : ゴール条件を満たしたかチェック
     //    {
     //        Goal();
     //    }
     //}
 
-    // ==== �v���C���[�Ǘ� ====
+    // ==== プレイヤー管理 ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"�yRegister�z{player.name} / cnt={activePlayers.Count}");
+            Debug.Log($"【Register】{player.name} / cnt={activePlayers.Count}");
         }
     }
     public void UnregisterPlayer(PlayerController player)
@@ -133,16 +134,16 @@ public class GameManager : MonoBehaviour
         {
             activePlayers.Remove(player);
 
-            Debug.Log($"�yUnregister�z�v���C���[�폜: {player.name} / �c��v���C���[��: {activePlayers.Count}");
+            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
         }
         else
         {
-            Debug.LogWarning($"�yUnregister�z���X�g�ɑ��݂��Ȃ��v���C���[: {player.name}");
+            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
         }
 
         if (activePlayers.Count == 0)
         {
-            Debug.Log("�S�v���C���[�����S���܂����BGameOver�B");
+            Debug.Log("全プレイヤーが全滅しました。GameOver。");
             GameOver();
         }
         if (activePlayers.Count == 0) GameOver();
@@ -152,7 +153,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController �����ݒ�̂��ߕ����ł��܂���");
+            Debug.LogWarning("PlayerController が未設定のため生成できません");
             return null;
         }
 
@@ -173,7 +174,7 @@ public class GameManager : MonoBehaviour
                 cloneRb.velocity = velocity;
             }
         }
-        Debug.Log($"�v���C���[�𕪗􂳂��܂����I ���݂̃v���C���[��: {activePlayers.Count}");
+        Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
 
         return cloneController;
     }
@@ -181,7 +182,7 @@ public class GameManager : MonoBehaviour
 
     public void Goal()
     {
-        StopTimer(); 
+        StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
 
@@ -197,7 +198,7 @@ public class GameManager : MonoBehaviour
 
             scoreSender.SendClearTimeSeconds(FinalTime);
 
-            yield return new WaitForSeconds(0.5f); 
+            yield return new WaitForSeconds(0.5f);
         }
 
         int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
@@ -209,7 +210,7 @@ public class GameManager : MonoBehaviour
     public void AddKeyGlobal()
     {
         totalKeys++;
-        Debug.Log($"�����擾���܂����i���v: {totalKeys}�j");
+        Debug.Log($"鍵を取得しました（総計: {totalKeys}）");
 
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
@@ -220,7 +221,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SubmitAndGotoRanking());
     }
 
-    // ==== �X�R�A���M�̉����� ====
+    // ==== スコア送信の準備 ====
     private void EnsureScoreSender()
     {
         if (scoreSender != null) return;
@@ -234,7 +235,7 @@ public class GameManager : MonoBehaviour
                 scoreSender = new GameObject("ScoreSender(Auto)").AddComponent<ScoreSender>();
         }
 
-        // �V�[���ׂ��ő��M���r�؂�Ȃ��悤�ɕێ�
+        // シーン移動後も破棄されないように保持
         DontDestroyOnLoad(scoreSender.gameObject);
     }
 
@@ -250,19 +251,19 @@ public class GameManager : MonoBehaviour
 
     private int TryParseStageNumberFromSceneName()
     {
-        // ��: "Stage01", "Stage12" �� 1..12
+        // 例: "Stage01", "Stage12" から 1..12
         string name = SceneManager.GetActiveScene().name;
         var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
         {
             return Mathf.Clamp(n, 1, 12);
         }
-        return 1; // �f�t�H���g
+        return 1; // デフォルト
     }
 
     private int GetCurrentStageNumber()
     {
-        // ��: �V�[���� "Stage01" �` "Stage12" ���玩�����o
+        // 例: シーン名が "Stage01" 〜 "Stage12" の場合に抽出
         if (overrideStageNumber > 0) return overrideStageNumber;
 
         var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
@@ -271,5 +272,4 @@ public class GameManager : MonoBehaviour
             return Mathf.Clamp(n, 1, 12);
         return 1;
     }
-
 }
