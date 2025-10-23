@@ -1,77 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
-using TMPro; // TextMeshProを扱うために必要
-using System.Collections.Generic;//PlayerList管理用
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
+using URandom = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    // このクラスの唯一のインスタンスを保持する（シングルトン）
     public static GameManager instance;
 
-    // 複数のボールで鍵の共有を行うためのもの
-    private int totalKeys = 0; // 全プレイヤー共通の鍵数
-    public int TotalKeys => totalKeys; // 参照用プロパティ
+    // 鍵・コイン関連（既存）
+    private int totalKeys = 0;
+    public int TotalKeys => totalKeys;
 
-    // インスペクターから設定する項目
-    public int requiredCoins = 5; // ゴールに必要なコインの数
-    public GameObject goalTextObject; // ゴールテキストのUIオブジェクト
-    /*public TextMeshProUGUI coinCounterText;*/ // コインカウンターのUIテキスト
-    public PlayerController playerController; // プレイヤーのスクリプト
+    public int requiredCoins = 5;
+    public GameObject goalTextObject;
+    public PlayerController playerController;
 
-    private int currentCoins = 0; // 現在のコイン取得数
-    
-    // ==== Doubleブロックによるプレイヤー管理用 ====
+    private int currentCoins = 0;
     private List<PlayerController> activePlayers = new List<PlayerController>();
 
     // ==== タイマー関連 ====
-    [SerializeField] private bool autoStartTimer = false; // ゲーム開始で自動計測するか
+    [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
-    private bool hasStarted = false;        // ← 追記：一度だけ開始管理
+    private bool hasStarted = false;
     private float elapsedTime = 0f;
-    public float FinalTime { get; private set; } = -1f; // ゴール時の確定タイム
-    // BGM関連
+    public float FinalTime { get; private set; } = -1f;
+
+    // ==== ランキング送信 ====
+    [Header("Ranking")]
+    [Tooltip("シーン名 Stage01..12 から自動抽出。手動で固定したい場合は 1..12 を指定")]
+    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 なら自動抽出
+    [SerializeField] private ScoreSender scoreSenderPrefab; // 無ければ自動生成用
+    private ScoreSender scoreSender; // 実体（同シーン or DontDestroy）
+
+    // BGM
     public AudioClip gameBGM;
+
     void Awake()
     {
-        // シングルトンの設定
+        // Singleton
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // シーンを跨いで保持
+            DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        else { Destroy(gameObject); return; }
     }
 
     void Start()
     {
-        // ゲーム開始時にUIを初期化
-        /*UpdateCoinCounter();*/
-        goalTextObject.SetActive(false); // ゴールテキストを非表示に
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
-        BGMManager.Instance.Play(gameBGM);
+        if (BGMManager.Instance != null && gameBGM != null) BGMManager.Instance.Play(gameBGM);
 
-        //DoubleBlock用：シーン開始時にプレイヤー登録
-        if (playerController == null)
-        {
-            playerController = FindObjectOfType<PlayerController>();
-        }
-        if (playerController != null)
-        {
-            RegisterPlayer(playerController);
-        }
+        // プレイヤー登録
+        if (playerController == null) playerController = FindObjectOfType<PlayerController>();
+        if (playerController != null) RegisterPlayer(playerController);
+
+        // スコア送信用コンポーネントの確保
+        EnsureScoreSender();
+        ApplyStageNumberToScoreSender();
     }
 
-    private void Update()
+    void Update()
     {
-        if (isTiming)
-        {
-            elapsedTime += Time.deltaTime;
-        }
+        if (isTiming) elapsedTime += Time.deltaTime;
     }
 
     // ==== タイマー操作 ====
@@ -82,20 +78,17 @@ public class GameManager : MonoBehaviour
         isTiming = true;
         hasStarted = true;
     }
-
-    // ← 追記：二重起動防止用のラッパー
     public void StartTimerOnce()
     {
         if (!hasStarted) StartTimer();
     }
-
     public void StopTimer()
     {
         isTiming = false;
         FinalTime = elapsedTime;
     }
-    public float ElapsedTime => elapsedTime; // 現在の経過秒を外部から参照
-    // もしリトライで再計測したい場合に呼ぶ用（任意）
+    public float ElapsedTime => elapsedTime;
+
     public void ResetTimerForNewRun()
     {
         isTiming = false;
@@ -111,114 +104,145 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // コインが取得された時に呼ばれる関数
+    // ==== コイン・鍵 ====
     public void AddCoin()
     {
         currentCoins++;
-        /*UpdateCoinCounter();*/
-
-        // ゴール条件を満たしたかチェック
-        if (currentCoins >= requiredCoins)
-        {
-            Goal();
-        }
+        if (currentCoins >= requiredCoins) { Goal(); }
     }
 
-    // コインカウンターUIを更新する関数
-    /*void UpdateCoinCounter()
+    public void AddKeyGlobal()
     {
-        if (coinCounterText != null)
-        {
-            coinCounterText.text = "Coin: " + currentCoins + " / " + requiredCoins;
-        }
-    }*/
+        totalKeys++;
+        PlayerInventory.RaiseKeyCountChanged(totalKeys);
+    }
 
-    // ==== 以下、Doubleブロックによるプレイヤー管理用 ====
-    // プレイヤーを登録（シーン開始時に呼ぶ）
+    // ==== プレイヤー管理 ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"【Register】プレイヤー登録: {player.name} / 現在のプレイヤー数: {activePlayers.Count}");
+            Debug.Log($"【Register】{player.name} / cnt={activePlayers.Count}");
         }
-        else
-        {
-            Debug.LogWarning($"【Register】既に登録済み: {player.name}");
-        }
-    }   
-    // プレイヤーが死んだときに呼ぶ
+    }
     public void UnregisterPlayer(PlayerController player)
     {
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
-            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
+            Debug.Log($"【Unregister】{player.name} / cnt={activePlayers.Count}");
         }
-        else
-        {
-            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
-        }
-
-        // 全員が死んだらゲームオーバー
-        if (activePlayers.Count == 0)
-        {
-            Debug.Log("全プレイヤーが死亡しました。GameOver。");
-            GameOver();
-        }
+        if (activePlayers.Count == 0) GameOver();
     }
     public void SpawnAdditionalPlayer(Transform originalPlayer)
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController が未設定のため複製できません");
+            Debug.LogWarning("PlayerController 未設定で複製不可");
             return;
         }
-
-        // 元プレイヤーの位置を基準に新しいプレイヤーを生成
         GameObject clone = Instantiate(playerController.gameObject, originalPlayer.position, Quaternion.identity);
-
-        // 少しずらして重ならないように
-        Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f), 0.5f, 0f);
+        Vector3 offset = new Vector3(URandom.Range(-1.0f, 1.0f), 0.5f, 0f);
         clone.transform.position += offset;
 
-        // clone も PlayerController を持つので独立して動く
-        PlayerController cloneController = clone.GetComponent<PlayerController>();
+        var cloneController = clone.GetComponent<PlayerController>();
         if (cloneController != null)
         {
             cloneController.canMove = true;
             RegisterPlayer(cloneController);
         }
-
-        Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
     }
 
-    // 鍵を取得した際の処理
-    public void AddKeyGlobal()
-    {
-        totalKeys++;
-        Debug.Log($"鍵を取得しました（合計: {totalKeys}）");
-
-        // Goalなどに通知
-        PlayerInventory.RaiseKeyCountChanged(totalKeys);
-    }
-
-    // ==== ゴール・ゲームオーバー処理 ====
-    // ゴール処理を行う関数
+    // ==== ゴール・ゲームオーバー ====
     public void Goal()
     {
-        StopTimer(); // ← タイマー確定
-        SceneManager.LoadScene("ResultScene");
+        StopTimer(); // タイム確定
+        if (playerController != null) playerController.canMove = false;
+        if (goalTextObject != null) goalTextObject.SetActive(true);
 
-        // プレイヤーの動きを止める
-        if (playerController != null)
-        {
-            playerController.canMove = false;
-        }
+        // 送信 → ランキングシーンへ直行
+        StartCoroutine(SubmitAndGotoRanking());
     }
+
+    private System.Collections.IEnumerator SubmitAndGotoRanking()
+    {
+        // 送信（できるだけ完了を待つ）
+        if (scoreSender != null && FinalTime >= 0f)
+        {
+            // シーン番号をScoreSenderへ（1..12）
+            int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+            scoreSender.StageNumber = stage;
+
+            // 送信開始（ScoreSender内でUnityWebRequestのコルーチンが走る）
+            scoreSender.SendClearTimeSeconds(FinalTime);
+
+            // シーン遷移で通信が切られにくいよう、短時間だけ待つ
+            yield return new WaitForSeconds(0.5f); // 0.3～1.0秒で調整可
+        }
+
+        // ★ 遷移先を ResultScene → RankingsSceneXX に変更
+        int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        string rankingScene = $"RankingScene{targetStage:00}";
+        UnityEngine.SceneManagement.SceneManager.LoadScene(rankingScene);
+    }
+
     public void GameOver()
     {
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
     }
+
+    // ==== スコア送信の下準備 ====
+    private void EnsureScoreSender()
+    {
+        if (scoreSender != null) return;
+
+        scoreSender = FindObjectOfType<ScoreSender>();
+        if (scoreSender == null)
+        {
+            if (scoreSenderPrefab != null)
+                scoreSender = Instantiate(scoreSenderPrefab);
+            else
+                scoreSender = new GameObject("ScoreSender(Auto)").AddComponent<ScoreSender>();
+        }
+
+        // シーン跨ぎで送信が途切れないように保持
+        DontDestroyOnLoad(scoreSender.gameObject);
+    }
+
+
+
+    private void ApplyStageNumberToScoreSender()
+    {
+        if (scoreSender == null) return;
+        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        scoreSender.StageNumber = stage;
+    }
+
+
+    private int TryParseStageNumberFromSceneName()
+    {
+        // 例: "Stage01", "Stage12" → 1..12
+        string name = SceneManager.GetActiveScene().name;
+        var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
+        {
+            return Mathf.Clamp(n, 1, 12);
+        }
+        return 1; // デフォルト
+    }
+
+    private int GetCurrentStageNumber()
+    {
+        // 例: シーン名 "Stage01" ～ "Stage12" から自動抽出
+        if (overrideStageNumber > 0) return overrideStageNumber;
+
+        var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        var m = System.Text.RegularExpressions.Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
+            return Mathf.Clamp(n, 1, 12);
+        return 1;
+    }
+
 }
