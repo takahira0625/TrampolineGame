@@ -6,14 +6,14 @@ public class PageSelectUI : MonoBehaviour
     [SerializeField] private AudioClip clickSE;
     public void OnClickLogin()
     {
-        SceneManager.LoadScene("StageSelectScene");
+        SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickStageSelect()
     {
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("StageSelectScene");
+        SceneManager.LoadScene("StageSelectScene1-6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -40,6 +40,6 @@ public class PageSelectUI : MonoBehaviour
             SceneBGMManager.instance.PlayStageBGM();
         }
 
-        SceneManager.LoadScene($"stage{stage:00}");
+        SceneManager.LoadScene($"Stage{stage:00}");
     }
 }
