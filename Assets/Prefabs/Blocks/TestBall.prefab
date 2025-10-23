@@ -171,12 +171,14 @@ MonoBehaviour:
   savedVelocity: {x: 0, y: 0}
   rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
   isActive: 0
+  afterImageOrderOffset: 1
   speedThresholdForAfterImage: 20
   normalAfterImageColor: {r: 0.26240644, g: 0.6369531, b: 0.7132075, a: 0.5}
   highSpeedAfterImageColor: {r: 0.78113204, g: 0.19896752, b: 0.19896752, a: 0.7}
   highSpeedEffectPrefab: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
   attachEffectToPlayer: 1
   effectOffset: {x: 0, y: 0, z: 0}
+  lightningAuraPrefab: {fileID: 7131401307255788800, guid: e7128cd20ace9af40b3d24f2bd7bfa35, type: 3}
 --- !u!114 &5175829930983611246
 MonoBehaviour:
   m_ObjectHideFlags: 0
