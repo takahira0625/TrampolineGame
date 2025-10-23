@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 3294510214245016835}
   - component: {fileID: 1875980885942040792}
   - component: {fileID: -6636970187652519209}
+  - component: {fileID: -5217972657898656149}
   m_Layer: 0
   m_Name: Goal
   m_TagString: GoalBlock
@@ -228,3 +229,24 @@ CapsuleCollider2D:
   m_Offset: {x: -0.00048561097, y: 0.00048555536}
   m_Size: {x: 0.07474933, y: 0.07572052}
   m_Direction: 0
+--- !u!95 &-5217972657898656149
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797651389120414331}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 00154acb4ddee4747b1956e8283889f1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
