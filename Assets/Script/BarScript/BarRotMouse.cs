@@ -19,6 +19,7 @@ public class BarRotation : MonoBehaviour
     private BarMovement barMovement;
     private float currentAngle;
     private Vector2 lastPhysicsPos;
+    private bool isActivated = false; // クリック済みフラグ
 
     void Awake()
     {
@@ -41,8 +42,25 @@ public class BarRotation : MonoBehaviour
         return new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
     }
 
+    void Update()
+    {
+        // クリック判定（一度だけ）
+        if (!isActivated && Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D col = GetComponent<Collider2D>();
+            if (col != null && col.OverlapPoint(mousePos))
+            {
+                isActivated = true;
+            }
+        }
+    }
+
     void FixedUpdate()
     {
+        // 未アクティブなら回転しない
+        if (!isActivated) return;
+
         // === スロー中の特殊回転 ===
         if (playerController != null && playerController.isActive &&
             slowMotionTarget != null && (rightClick == null || !rightClick.IsMoving))
@@ -63,12 +81,10 @@ public class BarRotation : MonoBehaviour
         // === 通常時：マウス方向に回転 ===
         else if (rotateToDirection && (rightClick == null || !rightClick.IsMoving))
         {
-            // マウスのワールド座標を取得
             Vector3 mouseScreenPos = Input.mousePosition;
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-            mouseWorldPos.z = 0f; // 2D平面補正
+            mouseWorldPos.z = 0f;
 
-            // 現在のバー位置 → マウス方向ベクトル
             Vector2 delta = (Vector2)mouseWorldPos - lastPhysicsPos;
 
             if (delta.sqrMagnitude > 0.0001f)

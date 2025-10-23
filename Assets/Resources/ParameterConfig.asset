@@ -30,5 +30,6 @@ MonoBehaviour:
   KeySprite: {fileID: 21300000, guid: ccd17f84fea1e3041a15fc6bd65ffc5f, type: 3}
   GoalSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
   BombSprite: {fileID: 21300000, guid: 6a394f51fda540241bf83a21e70752c3, type: 3}
-  WarpSprite: {fileID: 21300000, guid: 8f83bb954ddb42848b99870bf90b2890, type: 3}
+  WarpRandomSprite: {fileID: 21300000, guid: 8f83bb954ddb42848b99870bf90b2890, type: 3}
+  WarpPairSprite: {fileID: 21300000, guid: 8f83bb954ddb42848b99870bf90b2890, type: 3}
   DoubleSprite: {fileID: 21300000, guid: 7afe6b46e7d76a54d9ec9c9b3b0ed991, type: 3}

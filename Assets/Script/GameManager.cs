@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
         elapsedTime = 0f;
         FinalTime = -1f;
     }
+
     public static string FormatTime(float t)
     {
         if (t < 0f) return "--:--.--";
@@ -109,12 +110,6 @@ public class GameManager : MonoBehaviour
     {
         currentCoins++;
         if (currentCoins >= requiredCoins) { Goal(); }
-    }
-
-    public void AddKeyGlobal()
-    {
-        totalKeys++;
-        PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
     // ==== プレイヤー管理 ====
@@ -131,60 +126,86 @@ public class GameManager : MonoBehaviour
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
-            Debug.Log($"【Unregister】{player.name} / cnt={activePlayers.Count}");
+
+            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
+        }
+        else
+        {
+            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
+        }
+
+        if (activePlayers.Count == 0)
+        {
+            Debug.Log("全プレイヤーが死亡しました。GameOver。");
+            GameOver();
         }
         if (activePlayers.Count == 0) GameOver();
     }
-    public void SpawnAdditionalPlayer(Transform originalPlayer)
+
+    public PlayerController SpawnAdditionalPlayer(Transform originalPlayer, Vector2 velocity)
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController 未設定で複製不可");
-            return;
+            Debug.LogWarning("PlayerController が未設定のため複製できません");
+            return null;
         }
+
         GameObject clone = Instantiate(playerController.gameObject, originalPlayer.position, Quaternion.identity);
+
         Vector3 offset = new Vector3(URandom.Range(-1.0f, 1.0f), 0.5f, 0f);
         clone.transform.position += offset;
 
-        var cloneController = clone.GetComponent<PlayerController>();
+        PlayerController cloneController = clone.GetComponent<PlayerController>();
         if (cloneController != null)
         {
             cloneController.canMove = true;
             RegisterPlayer(cloneController);
+
+            Rigidbody2D cloneRb = clone.GetComponent<Rigidbody2D>();
+            if (cloneRb != null)
+            {
+                cloneRb.velocity = velocity;
+            }
         }
+        Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
+
+        return cloneController;
     }
 
-    // ==== ゴール・ゲームオーバー ====
+
     public void Goal()
     {
-        StopTimer(); // タイム確定
+        StopTimer(); 
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
 
-        // 送信 → ランキングシーンへ直行
         StartCoroutine(SubmitAndGotoRanking());
     }
 
     private System.Collections.IEnumerator SubmitAndGotoRanking()
     {
-        // 送信（できるだけ完了を待つ）
         if (scoreSender != null && FinalTime >= 0f)
         {
-            // シーン番号をScoreSenderへ（1..12）
             int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
             scoreSender.StageNumber = stage;
 
-            // 送信開始（ScoreSender内でUnityWebRequestのコルーチンが走る）
             scoreSender.SendClearTimeSeconds(FinalTime);
 
-            // シーン遷移で通信が切られにくいよう、短時間だけ待つ
-            yield return new WaitForSeconds(0.5f); // 0.3～1.0秒で調整可
+            yield return new WaitForSeconds(0.5f); 
         }
 
-        // ★ 遷移先を ResultScene → RankingsSceneXX に変更
         int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
         string rankingScene = $"RankingScene{targetStage:00}";
         UnityEngine.SceneManagement.SceneManager.LoadScene(rankingScene);
+    }
+
+
+    public void AddKeyGlobal()
+    {
+        totalKeys++;
+        Debug.Log($"鍵を取得しました（合計: {totalKeys}）");
+
+        PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
     public void GameOver()

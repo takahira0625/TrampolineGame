@@ -30,6 +30,7 @@ public class ParameterConfig : ScriptableObject
     public Sprite KeySprite;
     public Sprite GoalSprite;
     public Sprite BombSprite;
-    public Sprite WarpSprite;
+    public Sprite WarpRandomSprite;
+    public Sprite WarpPairSprite;
     public Sprite DoubleSprite;
 }

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7066897570707931640}
   - component: {fileID: 3294510214245016835}
-  - component: {fileID: -4722819471972507649}
   - component: {fileID: 1875980885942040792}
+  - component: {fileID: -6636970187652519209}
   m_Layer: 0
   m_Name: Goal
   m_TagString: GoalBlock
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 13c66f97192d50d47b30031a3e71e52e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -86,8 +86,30 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &-4722819471972507649
-BoxCollider2D:
+--- !u!114 &1875980885942040792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797651389120414331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd28e0a3e141d834d83355fb5986190a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: {fileID: 0}
+  breakBlock: {fileID: 0}
+  playSoundOnHit: 1
+  customHitSound: {fileID: 0}
+  playEffectOnHit: 1
+  requiredKeys: 3
+  lockedSprite: {fileID: 21300000, guid: 13c66f97192d50d47b30031a3e71e52e, type: 3}
+  unlockedSprite: {fileID: 21300000, guid: b1b52b68a7e130946a57d4974e4cc45e, type: 3}
+  unlockEffectPrefab: {fileID: 2513661457047019541, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+  effectOffset: {x: 0, y: 0, z: 0}
+--- !u!70 &-6636970187652519209
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -95,7 +117,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 3797651389120414331}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: db285ca2b8f56684880a52a9b1fe0aba, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -118,36 +140,6 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 12.1, y: 12.1}
-    newSize: {x: 0.1, y: 0.1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 1
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &1875980885942040792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3797651389120414331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd28e0a3e141d834d83355fb5986190a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameter: {fileID: 0}
-  breakBlock: {fileID: 0}
-  playSoundOnHit: 1
-  customHitSound: {fileID: 0}
-  playEffectOnHit: 1
-  requiredKeys: 3
-  lockedSprite: {fileID: 21300000, guid: 4e51e416031fb724daa556bef2738d73, type: 3}
-  unlockedSprite: {fileID: 21300000, guid: cf69cab0cc654d649a16cf9c8ba0f9d5, type: 3}
+  m_Offset: {x: -0.00048561097, y: 0.00048555536}
+  m_Size: {x: 0.07474933, y: 0.07572052}
+  m_Direction: 0

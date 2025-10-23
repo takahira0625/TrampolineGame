@@ -83,6 +83,7 @@ public class RightClickTriggerOn : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && !isMoving && !col.isTrigger)
         {
+            Debug.Log("右クリックで前進開始");
             startRotation = transform.rotation;
             StartCoroutine(MoveForwardAndBack());
         }
@@ -98,8 +99,8 @@ public class RightClickTriggerOn : MonoBehaviour
 
         originalPosition = rb.position;
         Vector2 forward = (startRotation * Vector2.up).normalized;
-        Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
 
+        Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
         float elapsed = 0f;
 
         // --- 前進 ---
@@ -180,9 +181,6 @@ public class RightClickTriggerOn : MonoBehaviour
         }
     }
 
-
-
-    // --- Exitで法線方向に飛ばす ---
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (isMoving) return; // Trigger中はスキップ
@@ -190,10 +188,7 @@ public class RightClickTriggerOn : MonoBehaviour
         Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
         if (ballRb == null) return;
 
-        // 速度が0なら向きがわからないので適当に上方向に飛ばす
         Vector2 dir = ballRb.velocity.normalized;
-        if (dir == Vector2.zero)
-            dir = Vector2.up;
 
         // magnitudeを指定して速度を変更
         ballRb.velocity = dir * reboundExitSpeed;

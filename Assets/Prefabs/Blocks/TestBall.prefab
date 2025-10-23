@@ -36,6 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 233479534502755880}
+  - {fileID: 5135340597285245048}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7136199059637855042
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 500
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -166,12 +167,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   outTimeToLose: 0.1
-  maxSpeed: 20
+  maxSpeed: 100
   slowSpeed: 5
   savedVelocity: {x: 0, y: 0}
   rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
   isActive: 0
-  speedThresholdForAfterImage: 20
+  afterImageOrderOffset: 1
+  speedThresholdForAfterImage: 40
   normalAfterImageColor: {r: 0.26240644, g: 0.6369531, b: 0.7132075, a: 0.5}
   highSpeedAfterImageColor: {r: 0.78113204, g: 0.19896752, b: 0.19896752, a: 0.7}
   highSpeedEffectPrefab: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
@@ -211,6 +213,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9802d6550648e71459fa1bd136a63953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &327397075306602051
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 516839309084771518}
+    m_Modifications:
+    - target: {fileID: 1580627835606230684, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_Name
+      value: Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.050607
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.1026402
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.05700621
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+--- !u!4 &5135340597285245048 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
+  m_PrefabInstance: {fileID: 327397075306602051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3161080733513031880
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +286,10 @@ PrefabInstance:
     - target: {fileID: 2946223095280311965, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: m_Name
       value: Spherical
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946223095280311966, guid: 16966713336d54d4a96c67725c97301c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.key0.g

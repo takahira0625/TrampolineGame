@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 public class BombBlock : GimmickBlock
 {
-    [SerializeField] private ExplosionEffect explosionEffectPrefab; // VFXÅ{îjâÛêßå‰ÇÃPrefab
+    [SerializeField] private ExplosionEffect explosionEffectPrefab;
     [SerializeField] private float explosionRadius = 3f;
+    private bool hasExploded = false; // îöî≠çœÇ›ÉtÉâÉO
     [SerializeField] private AudioClip explosionSound;
 
     protected override void Awake()
@@ -26,15 +28,17 @@ public class BombBlock : GimmickBlock
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
-
         if (collision.collider.CompareTag("Player"))
         {
             TriggerExplosion();
         }
     }
 
-    private void TriggerExplosion()
+    public void TriggerExplosion()
     {
+
+        if (hasExploded) return;
+        hasExploded = true;
         // îöî≠SEÇçƒê∂
         if (explosionSound != null && SEManager.Instance != null)
         {
@@ -45,9 +49,8 @@ public class BombBlock : GimmickBlock
         if (explosionEffectPrefab != null)
         {
             ExplosionEffect effect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-            effect.Initialize(explosionRadius);
+            effect.Initialize(explosionRadius, this);
         }
-
         Destroy(gameObject);
     }
 }
