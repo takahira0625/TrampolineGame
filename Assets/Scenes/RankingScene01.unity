@@ -519,8 +519,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 184388345}
-        m_TargetAssemblyTypeName: RankingButtons, Assembly-CSharp
-        m_MethodName: OnClickStageSelect
+        m_TargetAssemblyTypeName: PageSelectUI, Assembly-CSharp
+        m_MethodName: OnClickStageSelect1_6
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -3,8 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class PageSelectUI : MonoBehaviour
 {
-    public void OnClickLogin() => SceneManager.LoadScene("StageSelectScene");
-    public void OnClickStageSelect() => SceneManager.LoadScene("StageSelectScene1-6");
+    public void OnClickLogin() => SceneManager.LoadScene("StageSelectScene1_6");
+    public void OnClickStageSelect1_6() => SceneManager.LoadScene("StageSelectScene1_6");
+    public void OnClickStageSelect7_12() => SceneManager.LoadScene("StageSelectScene7_12");
     public void OnClickHome() => SceneManager.LoadScene("TitleScene");
     
     public void OnClickRetry()
