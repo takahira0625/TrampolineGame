@@ -47,6 +47,10 @@ public class Goal : BaseBlock
         {
             isUnlocked = true;
             spriteRenderer.sprite = unlockedSprite;
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
             SpawnUnlockEffect();
             Debug.Log("ƒS[ƒ‹‚ªŠJ•ú‚³‚ê‚Ü‚µ‚½I");
         }
