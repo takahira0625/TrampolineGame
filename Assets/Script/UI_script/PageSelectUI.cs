@@ -6,12 +6,14 @@ public class PageSelectUI : MonoBehaviour
     [SerializeField] private AudioClip clickSE;
     public void OnClickLogin()
     {
+        SEManager.Instance.StopAll();
         SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickStageSelect()
     {
+        SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("StageSelectScene1-6");
         SEManager.Instance.PlayOneShot(clickSE);
@@ -19,6 +21,7 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickHome()
     {
+        SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("TitleScene");
         SEManager.Instance.PlayOneShot(clickSE);
@@ -30,6 +33,7 @@ public class PageSelectUI : MonoBehaviour
         int stage = 1;
         if (GameManager.instance != null)
         {
+            SEManager.Instance.StopAll();
             stage = Mathf.Clamp(
                 (int)GameManager.instance
                       .GetType()
