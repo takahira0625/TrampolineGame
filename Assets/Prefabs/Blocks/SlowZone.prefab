@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1055361905370697974}
   - component: {fileID: 7141631673608586762}
   - component: {fileID: 7759355640271304571}
+  - component: {fileID: -3200650407633541774}
   m_Layer: 0
   m_Name: SlowZone
   m_TagString: SlowZone
@@ -130,3 +131,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-3200650407633541774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3084917115881456027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24a6b8b7eca3926428cfaf0cd6067702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minLength: 0.5
+  maxLength: 5

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4886195551998217787}
   - component: {fileID: 779663995483072517}
-  - component: {fileID: 5244202932465858000}
+  - component: {fileID: -82464586845521304}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5244202932465858000
+--- !u!114 &-82464586845521304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

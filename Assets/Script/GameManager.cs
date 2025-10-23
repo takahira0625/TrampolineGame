@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
     {
         BGMManager.Instance.SetVolume(0.5f);
         Debug.Log("Game Over!");
-        SceneManager.LoadScene("GameOverScene");
+        StartCoroutine(SubmitAndGotoRanking());
     }
 
     // ==== スコア送信の下準備 ====

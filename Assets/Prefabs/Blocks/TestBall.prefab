@@ -36,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 233479534502755880}
-  - {fileID: 5135340597285245048}
+  - {fileID: 6585362471463143443}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7136199059637855042
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 500
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -173,12 +173,13 @@ MonoBehaviour:
   rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
   isActive: 0
   afterImageOrderOffset: 1
-  speedThresholdForAfterImage: 40
+  speedThresholdForAfterImage: 20
   normalAfterImageColor: {r: 0.26240644, g: 0.6369531, b: 0.7132075, a: 0.5}
   highSpeedAfterImageColor: {r: 0.78113204, g: 0.19896752, b: 0.19896752, a: 0.7}
   highSpeedEffectPrefab: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
   attachEffectToPlayer: 1
   effectOffset: {x: 0, y: 0, z: 0}
+  lightningAuraPrefab: {fileID: 7131401307255788800, guid: e7128cd20ace9af40b3d24f2bd7bfa35, type: 3}
 --- !u!114 &5175829930983611246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9802d6550648e71459fa1bd136a63953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &327397075306602051
+--- !u!1001 &1777981433471387176
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -270,10 +271,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de881ada27f11b4478acd388ff223c93, type: 3}
---- !u!4 &5135340597285245048 stripped
+--- !u!4 &6585362471463143443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4886195551998217787, guid: de881ada27f11b4478acd388ff223c93, type: 3}
-  m_PrefabInstance: {fileID: 327397075306602051}
+  m_PrefabInstance: {fileID: 1777981433471387176}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3161080733513031880
 PrefabInstance:
@@ -286,10 +287,6 @@ PrefabInstance:
     - target: {fileID: 2946223095280311965, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: m_Name
       value: Spherical
-      objectReference: {fileID: 0}
-    - target: {fileID: 2946223095280311966, guid: 16966713336d54d4a96c67725c97301c, type: 3}
-      propertyPath: m_SortingOrder
-      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2946223095280311967, guid: 16966713336d54d4a96c67725c97301c, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.key0.g

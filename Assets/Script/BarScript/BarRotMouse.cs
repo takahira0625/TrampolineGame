@@ -19,12 +19,28 @@ public class BarRotation : MonoBehaviour
     private BarMovement barMovement;
     private float currentAngle;
     private Vector2 lastPhysicsPos;
-    private bool isActivated = false; // クリック済みフラグ
+    private bool isActivated = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         barMovement = GetComponent<BarMovement>();
+
+        // 自動取得
+        if (rightClick == null)
+        {
+            rightClick = GetComponent<RightClickTriggerOn>();
+        }
+
+        // Playerを自動取得
+        if (playerController == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerController = player.GetComponent<PlayerController>();
+            }
+        }
     }
 
     void Start()
@@ -33,9 +49,6 @@ public class BarRotation : MonoBehaviour
         currentAngle = rb.rotation;
     }
 
-    /// <summary>
-    /// バーの前方向を取得
-    /// </summary>
     public Vector2 GetForwardDirection()
     {
         float angleRad = currentAngle * Mathf.Deg2Rad;
@@ -44,7 +57,6 @@ public class BarRotation : MonoBehaviour
 
     void Update()
     {
-        // クリック判定（一度だけ）
         if (!isActivated && Input.GetMouseButtonDown(0))
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -52,18 +64,22 @@ public class BarRotation : MonoBehaviour
             if (col != null && col.OverlapPoint(mousePos))
             {
                 isActivated = true;
+                Debug.Log("Bar Activated!");
             }
         }
     }
 
     void FixedUpdate()
     {
-        // 未アクティブなら回転しない
         if (!isActivated) return;
 
-        // === スロー中の特殊回転 ===
-        if (playerController != null && playerController.isActive &&
-            slowMotionTarget != null && (rightClick == null || !rightClick.IsMoving))
+        // デバッグログ追加
+        bool isPlayerActive = playerController != null && playerController.isActive;
+        bool hasTarget = slowMotionTarget != null;
+        bool isRightClickMoving = rightClick != null && rightClick.IsMoving;
+
+        // === スロー中の特殊回転（条件を緩和） ===
+        if (hasTarget && Input.GetMouseButton(0) && !isRightClickMoving)
         {
             Vector2 ballDirection = (slowMotionTarget.position - transform.position).normalized;
             if (ballDirection.sqrMagnitude > 0.0001f)
@@ -76,10 +92,12 @@ public class BarRotation : MonoBehaviour
                 currentAngle = Mathf.LerpAngle(currentAngle, targetAngle,
                     1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
                 rb.MoveRotation(currentAngle);
+
+                lastPhysicsPos = rb.position; // 位置を更新して通常回転と競合しないように
             }
         }
         // === 通常時：マウス方向に回転 ===
-        else if (rotateToDirection && (rightClick == null || !rightClick.IsMoving))
+        else if (rotateToDirection && !isRightClickMoving)
         {
             Vector3 mouseScreenPos = Input.mousePosition;
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
@@ -108,6 +126,7 @@ public class BarRotation : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             slowMotionTarget = collision.transform;
+            Debug.Log("SlowMotion Target Set: " + collision.name);
         }
     }
 
@@ -116,6 +135,7 @@ public class BarRotation : MonoBehaviour
         if (collision.CompareTag("Player") && slowMotionTarget == collision.transform)
         {
             slowMotionTarget = null;
+            Debug.Log("SlowMotion Target Cleared");
         }
     }
 }

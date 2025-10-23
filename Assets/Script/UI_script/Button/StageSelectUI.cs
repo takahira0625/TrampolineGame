@@ -6,7 +6,7 @@ public class StageSelectUI : MonoBehaviour
     [SerializeField] private AudioClip clickSE;
     private void LoadStage(int n)
     {
-        Debug.Log("SE‚ð–Â‚ç‚µ‚Ü‚µ‚½");
+        Debug.Log("SEï¿½ï¿½Â‚ç‚µï¿½Ü‚ï¿½ï¿½ï¿½");
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
         SceneManager.LoadScene("stage" + n.ToString("D2"));

@@ -147,6 +147,8 @@ MonoBehaviour:
   breakBlock: {fileID: 0}
   playSoundOnHit: 1
   customHitSound: {fileID: 0}
+  playEffectOnHit: 1
   cooldown: {fileID: 0}
   explosionEffectPrefab: {fileID: 8777462857694897634, guid: a0d7c627e20aac04fbe538593ac877af, type: 3}
-  explosionRadius: 1
+  explosionRadius: 3
+  explosionSound: {fileID: 0}

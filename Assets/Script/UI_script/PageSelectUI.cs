@@ -26,7 +26,7 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        // GameManager‚ÌŒ»İƒXƒe[ƒWæ“¾‚ğg‚¤‘O’ñ
+        // GameManagerï¿½ÌŒï¿½ï¿½İƒXï¿½eï¿½[ï¿½Wï¿½æ“¾ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Oï¿½ï¿½
         int stage = 1;
         if (GameManager.instance != null)
         {

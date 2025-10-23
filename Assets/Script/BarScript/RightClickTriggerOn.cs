@@ -14,6 +14,8 @@ public class RightClickTriggerOn : MonoBehaviour
     [SerializeField] private float reboundExitSpeed = 25f; // Exit時に飛ばす速度
     [SerializeField] private float pushSpeed = 20f;
 
+    [SerializeField] private GameObject electroHitPrefab;
+
     [SerializeField, Header("ヒットストップ設定")]
     private float hitStopDuration = 0.1f;
 
@@ -167,9 +169,29 @@ public class RightClickTriggerOn : MonoBehaviour
                 StartCoroutine(HitStop());
                 Debug.Log("ヒットストップ: Active押し出し");
                 PlaySE(SmashSE, "CollisionSE");
+
+                // エフェクト生成
+                if (electroHitPrefab != null) // あらかじめ[SerializeField]でPrefabを指定
+                {
+                    Vector3 spawnPos = ballRb.transform.position;
+                    GameObject effect = Instantiate(electroHitPrefab, spawnPos, Quaternion.identity);
+
+                    // 子ParticleSystemがあればSorting Layerを統一して前面表示
+                    var renderers = effect.GetComponentsInChildren<ParticleSystemRenderer>();
+                    foreach (var r in renderers)
+                    {
+                        r.sortingLayerName = "Foreground"; // 必要に応じて変更
+                        r.sortingOrder = 10;
+                    }
+
+                    // ループする場合でも一定時間で消す（例：1秒）
+                    Destroy(effect, 1f);
+
+                    // またはPrefabのParticleSystemでLoopをOFF & Stop Action = DestroyにしてもOK
+                }
+
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
                 ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
-
                 playerCtrl.isActive = false;
             }
             else
