@@ -12,7 +12,19 @@ public class KeyUIController : MonoBehaviour
     [Tooltip("UIの鍵部品イメージのImageコンポーネント (最大4つ)")]
     public List<Image> keyPartImages = new List<Image>(); // ステップ6で設定
 
+    [Header("エフェクト")]
+    [Tooltip("鍵完成時に表示するエフェクトオブジェクト")]
+    public GameObject keyCompletionEffect;
+
+    private ParticleSystem keyEffectParticles;
+
     private int requiredPartsCount = 0;
+
+    // 追加：取得状況を追跡する配列
+    private bool[] hasCollectedPart;
+
+    // 追加：完了フラグ（エフェクトの重複実行防止）
+    private bool isComplete = false;
 
     // イベント購読
     private void OnEnable()
@@ -48,6 +60,9 @@ public class KeyUIController : MonoBehaviour
         // Configから必要数を取得
         requiredPartsCount = currentStageConfig.keyPartUISprites.Count;
 
+        // 追加：取得状況配列を、必要な部品数で初期化
+        hasCollectedPart = new bool[requiredPartsCount];
+
         // UIスロット（最大4つ）をループ
         for (int i = 0; i < keyPartImages.Count; i++)
         {
@@ -79,19 +94,87 @@ public class KeyUIController : MonoBehaviour
                 img.enabled = false;
             }
         }
+
+        // 追加：エフェクトを非表示に
+        if (keyCompletionEffect != null)
+        {
+            keyCompletionEffect.SetActive(false);
+            keyEffectParticles = keyCompletionEffect.GetComponentInChildren<ParticleSystem>();
+        }
+
+        // 追加：取得状況と完了フラグをリセット
+        isComplete = false;
+        // hasCollectedPartがnullの場合があるため、nullチェックを追加
+        if (hasCollectedPart != null)
+        {
+            for (int i = 0; i < hasCollectedPart.Length; i++)
+            {
+                hasCollectedPart[i] = false;
+            }
+        }
     }
 
     // KeyBlock.OnKeyPartCollected から呼ばれる関数
     private void HandleKeyPartCollected(int partIndex)
     {
-        // インデックスがUIリストの範囲内かチェック
-        if (partIndex >= 0 && partIndex < keyPartImages.Count)
+        // 既に完了しているか、インデックスが範囲外なら何もしない
+        if (isComplete || partIndex < 0 || partIndex >= requiredPartsCount)
         {
-            Image uiImage = keyPartImages[partIndex];
-            if (uiImage != null)
+            return;
+        }
+
+        // 既に取得済みなら何もしない (重複防止)
+        if (hasCollectedPart[partIndex])
+        {
+            return;
+        }
+
+        // 1. 取得済みにする
+        hasCollectedPart[partIndex] = true;
+
+        // 2. UIを表示する
+        if (partIndex < keyPartImages.Count && keyPartImages[partIndex] != null)
+        {
+            keyPartImages[partIndex].enabled = true;
+        }
+
+        // 3. 完了したかチェックする
+        CheckCompletion();
+    }
+
+    // 追加：完了チェック用メソッド
+    private void CheckCompletion()
+    {
+        // 取得状況配列をチェック
+        for (int i = 0; i < requiredPartsCount; i++)
+        {
+            // 1つでも未取得(false)があれば、まだ完了ではない
+            if (!hasCollectedPart[i])
             {
-                // 該当する番号の部品UIだけを有効にする
-                uiImage.enabled = true;
+                return; // チェック終了
+            }
+        }
+
+        // --- この行に来た = すべて true = 完了！ ---
+
+        isComplete = true; // 完了フラグを立てる (重複実行防止)
+
+        // エフェクトを表示
+        if (keyCompletionEffect != null)
+        {
+            Debug.Log("鍵が完成！エフェクトを表示します。");
+            keyCompletionEffect.SetActive(true);
+
+            // 取得済みのパーティクルシステムコンポーネントで Play() を呼ぶ
+            if (keyEffectParticles != null)
+            {
+                keyEffectParticles.Play();
+            }
+            // (もし取得できていなければ、念のため再度探してPlay)
+            else if (keyCompletionEffect.GetComponentInChildren<ParticleSystem>() != null)
+            {
+                keyEffectParticles = keyCompletionEffect.GetComponentInChildren<ParticleSystem>();
+                keyEffectParticles.Play();
             }
         }
     }
