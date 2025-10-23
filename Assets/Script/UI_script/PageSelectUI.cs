@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 public class PageSelectUI : MonoBehaviour
 {
     public void OnClickLogin() => SceneManager.LoadScene("StageSelectScene");
-    public void OnClickStageSelect() => SceneManager.LoadScene("StageSelectScene");
+    public void OnClickStageSelect() => SceneManager.LoadScene("StageSelectScene1-6");
     public void OnClickHome() => SceneManager.LoadScene("TitleScene");
+    
     public void OnClickRetry()
     {
         // GameManagerの現在ステージ取得を使う前提

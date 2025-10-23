@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game Over!");
-        SceneManager.LoadScene("GameOverScene");
+        StartCoroutine(SubmitAndGotoRanking());
     }
 
     // ==== スコア送信の下準備 ====
