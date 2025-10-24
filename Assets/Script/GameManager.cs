@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -175,21 +176,37 @@ public class GameManager : MonoBehaviour
 
     public void Goal()
     {
-        StopTimer(); 
+        StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
 
-        StartCoroutine(SubmitAndGotoRanking());
+        long steamId = 76561198123456789; // テスト用
+        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        int score = Mathf.RoundToInt(-FinalTime * 1000);
+
+        if (scoreSender != null)
+        {
+            scoreSender.SubmitScoreAndGetBoard(steamId, "all_time", stage, score);
+        }
+
+        StartCoroutine(GotoRanking(stage));
+    }
+
+    private IEnumerator GotoRanking(int stage)
+    {
+        yield return new WaitForSeconds(1.0f);
+        SceneManager.LoadScene($"RankingScene{stage:00}");
     }
 
     private System.Collections.IEnumerator SubmitAndGotoRanking()
     {
         if (scoreSender != null && FinalTime >= 0f)
         {
+            long steamId = 76561198123456789; // 仮のSteam ID（あとでSteamAPI連携）
             int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-            scoreSender.StageNumber = stage;
+            int score = Mathf.RoundToInt(-FinalTime * 1000); // 負のms値
 
-            scoreSender.SendClearTimeSeconds(FinalTime);
+            scoreSender.SubmitScoreAndGetBoard(steamId, "all_time", stage, score);
 
             yield return new WaitForSeconds(0.5f); 
         }

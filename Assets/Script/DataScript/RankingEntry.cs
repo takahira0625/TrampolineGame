@@ -1,21 +1,15 @@
-using System;
+ï»¿using System;
 using UnityEngine;
-// ‚ ‚¢‚Ü‚¢‰ðÁiUnity ‚Ì Debug ‚ðŽg‚¤j
-using Debug = UnityEngine.Debug;
-// Random ‚à Unity ‚Ì•û‚ðŽg‚¤
-using URandom = UnityEngine.Random;
 
 [Serializable]
 public class RankingEntry
 {
-    public long steamId;
-    public string displayName;
-    public float timeSeconds;  // •\Ž¦—pi¬‚³‚¢‚Ù‚ÇãˆÊj
+    public int out_rnk;
+    public long out_steam_id;
+    public string out_display_name;
+    public long out_score;
 
-    public RankingEntry(long steamId, string displayName, float timeSeconds)
-    {
-        this.steamId = steamId;
-        this.displayName = displayName;
-        this.timeSeconds = timeSeconds;
-    }
+    public float timeSeconds => Mathf.Abs((float)out_score) / 1000f;
 }
+
+
