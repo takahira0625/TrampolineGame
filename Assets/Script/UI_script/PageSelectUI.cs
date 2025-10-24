@@ -3,22 +3,47 @@ using UnityEngine.SceneManagement;
 
 public class PageSelectUI : MonoBehaviour
 {
-    public void OnClickLogin() => SceneManager.LoadScene("StageSelectScene");
-    public void OnClickStageSelect() => SceneManager.LoadScene("StageSelectScene1-6");
-    public void OnClickHome() => SceneManager.LoadScene("TitleScene");
-    
+    [SerializeField] private AudioClip clickSE;
+    public void OnClickLogin()
+    {
+        SEManager.Instance.StopAll();
+        SceneManager.LoadScene("StageSelectScene1_6");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
+    public void OnClickStageSelect()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("StageSelectScene1-6");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
+    public void OnClickHome()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("TitleScene");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
     public void OnClickRetry()
     {
-        // GameManager‚ÌŒ»İƒXƒe[ƒWæ“¾‚ğg‚¤‘O’ñ
+        // GameManagerï¿½ÌŒï¿½ï¿½İƒXï¿½eï¿½[ï¿½Wï¿½æ“¾ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Oï¿½ï¿½
         int stage = 1;
         if (GameManager.instance != null)
+        {
+            SEManager.Instance.StopAll();
             stage = Mathf.Clamp(
                 (int)GameManager.instance
                       .GetType()
                       .GetMethod("GetCurrentStageNumber", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                       .Invoke(GameManager.instance, null),
                 1, 12);
+            SEManager.Instance.PlayOneShot(clickSE);
+            SceneBGMManager.instance.PlayStageBGM();
+        }
 
-        SceneManager.LoadScene($"stage{stage:00}");
+        SceneManager.LoadScene($"Stage{stage:00}");
     }
 }

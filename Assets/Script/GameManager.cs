@@ -185,7 +185,6 @@ public class GameManager : MonoBehaviour
         StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
-
         StartCoroutine(SubmitAndGotoRanking());
     }
 
@@ -217,8 +216,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
-        StartCoroutine(SubmitAndGotoRanking());
+        SceneManager.LoadScene("GameOverScene");
     }
 
     // ==== スコア送信の準備 ====
