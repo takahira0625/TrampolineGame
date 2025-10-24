@@ -210,9 +210,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        BGMManager.Instance.SetVolume(0.5f);
+        BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
-        StartCoroutine(SubmitAndGotoRanking());
+        SceneManager.LoadScene("GameOverScene");
     }
 
     // ==== スコア送信の下準備 ====
