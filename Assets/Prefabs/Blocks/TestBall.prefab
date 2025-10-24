@@ -170,7 +170,6 @@ MonoBehaviour:
   slowSpeed: 5
   savedVelocity: {x: 0, y: 0}
   rightClick: {fileID: 8460906794975558630, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
-  guidelineManager: {fileID: 2841029036425182743, guid: 623dde84873c0c041abc357d643d9d99, type: 3}
   isActive: 0
   afterImageOrderOffset: 1
   speedThresholdForAfterImage: 20
