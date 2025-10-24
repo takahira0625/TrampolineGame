@@ -17,7 +17,7 @@ public class GameOverSceneUI : MonoBehaviour
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("StageSelectScene1-6");
+        SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
