@@ -1,19 +1,12 @@
-// ScoreSender.cs
-using Steamworks; // ← Steamのユーザー名/ID取得に使用
+using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Steamのユーザー名をDB(players)へupsert → スコア送信(RPC) → 返却Top3をUIへ通知、までを実行。
-/// DB要件:
-///   1) RPC: upsert_player(bigint,text)
-///   2) RPC: submit_score_and_get_board(text,int,bigint,int)
-///      ※ 返却JSONキー: out_rnk, out_steam_id, out_display_name, out_score
-/// </summary>
 public class ScoreSender : MonoBehaviour
 {
     [Header("Supabase")]
@@ -21,6 +14,31 @@ public class ScoreSender : MonoBehaviour
     [SerializeField] private string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sa2Z3a2V3a3JncHFka3JkbGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2OTM1MjQsImV4cCI6MjA3NjI2OTUyNH0.a65YIAmFXKnUYOB02_u_Foi4p9O5t6pWWf2xGVz7MEY"; // ← anon key に差し替え
 
     public int StageNumber { get; set; } = 1;
+    public static List<RankingEntry> LastBoard { get; private set; }
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // ランキングシーン名の規則に合わせて判定
+        if (!scene.name.StartsWith("RankingScene")) return;
+
+        if (LastBoard != null)
+        {
+            var board = FindObjectOfType<RankingBoardLeaderLegacy>();
+            if (board != null) board.RenderTop3(LastBoard);
+        }
+    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Steamから直接送るショートカットAPI（推奨）
@@ -150,6 +168,7 @@ public class ScoreSender : MonoBehaviour
             try
             {
                 var entries = new List<RankingEntry>(JsonHelper.FromJson<RankingEntry>(response));
+                LastBoard = entries;
                 var board = FindObjectOfType<RankingBoardLeaderLegacy>();
                 if (board != null) board.RenderTop3(entries);
             }

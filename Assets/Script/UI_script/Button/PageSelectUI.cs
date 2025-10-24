@@ -15,7 +15,7 @@ public class PageSelectUI : MonoBehaviour
     {
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("StageSelectScene1-6");
+        SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -23,7 +23,7 @@ public class PageSelectUI : MonoBehaviour
     {
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("StageSelectScene7-12");
+        SceneManager.LoadScene("StageSelectScene7_12");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 

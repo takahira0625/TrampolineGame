@@ -580,6 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466222318ac20cf4c8e888263f8a3d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
 --- !u!1 &352162464
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466222318ac20cf4c8e888263f8a3d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
 --- !u!1 &716619325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,9 +1344,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1281875463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4de7480ae5ef5640a0502b2f49d2a12, type: 3}
+  m_Script: {fileID: 11500000, guid: 152d9689373941a4e89aab85ea230c04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  supabaseUrl: https://olkfwkewkrgpqdkrdlbe.supabase.co
+  supabaseKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sa2Z3a2V3a3JncHFka3JkbGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2OTM1MjQsImV4cCI6MjA3NjI2OTUyNH0.a65YIAmFXKnUYOB02_u_Foi4p9O5t6pWWf2xGVz7MEY
 --- !u!4 &1281875465
 Transform:
   m_ObjectHideFlags: 0
@@ -1574,6 +1578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466222318ac20cf4c8e888263f8a3d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
 --- !u!1 &1661159916
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,13 +1685,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1840676801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058d9a253ec07b0478e7eb9cec1f61cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 152d9689373941a4e89aab85ea230c04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginPanel: {fileID: 0}
-  OnSteamLoggedIn:
-    m_PersistentCalls:
-      m_Calls: []
+  supabaseUrl: https://olkfwkewkrgpqdkrdlbe.supabase.co
+  supabaseKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sa2Z3a2V3a3JncHFka3JkbGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2OTM1MjQsImV4cCI6MjA3NjI2OTUyNH0.a65YIAmFXKnUYOB02_u_Foi4p9O5t6pWWf2xGVz7MEY
 --- !u!4 &1840676804
 Transform:
   m_ObjectHideFlags: 0
