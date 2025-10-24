@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
+
     // ==== ランキング送信 ====
     [Header("Ranking")]
     [Tooltip("シーン名 Stage01..12 から自動抽出。手動で固定したい場合は 1..12 を指定")]
@@ -175,28 +176,45 @@ public class GameManager : MonoBehaviour
 
 
     public void Goal()
+{
+    StopTimer();
+    if (playerController != null) playerController.canMove = false;
+    if (goalTextObject != null) goalTextObject.SetActive(true);
+
+    // -------- スコア送信 --------
+    int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+    int score = Mathf.RoundToInt(-FinalTime * 1000); // 負のミリ秒（大きいほど速い）
+
+    if (scoreSender != null)
     {
-        StopTimer();
-        if (playerController != null) playerController.canMove = false;
-        if (goalTextObject != null) goalTextObject.SetActive(true);
-
-        long steamId = 76561198123456789; // テスト用
-        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-        int score = Mathf.RoundToInt(-FinalTime * 1000);
-
-        if (scoreSender != null)
+        // Steam から取得（未初期化ならフォールバック）
+        long steamId = 0;
+        string playerName = "Unknown";
+        if (SteamLoginManager.Initialized)
         {
-            scoreSender.SubmitScoreAndGetBoard(steamId, "all_time", stage, score);
+            steamId = (long)SteamLoginManager.SteamId64;
+            playerName = SteamLoginManager.PersonaName;
         }
 
-        StartCoroutine(GotoRanking(stage));
+        // display_name も一緒に送る（RPC側: submit_score_and_get_board(mode, stage, steamId, display_name, score) を想定）
+        scoreSender.SubmitScoreAndGetBoard(steamId, playerName, "all_time", stage, score);
+    }
+    else
+    {
+        Debug.LogWarning("[GameManager] scoreSender が見つかりません。ランキング送信をスキップします。");
     }
 
-    private IEnumerator GotoRanking(int stage)
-    {
-        yield return new WaitForSeconds(1.0f);
-        SceneManager.LoadScene($"RankingScene{stage:00}");
-    }
+    // ランキングへ遷移
+    StartCoroutine(GotoRanking(stage));
+}
+
+private IEnumerator GotoRanking(int stage)
+{
+    // 送信ログを眺められる程度の待ち時間（必要に応じて調整）
+    yield return new WaitForSeconds(1.0f);
+    SceneManager.LoadScene($"RankingScene{stage:00}");
+}
+
 
     private System.Collections.IEnumerator SubmitAndGotoRanking()
     {
@@ -227,6 +245,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        BGMManager.Instance.SetVolume(0.5f);
         Debug.Log("Game Over!");
         StartCoroutine(SubmitAndGotoRanking());
     }

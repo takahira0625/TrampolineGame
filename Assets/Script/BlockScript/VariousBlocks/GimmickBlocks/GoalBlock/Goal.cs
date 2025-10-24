@@ -16,6 +16,8 @@ public class Goal : BaseBlock
     private SpriteRenderer spriteRenderer;
     private bool isUnlocked = false;
 
+    [Header("ƒTƒEƒ“ƒhÝ’è")]
+    [SerializeField] private AudioClip goalSE;
     protected override void Awake()
     {
         base.Awake();
@@ -71,6 +73,8 @@ public class Goal : BaseBlock
         {
             if (GameManager.instance.TotalKeys >= requiredKeys)
             {
+                BGMManager.Instance.Stop();
+                SEManager.Instance.PlayOneShot(goalSE);
                 GameManager.instance.Goal();
                 Debug.Log("Goal! " + GameManager.instance.TotalKeys);
             }
