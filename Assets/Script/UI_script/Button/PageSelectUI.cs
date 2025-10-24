@@ -11,11 +11,19 @@ public class PageSelectUI : MonoBehaviour
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
-    public void OnClickStageSelect()
+    public void OnClickStageSelect1_6()
     {
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("StageSelectScene1-6");
+        SceneManager.LoadScene("StageSelectScene1_6");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
+    public void OnClickStageSelect7_12()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("StageSelectScene7_12");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -29,7 +37,6 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        // GameManager�̌��݃X�e�[�W�擾���g���O��
         int stage = 1;
         if (GameManager.instance != null)
         {

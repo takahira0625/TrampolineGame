@@ -1,85 +1,197 @@
+using Steamworks;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using Debug = UnityEngine.Debug;
+using UnityEngine.SceneManagement;
 
 public class ScoreSender : MonoBehaviour
 {
-    [Header("Backend")]
-    [SerializeField] private string backendBaseUrl = "http://127.0.0.1:8000";
-    [SerializeField] private string mode = "all_time";                       
+    [Header("Supabase")]
+    [SerializeField] private string supabaseUrl = "https://olkfwkewkrgpqdkrdlbe.supabase.co";
+    [SerializeField] private string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sa2Z3a2V3a3JncHFka3JkbGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2OTM1MjQsImV4cCI6MjA3NjI2OTUyNH0.a65YIAmFXKnUYOB02_u_Foi4p9O5t6pWWf2xGVz7MEY"; // ← anon key に差し替え
 
-    [Header("Stage")]
-    [SerializeField, Range(1, 12)] private int stageNumber = 1;              
-    public int StageNumber                                                
+    public int StageNumber { get; set; } = 1;
+    public static List<RankingEntry> LastBoard { get; private set; }
+
+    void Awake()
     {
-        get => stageNumber;
-        set => stageNumber = Mathf.Clamp(value, 1, 12);
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    [Header("Steam")]
-    [Tooltip("Steam未初期化時のデバッグ用。0 の場合は送信しない。")]
-    [SerializeField] private long debugSteamIdOverride = 0;
-
-    
-    public void SendClearTimeSeconds(float clearTimeSeconds)
+    private void OnDestroy()
     {
-        StartCoroutine(PostScore(clearTimeSeconds));
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // --- 内部実装 ---
 
-    private long GetSteamId()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // ★ Steamが未初期化でも送信できるよう、debugSteamIdOverrideを優先
-        if (debugSteamIdOverride != 0)
-            return debugSteamIdOverride;
+        // ランキングシーン名の規則に合わせて判定
+        if (!scene.name.StartsWith("RankingScene")) return;
 
-        // Steam連携なしでテストするため常に固定IDを返す
-        return 76561198000000000; // ←仮のSteamID
-    }
-
-    private IEnumerator PostScore(float timeSec)
-    {
-        // 入力チェック
-        if (string.IsNullOrEmpty(backendBaseUrl))
+        if (LastBoard != null)
         {
-            Debug.LogError("[ScoreSender] backendBaseUrl が未設定です。");
-            yield break;
+            var board = FindObjectOfType<RankingBoardLeaderLegacy>();
+            if (board != null) board.RenderTop3(LastBoard);
         }
-        var baseUrl = backendBaseUrl.TrimEnd('/');
+    }
 
-        var steamId = GetSteamId();
-        if (steamId == 0)
+    // ─────────────────────────────────────────────────────────────────────────
+    // Steamから直接送るショートカットAPI（推奨）
+    // ─────────────────────────────────────────────────────────────────────────
+    /// <summary>
+    /// SteamからID/ユーザー名を取得して、プレイヤー名upsert→スコア送信→Top3描画まで実行
+    /// </summary>
+    public void SubmitCurrentSteamUser(string mode, int stage, int score)
+    {
+        if (!SteamManager.Initialized)
         {
-            Debug.LogError("[ScoreSender] SteamID が取得できません（Steam未初期化 or debugSteamIdOverride未設定）");
-            yield break;
+            Debug.LogWarning("[ScoreSender] Steam未初期化。'Unknown'名＆ID=0で送信します。");
+            SubmitScoreAndGetBoard(0L, "Unknown", mode, stage, score);
+            return;
         }
 
-        // ★短いタイムが良い → サーバは「負のミリ秒」をスコアとして受け取る想定
-        int negativeMillis = -(int)Mathf.Round(timeSec * 1000f);
+        long steamId = (long)SteamUser.GetSteamID().m_SteamID;
+        string playerName = SteamFriends.GetPersonaName(); // 例: "shogo34180115"
+        SubmitScoreAndGetBoard(steamId, playerName, mode, stage, score);
+    }
 
-        var payload = $"{{\"steam_id\":{steamId},\"score\":{negativeMillis},\"mode\":\"{mode}\",\"stage\":{stageNumber}}}";
-        var url = $"{baseUrl}/score"; // FastAPI 側の /score エンドポイント
+    // ─────────────────────────────────────────────────────────────────────────
+    // 既存互換API（playerName 指定あり/なし）
+    // ─────────────────────────────────────────────────────────────────────────
+    public void SubmitScoreAndGetBoard(long steamId, string playerName, string mode, int stage, int score)
+        => StartCoroutine(SubmitFlow(steamId, playerName, mode, stage, score));
+
+    public void SubmitScoreAndGetBoard(long steamId, string mode, int stage, int score)
+        => StartCoroutine(SubmitFlow(steamId, "Unknown", mode, stage, score));
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 一連の流れ（名前保存 → スコア送信）
+    // ─────────────────────────────────────────────────────────────────────────
+    private IEnumerator SubmitFlow(long steamId, string playerName, string mode, int stage, int score)
+    {
+        yield return PostScoreAndGetBoard(steamId, playerName, mode, stage, score); // スコア送信＋Top3取得→UI反映
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // players.display_name を upsert（RPC: upsert_player）
+    // ─────────────────────────────────────────────────────────────────────────
+    [Serializable]
+    private class UpsertPlayerPayload
+    {
+        public long in_steam_id;
+        public string in_display_name;
+    }
+
+    private IEnumerator UpsertPlayer(long steamId, string displayName)
+    {
+        string url = $"{supabaseUrl}/rest/v1/rpc/upsert_player";
+
+        var payload = new UpsertPlayerPayload
+        {
+            in_steam_id = steamId,
+            in_display_name = displayName
+        };
+        string json = JsonUtility.ToJson(payload);
+        Debug.Log($"[ScoreSender] upsert_player body = {json}");
 
         using (var req = new UnityWebRequest(url, "POST"))
         {
-            var body = Encoding.UTF8.GetBytes(payload);
-            req.uploadHandler = new UploadHandlerRaw(body);
+            req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("apikey", supabaseKey);
+            req.SetRequestHeader("Authorization", "Bearer " + supabaseKey);
+
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+                Debug.LogError($"[ScoreSender] upsert_player failed: {req.error}\n{req.downloadHandler.text}");
+            else
+                Debug.Log("[ScoreSender] upsert_player success");
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // スコア送信＋Top3取得（RPC: submit_score_and_get_board）
+    // ─────────────────────────────────────────────────────────────────────────
+    [Serializable]
+    private class RpcPayload
+    {
+        public string in_p_mode;
+        public int in_p_stage;
+        public long in_p_steam_id;
+        public string in_p_display_name;
+        public int in_p_score;
+    }
+
+    private IEnumerator PostScoreAndGetBoard(long steamId, string playerName, string mode, int stage, int score)
+    {
+        string url = $"{supabaseUrl}/rest/v1/rpc/submit_score_and_get_board";
+
+        var payload = new RpcPayload
+        {
+            in_p_mode = mode,
+            in_p_stage = stage,
+            in_p_steam_id = steamId,
+            in_p_display_name = playerName,
+            in_p_score = score
+        };
+
+        string json = JsonUtility.ToJson(payload);
+        Debug.Log($"[ScoreSender] RPC body = {json}");
+
+        using (var req = new UnityWebRequest(url, "POST"))
+        {
+            req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            req.downloadHandler = new DownloadHandlerBuffer();
+            req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("apikey", supabaseKey);
+            req.SetRequestHeader("Authorization", "Bearer " + supabaseKey);
 
             yield return req.SendWebRequest();
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"[ScoreSender] POST failed: {req.responseCode} {req.error} {req.downloadHandler.text}");
+                Debug.LogError($"[ScoreSender] RPC failed: {req.responseCode}\n{req.downloadHandler.text}");
+                yield break;
             }
-            else
+
+            string response = req.downloadHandler.text;
+            Debug.Log($"[ScoreSender] RPC success: {response}");
+
+            // JSON → Top3 → UIへ
+            try
             {
-                Debug.Log($"[ScoreSender] POST ok: time={timeSec:F2}s → score={negativeMillis} (mode={mode}, stage={stageNumber})");
+                var entries = new List<RankingEntry>(JsonHelper.FromJson<RankingEntry>(response));
+                LastBoard = entries;
+                var board = FindObjectOfType<RankingBoardLeaderLegacy>();
+                if (board != null) board.RenderTop3(entries);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[ScoreSender] JSON parse error: {e}");
             }
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// JSON配列をListに変換するためのヘルパー（UnityのJsonUtilityは配列直パース不可）
+// ─────────────────────────────────────────────────────────────────────────
+public static class JsonHelper
+{
+    [Serializable]
+    private class Wrapper<T> { public T[] Items; }
+
+    public static T[] FromJson<T>(string json)
+    {
+        string fixedJson = "{\"Items\":" + json + "}";
+        var wrapper = JsonUtility.FromJson<Wrapper<T>>(fixedJson);
+        return wrapper.Items;
     }
 }
