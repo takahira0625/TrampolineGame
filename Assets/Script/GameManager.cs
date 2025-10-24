@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // éµ/ã‚³ã‚¤ãƒ³é–¢é€£ï¼ˆé›†è¨ˆï¼‰
+    // Œ®EƒRƒCƒ“ŠÖ˜A
     private int totalKeys = 0;
     public int TotalKeys => totalKeys;
 
@@ -20,27 +21,27 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
 
     private int currentCoins = 0;
-    private List<PlayerController> activePlayers = new List<PlayerController>();
+    private readonly List<PlayerController> activePlayers = new List<PlayerController>();
 
-    // ==== ã‚¿ã‚¤ãƒãƒ¼é–¢é€£ ====
-    [Header("Timer")] // ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’ Timer ã«å¤‰æ›´
+    // ==== ƒ^ƒCƒ}[ ====
+    [Header("Timer")]
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
     private bool hasStarted = false;
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
-    // ==== ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚­ãƒ³ã‚°é–¢é€£ ====
+    // ==== ƒ‰ƒ“ƒLƒ“ƒO‘—M ====
     [Header("Ranking")]
-    [Tooltip("ã‚·ãƒ¼ãƒ³åãŒ Stage01..12 ã§ãªã„å ´åˆã«ä¸Šæ›¸ãæŒ‡å®šã—ãŸå ´åˆã« 1..12 ã‚’æŒ‡å®š")]
-    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 ãªã‚‰ç„¡è¦– : 0 ãªã‚‰ç„¡è¦–
-    [SerializeField] private ScoreSender scoreSenderPrefab; // ã‚¹ã‚³ã‚¢é€ä¿¡å‡¦ç†ç”¨
-    private ScoreSender scoreSender; // ç®¡ç†ç”¨ï¼ˆåˆ¥ã‚·ãƒ¼ãƒ³ or DontDestroyï¼‰ : ç®¡ç†ç”¨ï¼ˆåˆ¥ã‚·ãƒ¼ãƒ³ or DontDestroyï¼‰
+    [Tooltip("ƒV[ƒ“–¼ Stage01..12 ‚©‚ç©“®’ŠoBè“®‚ÅŒÅ’è‚µ‚½‚¢ê‡‚Í 1..12 ‚ğw’è")]
+    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 ‚È‚ç©“®’Šo
+    [SerializeField] private ScoreSender scoreSenderPrefab; // –³‚¯‚ê‚Î©“®¶¬—p
+    private ScoreSender scoreSender; // À‘Ì
 
     // BGM
     public AudioClip gameBGM;
 
-    void Awake()
+    private void Awake()
     {
         // Singleton
         if (instance == null)
@@ -48,30 +49,34 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else { Destroy(gameObject); return; }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
-    void Start()
+    private void Start()
     {
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
         if (BGMManager.Instance != null && gameBGM != null) BGMManager.Instance.Play(gameBGM);
 
-        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç™»éŒ²
+        // ƒvƒŒƒCƒ„[“o˜^
         if (playerController == null) playerController = FindObjectOfType<PlayerController>();
         if (playerController != null) RegisterPlayer(playerController);
 
-        // ã‚¹ã‚³ã‚¢é€ä¿¡ç”¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç¢ºä¿
+        // ƒXƒRƒA‘—M—pƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŠm•Û
         EnsureScoreSender();
         ApplyStageNumberToScoreSender();
     }
 
-    void Update()
+    private void Update()
     {
         if (isTiming) elapsedTime += Time.deltaTime;
     }
 
-    // ==== ã‚¿ã‚¤ãƒãƒ¼æ“ä½œ ====
+    // ==== ƒ^ƒCƒ}[‘€ì ====
     public void StartTimer()
     {
         elapsedTime = 0f;
@@ -79,15 +84,18 @@ public class GameManager : MonoBehaviour
         isTiming = true;
         hasStarted = true;
     }
+
     public void StartTimerOnce()
     {
         if (!hasStarted) StartTimer();
     }
+
     public void StopTimer()
     {
         isTiming = false;
         FinalTime = elapsedTime;
     }
+
     public float ElapsedTime => elapsedTime;
 
     public void ResetTimerForNewRun()
@@ -106,54 +114,40 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // ã‚³ã‚¤ãƒ³ãŒå–å¾—ã•ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
-    //public void AddCoin() : ã‚³ã‚¤ãƒ³ãŒå–å¾—ã•ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
-    //{
-    //    currentCoins++;
-    //    /*UpdateCoinCounter();*/
-
-    //    // ã‚´ãƒ¼ãƒ«æ¡ä»¶ã‚’æº€ãŸã—ãŸã‹ãƒã‚§ãƒƒã‚¯
-    //    if (currentCoins >= requiredCoins) : ã‚´ãƒ¼ãƒ«æ¡ä»¶ã‚’æº€ãŸã—ãŸã‹ãƒã‚§ãƒƒã‚¯
-    //    {
-    //        Goal();
-    //    }
-    //}
-
-    // ==== ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç®¡ç† ====
+    // ==== ƒvƒŒƒCƒ„[ŠÇ— ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"ã€Registerã€‘{player.name} / cnt={activePlayers.Count}");
+            Debug.Log($"[Register] {player.name} / cnt={activePlayers.Count}");
         }
     }
+
     public void UnregisterPlayer(PlayerController player)
     {
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
-
-            Debug.Log($"ã€Unregisterã€‘ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤: {player.name} / æ®‹ã‚Šãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°: {activePlayers.Count}");
+            Debug.Log($"[Unregister] ƒvƒŒƒCƒ„[íœ: {player.name} / c‚èƒvƒŒƒCƒ„[”: {activePlayers.Count}");
         }
         else
         {
-            Debug.LogWarning($"ã€Unregisterã€‘ãƒªã‚¹ãƒˆã«å­˜åœ¨ã—ãªã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼: {player.name}");
+            Debug.LogWarning($"[Unregister] ƒŠƒXƒg‚É‘¶İ‚µ‚È‚¢ƒvƒŒƒCƒ„[: {player.name}");
         }
 
         if (activePlayers.Count == 0)
         {
-            Debug.Log("å…¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå…¨æ»…ã—ã¾ã—ãŸã€‚GameOverã€‚");
+            Debug.Log("‘SƒvƒŒƒCƒ„[‚ª€–S‚µ‚Ü‚µ‚½BGameOverB");
             GameOver();
         }
-        if (activePlayers.Count == 0) GameOver();
     }
 
     public PlayerController SpawnAdditionalPlayer(Transform originalPlayer, Vector2 velocity)
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController ãŒæœªè¨­å®šã®ãŸã‚ç”Ÿæˆã§ãã¾ã›ã‚“");
+            Debug.LogWarning("PlayerController ‚ª–¢İ’è‚Ì‚½‚ß•¡»‚Å‚«‚Ü‚¹‚ñB");
             return null;
         }
 
@@ -174,54 +168,72 @@ public class GameManager : MonoBehaviour
                 cloneRb.velocity = velocity;
             }
         }
-        Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ†è£‚ã•ã›ã¾ã—ãŸï¼ ç¾åœ¨ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°: {activePlayers.Count}");
+        Debug.Log($"ƒvƒŒƒCƒ„[‚ğ•ª—ô‚³‚¹‚Ü‚µ‚½I Œ»İ‚ÌƒvƒŒƒCƒ„[”: {activePlayers.Count}");
 
         return cloneController;
     }
 
-
+    // ==== ƒS[ƒ‹ˆ— ====
     public void Goal()
     {
         StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
-        StartCoroutine(SubmitAndGotoRanking());
-    }
 
-    private System.Collections.IEnumerator SubmitAndGotoRanking()
-    {
-        if (scoreSender != null && FinalTime >= 0f)
+        // ƒXƒRƒA‘—M
+        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        int score = Mathf.RoundToInt(-FinalTime * 1000); // •‰‚Ìƒ~ƒŠ•bi‘å‚«‚¢‚Ù‚Ç‘¬‚¢j
+
+        if (scoreSender != null)
         {
-            int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-            scoreSender.StageNumber = stage;
+            // Steam ‚©‚çæ“¾i–¢‰Šú‰»‚È‚çƒtƒH[ƒ‹ƒoƒbƒNj
+            long steamId = 0;
+            string playerName = "Unknown";
+            try
+            {
+                // SteamLoginManager ‚Í‚ ‚È‚½‚ÌƒvƒƒWƒFƒNƒg‚ÌŠù‘¶ƒNƒ‰ƒX‚ğ‘z’è
+                if (SteamLoginManager.Initialized)
+                {
+                    steamId = (long)SteamLoginManager.SteamId64;
+                    playerName = SteamLoginManager.PersonaName;
+                }
+            }
+            catch { /* QÆ‚Å‚«‚È‚¢ŠÂ‹«‚Å‚à—‚¿‚È‚¢‚æ‚¤‚É‚·‚é */ }
 
-            scoreSender.SendClearTimeSeconds(FinalTime);
-
-            yield return new WaitForSeconds(0.5f);
+            scoreSender.SubmitScoreAndGetBoard(steamId, playerName, "all_time", stage, score);
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] scoreSender ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒ‰ƒ“ƒLƒ“ƒO‘—M‚ğƒXƒLƒbƒv‚µ‚Ü‚·B");
         }
 
-        int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-        string rankingScene = $"RankingScene{targetStage:00}";
-        UnityEngine.SceneManagement.SceneManager.LoadScene(rankingScene);
+        // ƒ‰ƒ“ƒLƒ“ƒO‚Ö‘JˆÚi­‚µ‘Ò‚Âê‡‚Í WaitForSeconds ‚ğ‰„‚Î‚·j
+        StartCoroutine(GotoRanking(stage));
     }
 
+    private IEnumerator GotoRanking(int stage)
+    {
+        yield return new WaitForSeconds(1.0f);
+        SceneManager.LoadScene($"RankingScene{stage:00}");
+    }
 
+    // ==== ƒL[‰ÁZiƒOƒ[ƒoƒ‹j ====
     public void AddKeyGlobal()
     {
         totalKeys++;
-        Debug.Log($"éµã‚’å–å¾—ã—ã¾ã—ãŸï¼ˆç·è¨ˆ: {totalKeys}ï¼‰");
-
+        Debug.Log($"Œ®‚ğæ“¾‚µ‚Ü‚µ‚½i‡Œv: {totalKeys}j");
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
+    // ==== ƒQ[ƒ€ƒI[ƒo[ ====
     public void GameOver()
     {
-        BGMManager.Instance.SetVolume(0.2f);
+        if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
     }
 
-    // ==== ã‚¹ã‚³ã‚¢é€ä¿¡ã®æº–å‚™ ====
+    // ==== ƒXƒRƒA‘—M‚Ì‰º€”õ ====
     private void EnsureScoreSender()
     {
         if (scoreSender != null) return;
@@ -235,11 +247,9 @@ public class GameManager : MonoBehaviour
                 scoreSender = new GameObject("ScoreSender(Auto)").AddComponent<ScoreSender>();
         }
 
-        // ã‚·ãƒ¼ãƒ³ç§»å‹•å¾Œã‚‚ç ´æ£„ã•ã‚Œãªã„ã‚ˆã†ã«ä¿æŒ
+        // ƒV[ƒ“Œ×‚¬‚Å‘—M‚ª“rØ‚ê‚È‚¢‚æ‚¤‚É•Û
         DontDestroyOnLoad(scoreSender.gameObject);
     }
-
-
 
     private void ApplyStageNumberToScoreSender()
     {
@@ -248,26 +258,25 @@ public class GameManager : MonoBehaviour
         scoreSender.StageNumber = stage;
     }
 
-
     private int TryParseStageNumberFromSceneName()
     {
-        // ä¾‹: "Stage01", "Stage12" ã‹ã‚‰ 1..12
+        // —á: "Stage01", "Stage12" ¨ 1..12
         string name = SceneManager.GetActiveScene().name;
         var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
         {
             return Mathf.Clamp(n, 1, 12);
         }
-        return 1; // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
+        return 1; // ƒfƒtƒHƒ‹ƒg
     }
 
     private int GetCurrentStageNumber()
     {
-        // ä¾‹: ã‚·ãƒ¼ãƒ³åãŒ "Stage01" ã€œ "Stage12" ã®å ´åˆã«æŠ½å‡º
+        // —á: ƒV[ƒ“–¼ "Stage01" ` "Stage12" ‚©‚ç©“®’Šo
         if (overrideStageNumber > 0) return overrideStageNumber;
 
-        var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        var m = System.Text.RegularExpressions.Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        var name = SceneManager.GetActiveScene().name;
+        var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
             return Mathf.Clamp(n, 1, 12);
         return 1;
