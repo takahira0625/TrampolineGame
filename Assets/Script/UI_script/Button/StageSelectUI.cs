@@ -9,7 +9,7 @@ public class StageSelectUI : MonoBehaviour
         Debug.Log("SE��炵�܂���");
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("stage" + n.ToString("D2"));
+        SceneManager.LoadScene("Stage" + n.ToString("D2"));
     }
 
     public void OnClickStage1()
