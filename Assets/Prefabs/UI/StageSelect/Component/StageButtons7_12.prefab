@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3029352670594351473}
   - component: {fileID: 9154135352161705802}
   m_Layer: 5
-  m_Name: Stage2Button
+  m_Name: Stage8Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 184699650473178297}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1237691255841451779}
@@ -124,7 +124,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9154135352161705802}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStage2
+        m_MethodName: OnClickStage8
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -225,7 +225,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage6
+  m_Text: 'Stage12
+
+'
 --- !u!1 &2085864568444001332
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +306,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage4
+  m_Text: Stage10
 --- !u!1 &2632218237821897325
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 82928362061503745}
   m_Layer: 5
-  m_Name: StageButtons
+  m_Name: StageButtons7_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +331,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2632218237821897325}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 45}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,7 +362,7 @@ GameObject:
   - component: {fileID: 3962248437556850031}
   - component: {fileID: 1449087145281010888}
   m_Layer: 5
-  m_Name: Stage5Button
+  m_Name: Stage11Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -374,8 +376,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3458199422927294713}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8138102684761707244}
@@ -468,9 +470,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7310925206100889991}
+      - m_Target: {fileID: 1449087145281010888}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: OnClickStage11
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -571,7 +573,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage2
+  m_Text: Stage8
 --- !u!1 &7310925206100889991
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +588,7 @@ GameObject:
   - component: {fileID: 7448291080309457170}
   - component: {fileID: 3067605976771741084}
   m_Layer: 5
-  m_Name: Stage6Button
+  m_Name: Stage12Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -600,8 +602,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310925206100889991}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1529462813695901133}
@@ -696,7 +698,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3067605976771741084}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStage6
+        m_MethodName: OnClickStage12
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -733,7 +735,7 @@ GameObject:
   - component: {fileID: 8182260602566483601}
   - component: {fileID: 8396295280115001994}
   m_Layer: 5
-  m_Name: Stage3Button
+  m_Name: Stage9Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -747,8 +749,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7550086692973686928}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3658722817473566380}
@@ -843,7 +845,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8396295280115001994}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStage3
+        m_MethodName: OnClickStage9
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -944,7 +946,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage5
+  m_Text: Stage11
 --- !u!1 &8268739826738279815
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,7 +961,7 @@ GameObject:
   - component: {fileID: 5554325058046536344}
   - component: {fileID: 7081540714383786870}
   m_Layer: 5
-  m_Name: Stage1Button
+  m_Name: Stage7Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -973,8 +975,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8268739826738279815}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2921466906503680184}
@@ -1069,7 +1071,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7081540714383786870}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStage1
+        m_MethodName: OnClickStage7
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1170,7 +1172,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage3
+  m_Text: Stage9
 --- !u!1 &9068263882122111549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,7 +1251,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage1
+  m_Text: Stage7
 --- !u!1 &9136829928876921280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,7 +1266,7 @@ GameObject:
   - component: {fileID: 1681221450777933137}
   - component: {fileID: 8774281708001750452}
   m_Layer: 5
-  m_Name: Stage4Button
+  m_Name: Stage10Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1278,8 +1280,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9136829928876921280}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13.5, y: 13.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6206249126513969807}
@@ -1372,9 +1374,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1449087145281010888}
+      - m_Target: {fileID: 8774281708001750452}
         m_TargetAssemblyTypeName: StageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStage4
+        m_MethodName: OnClickStage10
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
