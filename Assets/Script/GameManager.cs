@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -180,6 +179,8 @@ public class GameManager : MonoBehaviour
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
 
+        //FinalTimerの保持
+        PlayerPrefs.SetFloat("finaltimer", FinalTime);
         // スコア送信
         int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
         int score = Mathf.RoundToInt(-FinalTime * 1000); // 負のミリ秒（大きいほど速い）
