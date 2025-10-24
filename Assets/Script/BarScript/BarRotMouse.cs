@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BarMovement))]
-public class BarRotation : MonoBehaviour
+public class BarRotMouse: MonoBehaviour
 {
     [Header("回転設定")]
     [SerializeField] private bool rotateToDirection = true;
@@ -78,23 +78,22 @@ public class BarRotation : MonoBehaviour
         bool hasTarget = slowMotionTarget != null;
         bool isRightClickMoving = rightClick != null && rightClick.IsMoving;
 
-        // === スロー中の特殊回転（条件を緩和） ===
+        // === スロー中の特殊回転（デバック） ===
         if (hasTarget && Input.GetMouseButton(0) && !isRightClickMoving)
         {
             Vector2 ballDirection = (slowMotionTarget.position - transform.position).normalized;
-            if (ballDirection.sqrMagnitude > 0.0001f)
-            {
-                float targetAngle = Mathf.Atan2(ballDirection.y, ballDirection.x) * Mathf.Rad2Deg - 90f;
-                float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);
-                float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDiff) / angleDeltaThreshold);
-                float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
 
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle,
-                    1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
-                rb.MoveRotation(currentAngle);
+            float targetAngle = Mathf.Atan2(ballDirection.y, ballDirection.x) * Mathf.Rad2Deg - 90f;
+            float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);
+            float normalizedDelta = Mathf.Clamp01(Mathf.Abs(angleDiff) / angleDeltaThreshold);
+            float adaptiveSmoothing = Mathf.Lerp(rotationSmoothingMin, rotationSmoothingMax, normalizedDelta);
 
-                lastPhysicsPos = rb.position; // 位置を更新して通常回転と競合しないように
-            }
+            currentAngle = Mathf.LerpAngle(currentAngle, targetAngle,
+                1f - Mathf.Pow(1f - adaptiveSmoothing, Time.fixedDeltaTime * 60f));
+
+            rb.MoveRotation(currentAngle);
+            lastPhysicsPos = rb.position;
+
         }
         // === 通常時：マウス方向に回転 ===
         else if (rotateToDirection && !isRightClickMoving)
@@ -126,7 +125,6 @@ public class BarRotation : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             slowMotionTarget = collision.transform;
-            Debug.Log("SlowMotion Target Set: " + collision.name);
         }
     }
 
@@ -135,7 +133,7 @@ public class BarRotation : MonoBehaviour
         if (collision.CompareTag("Player") && slowMotionTarget == collision.transform)
         {
             slowMotionTarget = null;
-            Debug.Log("SlowMotion Target Cleared");
         }
     }
+
 }

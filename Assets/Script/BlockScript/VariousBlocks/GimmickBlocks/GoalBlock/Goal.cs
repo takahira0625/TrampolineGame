@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+
 
 public class Goal : BaseBlock
 {
@@ -27,7 +29,6 @@ public class Goal : BaseBlock
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = lockedSprite; // 初期状態はロック見た目
     }
-
     private void OnEnable()
     {
         // PlayerInventory のイベント購読
@@ -52,8 +53,41 @@ public class Goal : BaseBlock
                 Destroy(child.gameObject);
             }
             SpawnUnlockEffect();
+            StartCoroutine(PlayUnlockAnimation());
             Debug.Log("ゴールが開放されました！");
         }
+    }
+
+    private IEnumerator PlayUnlockAnimation()
+    {
+        // --- 時間をゆっくりにする ---
+        Time.timeScale = 0.5f;
+
+        Vector3 originalScale = transform.localScale;
+        Vector3 smallScale = originalScale * 0.1f;
+
+        // --- 縮む（0.3秒）---
+        float duration = 0.6f;
+        float return_duration = 0.1f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime; // ← TimeScaleの影響を受けない
+            transform.localScale = Vector3.Lerp(originalScale, smallScale, elapsed / duration);
+            yield return null;
+        }
+
+        // --- 元に戻る（0.3秒）---
+        elapsed = 0f;
+        while (elapsed < return_duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            transform.localScale = Vector3.Lerp(smallScale, originalScale, elapsed / duration);
+            yield return null;
+        }
+
+        // --- 時間の流れを元に戻す ---
+        Time.timeScale = 1f;
     }
 
     private void SpawnUnlockEffect()
