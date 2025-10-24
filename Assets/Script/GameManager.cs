@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // Œ®EƒRƒCƒ“ŠÖ˜AiŠù‘¶j
+    // éµ/ã‚³ã‚¤ãƒ³é–¢é€£ï¼ˆé›†è¨ˆï¼‰
     private int totalKeys = 0;
     public int TotalKeys => totalKeys;
 
@@ -22,20 +22,20 @@ public class GameManager : MonoBehaviour
     private int currentCoins = 0;
     private List<PlayerController> activePlayers = new List<PlayerController>();
 
-    // ==== ƒ^ƒCƒ}[ŠÖ˜A ====
+    // ==== ã‚¿ã‚¤ãƒãƒ¼é–¢é€£ ====
+    [Header("Timer")] // ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’ Timer ã«å¤‰æ›´
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
     private bool hasStarted = false;
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
-
-    // ==== ƒ‰ƒ“ƒLƒ“ƒO‘—M ====
+    // ==== ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚­ãƒ³ã‚°é–¢é€£ ====
     [Header("Ranking")]
-    [Tooltip("ƒV[ƒ“–¼ Stage01..12 ‚©‚ç©“®’ŠoBè“®‚ÅŒÅ’è‚µ‚½‚¢ê‡‚Í 1..12 ‚ğw’è")]
-    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 ‚È‚ç©“®’Šo
-    [SerializeField] private ScoreSender scoreSenderPrefab; // –³‚¯‚ê‚Î©“®¶¬—p
-    private ScoreSender scoreSender; // À‘Ìi“¯ƒV[ƒ“ or DontDestroyj
+    [Tooltip("ã‚·ãƒ¼ãƒ³åãŒ Stage01..12 ã§ãªã„å ´åˆã«ä¸Šæ›¸ãæŒ‡å®šã—ãŸå ´åˆã« 1..12 ã‚’æŒ‡å®š")]
+    [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 ãªã‚‰ç„¡è¦– : 0 ãªã‚‰ç„¡è¦–
+    [SerializeField] private ScoreSender scoreSenderPrefab; // ã‚¹ã‚³ã‚¢é€ä¿¡å‡¦ç†ç”¨
+    private ScoreSender scoreSender; // ç®¡ç†ç”¨ï¼ˆåˆ¥ã‚·ãƒ¼ãƒ³ or DontDestroyï¼‰ : ç®¡ç†ç”¨ï¼ˆåˆ¥ã‚·ãƒ¼ãƒ³ or DontDestroyï¼‰
 
     // BGM
     public AudioClip gameBGM;
@@ -57,11 +57,11 @@ public class GameManager : MonoBehaviour
         if (autoStartTimer) StartTimer();
         if (BGMManager.Instance != null && gameBGM != null) BGMManager.Instance.Play(gameBGM);
 
-        // ƒvƒŒƒCƒ„[“o˜^
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç™»éŒ²
         if (playerController == null) playerController = FindObjectOfType<PlayerController>();
         if (playerController != null) RegisterPlayer(playerController);
 
-        // ƒXƒRƒA‘—M—pƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŠm•Û
+        // ã‚¹ã‚³ã‚¢é€ä¿¡ç”¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç¢ºä¿
         EnsureScoreSender();
         ApplyStageNumberToScoreSender();
     }
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         if (isTiming) elapsedTime += Time.deltaTime;
     }
 
-    // ==== ƒ^ƒCƒ}[‘€ì ====
+    // ==== ã‚¿ã‚¤ãƒãƒ¼æ“ä½œ ====
     public void StartTimer()
     {
         elapsedTime = 0f;
@@ -106,20 +106,26 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // ==== ƒRƒCƒ“EŒ® ====
-    public void AddCoin()
-    {
-        currentCoins++;
-        if (currentCoins >= requiredCoins) { Goal(); }
-    }
+    // ã‚³ã‚¤ãƒ³ãŒå–å¾—ã•ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
+    //public void AddCoin() : ã‚³ã‚¤ãƒ³ãŒå–å¾—ã•ã‚ŒãŸæ™‚ã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
+    //{
+    //    currentCoins++;
+    //    /*UpdateCoinCounter();*/
 
-    // ==== ƒvƒŒƒCƒ„[ŠÇ— ====
+    //    // ã‚´ãƒ¼ãƒ«æ¡ä»¶ã‚’æº€ãŸã—ãŸã‹ãƒã‚§ãƒƒã‚¯
+    //    if (currentCoins >= requiredCoins) : ã‚´ãƒ¼ãƒ«æ¡ä»¶ã‚’æº€ãŸã—ãŸã‹ãƒã‚§ãƒƒã‚¯
+    //    {
+    //        Goal();
+    //    }
+    //}
+
+    // ==== ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç®¡ç† ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"yRegisterz{player.name} / cnt={activePlayers.Count}");
+            Debug.Log($"ã€Registerã€‘{player.name} / cnt={activePlayers.Count}");
         }
     }
     public void UnregisterPlayer(PlayerController player)
@@ -128,16 +134,16 @@ public class GameManager : MonoBehaviour
         {
             activePlayers.Remove(player);
 
-            Debug.Log($"yUnregisterzƒvƒŒƒCƒ„[íœ: {player.name} / c‚èƒvƒŒƒCƒ„[”: {activePlayers.Count}");
+            Debug.Log($"ã€Unregisterã€‘ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤: {player.name} / æ®‹ã‚Šãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°: {activePlayers.Count}");
         }
         else
         {
-            Debug.LogWarning($"yUnregisterzƒŠƒXƒg‚É‘¶İ‚µ‚È‚¢ƒvƒŒƒCƒ„[: {player.name}");
+            Debug.LogWarning($"ã€Unregisterã€‘ãƒªã‚¹ãƒˆã«å­˜åœ¨ã—ãªã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼: {player.name}");
         }
 
         if (activePlayers.Count == 0)
         {
-            Debug.Log("‘SƒvƒŒƒCƒ„[‚ª€–S‚µ‚Ü‚µ‚½BGameOverB");
+            Debug.Log("å…¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå…¨æ»…ã—ã¾ã—ãŸã€‚GameOverã€‚");
             GameOver();
         }
         if (activePlayers.Count == 0) GameOver();
@@ -147,7 +153,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController ‚ª–¢İ’è‚Ì‚½‚ß•¡»‚Å‚«‚Ü‚¹‚ñ");
+            Debug.LogWarning("PlayerController ãŒæœªè¨­å®šã®ãŸã‚ç”Ÿæˆã§ãã¾ã›ã‚“");
             return null;
         }
 
@@ -168,7 +174,7 @@ public class GameManager : MonoBehaviour
                 cloneRb.velocity = velocity;
             }
         }
-        Debug.Log($"ƒvƒŒƒCƒ„[‚ğ•ª—ô‚³‚¹‚Ü‚µ‚½I Œ»İ‚ÌƒvƒŒƒCƒ„[”: {activePlayers.Count}");
+        Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ†è£‚ã•ã›ã¾ã—ãŸï¼ ç¾åœ¨ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°: {activePlayers.Count}");
 
         return cloneController;
     }
@@ -176,7 +182,7 @@ public class GameManager : MonoBehaviour
 
     public void Goal()
     {
-        StopTimer(); 
+        StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
         StartCoroutine(SubmitAndGotoRanking());
@@ -191,7 +197,7 @@ public class GameManager : MonoBehaviour
 
             scoreSender.SendClearTimeSeconds(FinalTime);
 
-            yield return new WaitForSeconds(0.5f); 
+            yield return new WaitForSeconds(0.5f);
         }
 
         int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
@@ -203,7 +209,7 @@ public class GameManager : MonoBehaviour
     public void AddKeyGlobal()
     {
         totalKeys++;
-        Debug.Log($"Œ®‚ğæ“¾‚µ‚Ü‚µ‚½i‡Œv: {totalKeys}j");
+        Debug.Log($"éµã‚’å–å¾—ã—ã¾ã—ãŸï¼ˆç·è¨ˆ: {totalKeys}ï¼‰");
 
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
@@ -215,7 +221,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameOverScene");
     }
 
-    // ==== ƒXƒRƒA‘—M‚Ì‰º€”õ ====
+    // ==== ã‚¹ã‚³ã‚¢é€ä¿¡ã®æº–å‚™ ====
     private void EnsureScoreSender()
     {
         if (scoreSender != null) return;
@@ -229,7 +235,7 @@ public class GameManager : MonoBehaviour
                 scoreSender = new GameObject("ScoreSender(Auto)").AddComponent<ScoreSender>();
         }
 
-        // ƒV[ƒ“Œ×‚¬‚Å‘—M‚ª“rØ‚ê‚È‚¢‚æ‚¤‚É•Û
+        // ã‚·ãƒ¼ãƒ³ç§»å‹•å¾Œã‚‚ç ´æ£„ã•ã‚Œãªã„ã‚ˆã†ã«ä¿æŒ
         DontDestroyOnLoad(scoreSender.gameObject);
     }
 
@@ -245,19 +251,19 @@ public class GameManager : MonoBehaviour
 
     private int TryParseStageNumberFromSceneName()
     {
-        // —á: "Stage01", "Stage12" ¨ 1..12
+        // ä¾‹: "Stage01", "Stage12" ã‹ã‚‰ 1..12
         string name = SceneManager.GetActiveScene().name;
         var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
         {
             return Mathf.Clamp(n, 1, 12);
         }
-        return 1; // ƒfƒtƒHƒ‹ƒg
+        return 1; // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
     }
 
     private int GetCurrentStageNumber()
     {
-        // —á: ƒV[ƒ“–¼ "Stage01" ` "Stage12" ‚©‚ç©“®’Šo
+        // ä¾‹: ã‚·ãƒ¼ãƒ³åãŒ "Stage01" ã€œ "Stage12" ã®å ´åˆã«æŠ½å‡º
         if (overrideStageNumber > 0) return overrideStageNumber;
 
         var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
@@ -266,5 +272,4 @@ public class GameManager : MonoBehaviour
             return Mathf.Clamp(n, 1, 12);
         return 1;
     }
-
 }

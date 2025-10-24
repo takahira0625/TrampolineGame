@@ -10,7 +10,7 @@ public class Coin : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // GameManagerにコインを取得したことを通知する
-            GameManager.instance.AddCoin();
+            //GameManager.instance.AddCoin();
 
             // コイン自身を消滅させる
             Destroy(gameObject);
