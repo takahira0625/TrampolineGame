@@ -33,14 +33,17 @@ public class SceneBGMManager : MonoBehaviour
     }
     public void PlayTitleBGM()
     {
+        BGMManager.Instance.SetVolume(1f);
         BGMManager.Instance.Play(titleBGMClip, fadeIn: true, fadeDuration: 2f);
     }
     public void PlayStageBGM()
     {
+        BGMManager.Instance.SetVolume(1f);
         BGMManager.Instance.Play(stageBGMClip, fadeIn: true, fadeDuration: 1f);
     }
     public void PlayResultBGM()
     {
+        BGMManager.Instance.SetVolume(1f);
         BGMManager.Instance.Play(resultBGMClip, fadeIn: true, fadeDuration: 2f);
     }
 
