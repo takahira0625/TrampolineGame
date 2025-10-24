@@ -21,13 +21,33 @@ public class RankingBoardLeaderLegacy : MonoBehaviour
             return;
         }
 
-        if (entries.Count >= 1) firstText.text = ComposeLine(entries[0]);
-        if (entries.Count >= 2) secondText.text = ComposeLine(entries[1]);
-        if (entries.Count >= 3) thirdText.text = ComposeLine(entries[2]);
+        if (entries.Count >= 1) firstText.text = ComposeLine(entries[0], 1);
+        if (entries.Count >= 2) secondText.text = ComposeLine(entries[1], 2);
+        if (entries.Count >= 3) thirdText.text = ComposeLine(entries[2], 3);
     }
 
-    private string ComposeLine(RankingEntry e)
+    private string ComposeLine(RankingEntry e, int rank)
     {
-        return $"{e.out_display_name}   {GameManager.FormatTime(e.timeSeconds)}";
+        string rankLabel = GetRankLabel(rank);
+        string name = e.out_display_name.Length > 15 ? e.out_display_name.Substring(0, 15) : e.out_display_name;
+        string timeText = GameManager.FormatTime(e.timeSeconds);
+
+        // 等幅フォントを使用する前提（Courier Newなど）
+        return $"{rankLabel,-4}{name,-15}{timeText,10}";
+    }
+
+
+    /// <summary>
+    /// 順位を「1ST」「2ND」「3RD」「4TH」形式で返す
+    /// </summary>
+    private string GetRankLabel(int rank)
+    {
+        switch (rank)
+        {
+            case 1: return "1ST";
+            case 2: return "2ND";
+            case 3: return "3RD";
+            default: return $"{rank}TH";
+        }
     }
 }
