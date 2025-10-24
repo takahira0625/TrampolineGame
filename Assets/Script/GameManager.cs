@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // 鍵・コイン関連（既存）
+    // 鍵・コイン関連
     private int totalKeys = 0;
     public int TotalKeys => totalKeys;
 
@@ -20,9 +21,10 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
 
     private int currentCoins = 0;
-    private List<PlayerController> activePlayers = new List<PlayerController>();
+    private readonly List<PlayerController> activePlayers = new List<PlayerController>();
 
-    // ==== タイマー関連 ====
+    // ==== タイマー ====
+    [Header("Timer")]
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
     private bool hasStarted = false;
@@ -34,12 +36,12 @@ public class GameManager : MonoBehaviour
     [Tooltip("シーン名 Stage01..12 から自動抽出。手動で固定したい場合は 1..12 を指定")]
     [SerializeField, Range(0, 12)] private int overrideStageNumber = 0; // 0 なら自動抽出
     [SerializeField] private ScoreSender scoreSenderPrefab; // 無ければ自動生成用
-    private ScoreSender scoreSender; // 実体（同シーン or DontDestroy）
+    private ScoreSender scoreSender; // 実体
 
     // BGM
     public AudioClip gameBGM;
 
-    void Awake()
+    private void Awake()
     {
         // Singleton
         if (instance == null)
@@ -47,10 +49,14 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else { Destroy(gameObject); return; }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
-    void Start()
+    private void Start()
     {
         if (goalTextObject != null) goalTextObject.SetActive(false);
         if (autoStartTimer) StartTimer();
@@ -65,7 +71,7 @@ public class GameManager : MonoBehaviour
         ApplyStageNumberToScoreSender();
     }
 
-    void Update()
+    private void Update()
     {
         if (isTiming) elapsedTime += Time.deltaTime;
     }
@@ -78,15 +84,18 @@ public class GameManager : MonoBehaviour
         isTiming = true;
         hasStarted = true;
     }
+
     public void StartTimerOnce()
     {
         if (!hasStarted) StartTimer();
     }
+
     public void StopTimer()
     {
         isTiming = false;
         FinalTime = elapsedTime;
     }
+
     public float ElapsedTime => elapsedTime;
 
     public void ResetTimerForNewRun()
@@ -105,33 +114,26 @@ public class GameManager : MonoBehaviour
         return $"{minutes:00}:{seconds:00.00}";
     }
 
-    // ==== コイン・鍵 ====
-    public void AddCoin()
-    {
-        currentCoins++;
-        if (currentCoins >= requiredCoins) { Goal(); }
-    }
-
     // ==== プレイヤー管理 ====
     public void RegisterPlayer(PlayerController player)
     {
         if (!activePlayers.Contains(player))
         {
             activePlayers.Add(player);
-            Debug.Log($"【Register】{player.name} / cnt={activePlayers.Count}");
+            Debug.Log($"[Register] {player.name} / cnt={activePlayers.Count}");
         }
     }
+
     public void UnregisterPlayer(PlayerController player)
     {
         if (activePlayers.Contains(player))
         {
             activePlayers.Remove(player);
-
-            Debug.Log($"【Unregister】プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
+            Debug.Log($"[Unregister] プレイヤー削除: {player.name} / 残りプレイヤー数: {activePlayers.Count}");
         }
         else
         {
-            Debug.LogWarning($"【Unregister】リストに存在しないプレイヤー: {player.name}");
+            Debug.LogWarning($"[Unregister] リストに存在しないプレイヤー: {player.name}");
         }
 
         if (activePlayers.Count == 0)
@@ -139,14 +141,13 @@ public class GameManager : MonoBehaviour
             Debug.Log("全プレイヤーが死亡しました。GameOver。");
             GameOver();
         }
-        if (activePlayers.Count == 0) GameOver();
     }
 
     public PlayerController SpawnAdditionalPlayer(Transform originalPlayer, Vector2 velocity)
     {
         if (playerController == null)
         {
-            Debug.LogWarning("PlayerController が未設定のため複製できません");
+            Debug.LogWarning("PlayerController が未設定のため複製できません。");
             return null;
         }
 
@@ -172,44 +173,62 @@ public class GameManager : MonoBehaviour
         return cloneController;
     }
 
-
+    // ==== ゴール処理 ====
     public void Goal()
     {
-        StopTimer(); 
+        StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
 
-        StartCoroutine(SubmitAndGotoRanking());
-    }
+        // スコア送信
+        int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
+        int score = Mathf.RoundToInt(-FinalTime * 1000); // 負のミリ秒（大きいほど速い）
 
-    private System.Collections.IEnumerator SubmitAndGotoRanking()
-    {
-        if (scoreSender != null && FinalTime >= 0f)
+        if (scoreSender != null)
         {
-            int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-            scoreSender.StageNumber = stage;
+            // Steam から取得（未初期化ならフォールバック）
+            long steamId = 0;
+            string playerName = "Unknown";
+            try
+            {
+                // SteamLoginManager はあなたのプロジェクトの既存クラスを想定
+                if (SteamLoginManager.Initialized)
+                {
+                    steamId = (long)SteamLoginManager.SteamId64;
+                    playerName = SteamLoginManager.PersonaName;
+                }
+            }
+            catch { /* 参照できない環境でも落ちないようにする */ }
 
-            scoreSender.SendClearTimeSeconds(FinalTime);
-
-            yield return new WaitForSeconds(0.5f); 
+            scoreSender.SubmitScoreAndGetBoard(steamId, playerName, "all_time", stage, score);
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] scoreSender が見つかりません。ランキング送信をスキップします。");
         }
 
-        int targetStage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
-        string rankingScene = $"RankingScene{targetStage:00}";
-        UnityEngine.SceneManagement.SceneManager.LoadScene(rankingScene);
+        // ランキングへ遷移（少し待つ場合は WaitForSeconds を延ばす）
+        StartCoroutine(GotoRanking(stage));
     }
 
+    private IEnumerator GotoRanking(int stage)
+    {
+        yield return new WaitForSeconds(1.0f);
+        SceneManager.LoadScene($"RankingScene{stage:00}");
+    }
 
+    // ==== キー加算（グローバル） ====
     public void AddKeyGlobal()
     {
         totalKeys++;
         Debug.Log($"鍵を取得しました（合計: {totalKeys}）");
-
         PlayerInventory.RaiseKeyCountChanged(totalKeys);
     }
 
+    // ==== ゲームオーバー ====
     public void GameOver()
     {
+        if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
     }
@@ -232,15 +251,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(scoreSender.gameObject);
     }
 
-
-
     private void ApplyStageNumberToScoreSender()
     {
         if (scoreSender == null) return;
         int stage = Mathf.Clamp(GetCurrentStageNumber(), 1, 12);
         scoreSender.StageNumber = stage;
     }
-
 
     private int TryParseStageNumberFromSceneName()
     {
@@ -259,11 +275,10 @@ public class GameManager : MonoBehaviour
         // 例: シーン名 "Stage01" ～ "Stage12" から自動抽出
         if (overrideStageNumber > 0) return overrideStageNumber;
 
-        var name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        var m = System.Text.RegularExpressions.Regex.Match(name, @"Stage\s*0?(\d{1,2})");
+        var name = SceneManager.GetActiveScene().name;
+        var m = Regex.Match(name, @"Stage\s*0?(\d{1,2})");
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
             return Mathf.Clamp(n, 1, 12);
         return 1;
     }
-
 }

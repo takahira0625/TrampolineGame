@@ -79,7 +79,6 @@ public class PlayerController : MonoBehaviour
             {
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
-                GameManager.instance.GameOver();
                 GameManager.instance.UnregisterPlayer(this);
                 Destroy(gameObject);
                 return;
