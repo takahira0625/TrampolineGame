@@ -27,6 +27,36 @@ EditorBuildSettings:
     path: Assets/Scenes/RankingScene01.unity
     guid: 18876ba2781c26f41a589631c29b1ee0
   - enabled: 1
+    path: Assets/Scenes/RankingScene03.unity
+    guid: f10a4590d022fc74ba22f1c3479928d8
+  - enabled: 1
+    path: Assets/Scenes/RankingScene04.unity
+    guid: 4dc708af4bea6df4db42bbef5f5be093
+  - enabled: 1
+    path: Assets/Scenes/RankingScene05.unity
+    guid: e412a6ef85a5ac446826d106f8ec0d70
+  - enabled: 1
+    path: Assets/Scenes/RankingScene06.unity
+    guid: eea69edcc0933e549af7d25a06aef5f4
+  - enabled: 1
+    path: Assets/Scenes/RankingScene07.unity
+    guid: 34eb27cae331b8e4886a3f1a9e8b3922
+  - enabled: 1
+    path: Assets/Scenes/RankingScene08.unity
+    guid: ac33e5991642f8f4c90fc0951c1f430c
+  - enabled: 1
+    path: Assets/Scenes/RankingScene09.unity
+    guid: 5378caf504a276540bcdc3569766241b
+  - enabled: 1
+    path: Assets/Scenes/RankingScene10.unity
+    guid: 9a8e794dabbddf3499f715858e48a47b
+  - enabled: 1
+    path: Assets/Scenes/RankingScene11.unity
+    guid: 8a094af1a250b5547a42d4180280a0e4
+  - enabled: 1
+    path: Assets/Scenes/RankingScene12.unity
+    guid: e0ce232b1ef814f4cb29cccfbedbc42a
+  - enabled: 1
     path: Assets/Scenes/Stage01.unity
     guid: d3151fd3848eba5499794339890035f5
   - enabled: 1
@@ -65,4 +95,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StageSelectScene7_12.unity
     guid: 78fc0f668b7aa9d469501663237e02a7
+  - enabled: 1
+    path: Assets/Scenes/RankingScene02.unity
+    guid: 5cf91ed085ab3364683a7e0b61a25c22
   m_configObjects: {}

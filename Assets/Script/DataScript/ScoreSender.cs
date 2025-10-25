@@ -131,7 +131,7 @@ public class ScoreSender : MonoBehaviour
 
     private IEnumerator PostScoreAndGetBoard(long steamId, string playerName, string mode, int stage, int score)
     {
-        string url = $"{supabaseUrl}/rest/v1/rpc/submit_score_and_get_board";
+        string url = $"{supabaseUrl}/rest/v1/rpc/submit_scoreboard";
 
         var payload = new RpcPayload
         {
