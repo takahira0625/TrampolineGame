@@ -17,6 +17,7 @@ public class Goal : BaseBlock
 
     private SpriteRenderer spriteRenderer;
     private bool isUnlocked = false;
+    private bool hasGoaled = false; // ゴール処理済みフラグを追加
 
     [Header("サウンド設定")]
     [SerializeField] private AudioClip goalSE;
@@ -105,8 +106,9 @@ public class Goal : BaseBlock
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (GameManager.instance.TotalKeys >= requiredKeys)
+            if (GameManager.instance.TotalKeys >= requiredKeys && !hasGoaled)
             {
+                hasGoaled = true; // ゴール処理済みフラグを立てる
                 BGMManager.Instance.Stop();
                 SEManager.Instance.PlayOneShot(goalSE);
                 GameManager.instance.Goal();

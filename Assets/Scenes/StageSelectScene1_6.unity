@@ -448,6 +448,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 517642564004064247, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 2981924496971109607, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Name
       value: StageSelect1_6
