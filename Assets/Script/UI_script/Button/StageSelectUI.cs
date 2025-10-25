@@ -36,7 +36,10 @@ public class StageSelectUI : MonoBehaviour
     {
         LoadStage(5);
     }
-
+    public void OnClickStage6()
+    {
+        LoadStage(6);
+    }
     public void OnClickStage7()
     {
         LoadStage(7);
