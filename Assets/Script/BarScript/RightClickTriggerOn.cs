@@ -190,7 +190,7 @@ public class RightClickTriggerOn : MonoBehaviour
                 playerCtrl.isActive = false;
 
                 // エフェクト生成
-                if (electroHitPrefab != null) // あらかじめ[SerializeField]でPrefabを指定
+                if (electroHitPrefab != null)
                 {
                     Vector3 spawnPos = ballRb.transform.position;
                     GameObject effect = Instantiate(electroHitPrefab, spawnPos, Quaternion.identity);

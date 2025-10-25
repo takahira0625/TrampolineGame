@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("速度制限")]
     public float maxSpeed = 30f;
     [SerializeField, Tooltip("スロー時の速度の大きさ")]
-    private float slowSpeed = 1f;
+    private float slowSpeed = 0.1f;
     public Vector2 savedVelocity = Vector2.zero;
     //Bar関連
     [SerializeField] private RightClickTriggerOn rightClick;
