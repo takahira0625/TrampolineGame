@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("速度制限")]
     public float maxSpeed = 30f;
     [SerializeField, Tooltip("スロー時の速度の大きさ")]
-    private float slowSpeed = 5f;
+    private float slowSpeed = 1f;
     public Vector2 savedVelocity = Vector2.zero;
     //Bar関連
     [SerializeField] private RightClickTriggerOn rightClick;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     private AIE2D.DynamicAfterImageEffect2DPlayer afterImagePlayer;
     private bool isHighSpeed = false;
     private ParticleSystem currentSpeedEffect;
-    
+
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -59,6 +59,9 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning("DynamicAfterImageEffect2DPlayerが見つかりません");
         }
+
+        // エフェクトを事前生成
+        InitializeLightningAuraEffect();
     }
 
     void Start()
@@ -93,10 +96,30 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
-
-        if (isInSlowZone && Input.GetMouseButton(0) )
+        //ここから
+        //押し出してない時、
+        if (!rightClick.IsMoving)
         {
-            isActive = true;
+            if (isInSlowZone && Input.GetMouseButton(0))
+            {
+                isActive = true;
+                Vector2 velocity = rb.velocity;
+                rb.velocity = velocity.normalized * slowSpeed;
+            }
+            else
+            {
+                isActive = false;
+            }
+        }
+        //ここまで
+        /*
+        if (isInSlowZone)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                isActive = true;
+            }
+                
             if (!rightClick.IsMoving)
             {
 
@@ -107,55 +130,50 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            isActive = false;
+            if (!rightClick.IsMoving)
+            {
+                isActive = false;
+            }
         }
+        */
 
         UpdateAfterImageColor();
         UpdateHighSpeedEffect();
         UpdateLightningAuraEffect();
+    }
 
+    private void InitializeLightningAuraEffect()
+    {
+        if (lightningAuraPrefab != null)
+        {
+            currentAuraEffect = Instantiate(lightningAuraPrefab, transform.position, Quaternion.identity);
+            currentAuraEffect.transform.SetParent(transform);
+            currentAuraEffect.transform.localPosition = Vector3.zero;
+
+            // SortingLayerを設定
+            var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
+            foreach (var r in renderers)
+            {
+                r.sortingLayerName = "Player";
+                r.sortingOrder = 10;
+            }
+
+            // 初期状態は非表示
+            currentAuraEffect.SetActive(false);
+        }
     }
 
     private void UpdateLightningAuraEffect()
     {
-        if (isActive)
+        if (currentAuraEffect != null)
         {
-            // まだエフェクトが存在しないなら生成
-            if (currentAuraEffect == null && lightningAuraPrefab != null)
+            // isActiveの状態に応じて表示を切り替え
+            if (currentAuraEffect.activeSelf != isActive)
             {
-                // 親を指定して生成（ズレ防止）
-                currentAuraEffect = Instantiate(lightningAuraPrefab, transform);
-                currentAuraEffect.transform.localPosition = Vector3.zero;
-                currentAuraEffect.transform.localRotation = Quaternion.identity;
-                currentAuraEffect.transform.localScale = Vector3.one;
-
-                // 描画設定
-                var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
-                foreach (var r in renderers)
-                {
-                    r.sortingLayerName = "Player";
-                    r.sortingOrder = 10;
-                }
-            }
-
-            // アクティブにする
-            if (currentAuraEffect != null && !currentAuraEffect.activeSelf)
-            {
-                currentAuraEffect.SetActive(true);
-            }
-        }
-        else
-        {
-            // 🔻 isActiveがfalseなら非表示にするだけ（削除しない）
-            if (currentAuraEffect != null && currentAuraEffect.activeSelf)
-            {
-                currentAuraEffect.SetActive(false);
+                currentAuraEffect.SetActive(isActive);
             }
         }
     }
-
-
-
     void FixedUpdate()
     {
         if (!canMove) return;
@@ -224,13 +242,17 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("SlowZone"))
         {
-            // ①スローゾーン内に入った時点での速度を取得
-            isInSlowZone = true;
-            savedVelocity = rb.velocity;
+            if (!rightClick.IsMoving)
+            {
+                // ①スローゾーン内に入った時点での速度を取得
+                isInSlowZone = true;
+                savedVelocity = rb.velocity;
+            }
 
         }
         if (collision.CompareTag("Bar"))
         {
+            Debug.Log("タイマースタート");
             GameManager.instance.StartTimerOnce();
         }
     }
@@ -240,19 +262,9 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("SlowZone"))
         {
             isInSlowZone = false;
-
-            //SlowZoneエフェクトが存在すれば削除
-            if (currentAuraEffect != null)
-            {
-                Destroy(currentAuraEffect);
-                currentAuraEffect = null;
-            }
-
-            // 念のため isActive もリセット
-            isActive = false;
         }
-    }
 
+    }
     private void OnDestroy()
     {
         if (currentSpeedEffect != null)
@@ -273,6 +285,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bar"))
         {
+            Debug.Log("タイマースタート");
             GameManager.instance.StartTimerOnce();
         }
     }
