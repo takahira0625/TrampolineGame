@@ -169,14 +169,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barFollow: {fileID: 6302593608544869286}
-  forwardDistance: 10
-  forwardTime: 0.1
+  backDistance: 4
+  backTime: 0.2
+  forwardDistance: 13
+  forwardTime: 0.2
   returnTime: 0.3
   reboundCoefficient: 0.7
   reboundExitSpeed: 25
   pushSpeed: 30
   electroHitPrefab: {fileID: 2965222256817593503, guid: 27da1b12b64b93f4fab4c03fb7622aeb, type: 3}
-  hitStopDuration: 0.3
+  hitStopDuration: 0.5
 --- !u!50 &1465036473749397005
 Rigidbody2D:
   serializedVersion: 4

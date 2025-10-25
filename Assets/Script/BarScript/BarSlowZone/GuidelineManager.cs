@@ -69,21 +69,11 @@ public class GuidelineManager : MonoBehaviour
 
         if (hit.collider != null)
         {
-            if (showDebugRay)
-                Debug.DrawLine(rayOrigin, hit.point, firstRayColor, 1f);
-
-            Debug.Log($"[1st Ray] Hit: {hit.collider.name}, distance: {hit.distance}");
-
             // 反射方向を計算
             Vector2 reflectDir = Vector2.Reflect(rayDirection, hit.normal);
             Vector2 secondOrigin = hit.point + reflectDir * 0.01f;
 
             SecondCastRay(secondOrigin, reflectDir);
-        }
-        else
-        {
-            if (showDebugRay)
-                Debug.DrawRay(rayOrigin, rayDirection * maxRayDistance, missColor, 1f);
         }
     }
 
@@ -97,17 +87,6 @@ public class GuidelineManager : MonoBehaviour
 
         // 2回目もガイドラインを追加で並べる
         PlaceGuidelines(origin, endPoint, direction, startIndexOffset: Mathf.FloorToInt(Vector2.Distance(transform.position, origin) / placementInterval));
-
-        if (hit.collider != null)
-        {
-            if (showDebugRay)
-                Debug.DrawLine(origin, hit.point, secondRayColor, 1f);
-            Debug.Log($"[2nd Ray] Hit: {hit.collider.name}, distance: {hit.distance}");
-        }
-        else if (showDebugRay)
-        {
-            Debug.DrawRay(origin, direction * maxRayDistance, missColor, 1f);
-        }
     }
 
     /// <summary>
