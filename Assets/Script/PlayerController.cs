@@ -231,6 +231,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.CompareTag("Bar"))
         {
+            Debug.Log("タイマースタート");
             GameManager.instance.StartTimerOnce();
         }
     }
@@ -273,6 +274,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bar"))
         {
+            Debug.Log("タイマースタート");
             GameManager.instance.StartTimerOnce();
         }
     }
