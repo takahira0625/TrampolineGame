@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("速度制限")]
     public float maxSpeed = 30f;
     [SerializeField, Tooltip("スロー時の速度の大きさ")]
-    private float slowSpeed = 5f;
+    private float slowSpeed = 1f;
     public Vector2 savedVelocity = Vector2.zero;
     //Bar関連
     [SerializeField] private RightClickTriggerOn rightClick;
@@ -96,10 +96,30 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
-
-        if (isInSlowZone && Input.GetMouseButton(0) )
+        //ここから
+        //押し出してない時、
+        if (!rightClick.IsMoving)
         {
-            isActive = true;
+            if (isInSlowZone && Input.GetMouseButton(0))
+            {
+                isActive = true;
+                Vector2 velocity = rb.velocity;
+                rb.velocity = velocity.normalized * slowSpeed;
+            }
+            else
+            {
+                isActive = false;
+            }
+        }
+        //ここまで
+        /*
+        if (isInSlowZone)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                isActive = true;
+            }
+                
             if (!rightClick.IsMoving)
             {
 
@@ -115,6 +135,7 @@ public class PlayerController : MonoBehaviour
                 isActive = false;
             }
         }
+        */
 
         UpdateAfterImageColor();
         UpdateHighSpeedEffect();
@@ -153,8 +174,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
     void FixedUpdate()
     {
         if (!canMove) return;
@@ -223,9 +242,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("SlowZone"))
         {
-            // ①スローゾーン内に入った時点での速度を取得
-            isInSlowZone = true;
-            savedVelocity = rb.velocity;
+            if (!rightClick.IsMoving)
+            {
+                // ①スローゾーン内に入った時点での速度を取得
+                isInSlowZone = true;
+                savedVelocity = rb.velocity;
+            }
+
         }
         if (collision.CompareTag("Bar"))
         {
@@ -235,9 +258,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        isInSlowZone = false;
-    }
+        if (collision.CompareTag("SlowZone"))
+        {
+            isInSlowZone = false;
+        }
 
+    }
     private void OnDestroy()
     {
         if (currentSpeedEffect != null)
