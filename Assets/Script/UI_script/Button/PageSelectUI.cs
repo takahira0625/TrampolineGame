@@ -37,19 +37,12 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        int stage = 1;
-        if (GameManager.instance != null)
-        {
-            SEManager.Instance.StopAll();
-            stage = Mathf.Clamp(
-                (int)GameManager.instance
-                      .GetType()
-                      .GetMethod("GetCurrentStageNumber", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                      .Invoke(GameManager.instance, null),
-                1, 12);
-            SEManager.Instance.PlayOneShot(clickSE);
-            SceneBGMManager.instance.PlayStageBGM();
-        }
+        // 保存されたステージ番号を取得
+        int stage = GameManager.instance.LoadLastStageNumber();
+
+        SEManager.Instance.StopAll();
+        SEManager.Instance.PlayOneShot(clickSE);
+        SceneBGMManager.instance.PlayStageBGM();
 
         SceneManager.LoadScene($"Stage{stage:00}");
     }
