@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
         StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
-
+        SaveCurrentStageNumber();
         //FinalTimerの保持
         PlayerPrefs.SetFloat("finaltimer", FinalTime);
         // スコア送信
@@ -229,6 +229,7 @@ public class GameManager : MonoBehaviour
     // ==== ゲームオーバー ====
     public void GameOver()
     {
+        SaveCurrentStageNumber();
         if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
@@ -281,5 +282,20 @@ public class GameManager : MonoBehaviour
         if (m.Success && int.TryParse(m.Groups[1].Value, out int n))
             return Mathf.Clamp(n, 1, 12);
         return 1;
+    }
+    // 現在のシーンの番号を保存
+    public void SaveCurrentStageNumber()
+    {
+        int stageNumber = GetCurrentStageNumber();
+        PlayerPrefs.SetInt("LastStageNumber", stageNumber);
+        PlayerPrefs.Save();
+        Debug.Log($"ステージ番号 {stageNumber} を保存しました");
+    }
+    // 最後に保存したシーンの番号を取得
+    public int LoadLastStageNumber()
+    {
+        int stageNumber = PlayerPrefs.GetInt("LastStageNumber", 1);
+        Debug.Log($"最後に保存したステージ番号を読み込みました: {stageNumber}");
+        return stageNumber;
     }
 }
