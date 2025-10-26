@@ -172,10 +172,11 @@ public class RightClickTriggerOn : MonoBehaviour
         Rigidbody2D ballRb = other.attachedRigidbody;
         PlayerController playerCtrl = other.GetComponent<PlayerController>();
         if (ballRb == null || playerCtrl == null || (isMoving && hasHitThisPush)) return;
-
+        
         // --- 押し出し中 ---
         if (isMoving)
         {
+            GameManager.instance.StartTimerOnce();
             hasHitThisPush = true;
             Vector2 forward = transform.up.normalized;
 
@@ -226,7 +227,10 @@ public class RightClickTriggerOn : MonoBehaviour
         if (ballRb == null) return;
 
         Vector2 dir = ballRb.velocity.normalized;
-
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            GameManager.instance.StartTimerOnce();
+        }
         // magnitudeを指定して速度を変更
         ballRb.velocity = dir * reboundExitSpeed;
     }
