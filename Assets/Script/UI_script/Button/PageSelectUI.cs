@@ -4,6 +4,12 @@ using UnityEngine.SceneManagement;
 public class PageSelectUI : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
+    [SerializeField] private Fade fade;
+
+    void Start()
+    {
+        fade.FadeOut(0.5f);
+    }
     public void OnClickLogin()
     {
         SEManager.Instance.StopAll();

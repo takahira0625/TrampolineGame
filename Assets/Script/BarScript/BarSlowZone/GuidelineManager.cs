@@ -41,7 +41,7 @@ public class GuidelineManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (InputManager.IsLeftClickPressed())
             CastRay();
         else         {
             // マウスボタンを離したら全てのガイドラインを非表示にする
