@@ -972,7 +972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
-  fade: {fileID: 0}
+  fade: {fileID: 1259396380}
 --- !u!1 &716619325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
-  fade: {fileID: 0}
+  fade: {fileID: 1259396380}
 --- !u!1 &1523150023
 GameObject:
   m_ObjectHideFlags: 0
