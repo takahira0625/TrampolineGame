@@ -95,9 +95,9 @@ public class BarController : MonoBehaviour
             target.y = Mathf.Clamp(target.y, minPos.y, maxPos.y);
         }
 
-        if (stopFollowOnLeftClick && Input.GetMouseButton(0))
+        if (stopFollowOnLeftClick && InputManager.IsLeftClickPressed())
         {
-            if (Input.GetMouseButtonDown(0))
+            if (InputManager.IsLeftClickDown())
             {
                 frozenPosition = rb.position;
                 isReturningToMouse = false;
@@ -107,7 +107,7 @@ public class BarController : MonoBehaviour
             return;
         }
 
-        if (stopFollowOnLeftClick && Input.GetMouseButtonUp(0))
+        if (stopFollowOnLeftClick && InputManager.IsLeftClickUp())
         {
             isReturningToMouse = true;
             returnStartPos = rb.position;

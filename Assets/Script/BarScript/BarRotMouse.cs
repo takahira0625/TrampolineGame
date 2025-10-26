@@ -57,7 +57,7 @@ public class BarRotMouse: MonoBehaviour
 
     void Update()
     {
-        if (!isActivated && Input.GetMouseButtonDown(0))
+        if (!isActivated && InputManager.IsLeftClickPressed())
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D col = GetComponent<Collider2D>();
@@ -79,7 +79,7 @@ public class BarRotMouse: MonoBehaviour
         bool isRightClickMoving = rightClick != null && rightClick.IsMoving;
 
         // === スロー中の特殊回転（デバック） ===
-        if (hasTarget && Input.GetMouseButton(0) && !isRightClickMoving)
+        if (hasTarget && InputManager.IsLeftClickPressed() && !isRightClickMoving)
         {
             Vector2 ballDirection = (slowMotionTarget.position - transform.position).normalized;
 

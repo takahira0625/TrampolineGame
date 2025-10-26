@@ -90,7 +90,7 @@ public class RightClick : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isMoving)
+        if (InputManager.IsRightClickPressed() && !isMoving)
         {
             startRotation = transform.rotation;
             StartCoroutine(MoveForwardAndBack());

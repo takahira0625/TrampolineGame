@@ -57,7 +57,7 @@ public class BarMovement : MonoBehaviour
         if (mainCamera == null) return;
 
         // クリック判定（一度だけ）
-        if (!isActivated && Input.GetMouseButtonDown(0))
+        if (!isActivated && InputManager.IsLeftClickDown())
         {
             Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Collider2D col = GetComponent<Collider2D>();

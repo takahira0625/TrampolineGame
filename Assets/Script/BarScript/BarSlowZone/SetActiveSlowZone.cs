@@ -12,7 +12,7 @@ public class SetActiveSlowZone : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (InputManager.IsLeftClickPressed())
         {
             SetRenderersEnabled(true);
         }

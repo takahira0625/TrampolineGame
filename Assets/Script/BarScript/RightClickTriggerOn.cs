@@ -85,7 +85,7 @@ public class RightClickTriggerOn : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isMoving && !col.isTrigger)
+        if (InputManager.IsRightClickPressed() && !isMoving && !col.isTrigger)
         {
             Debug.Log("右クリックで前進開始");
             startRotation = transform.rotation;
