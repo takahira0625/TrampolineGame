@@ -33,6 +33,22 @@ public class PageSelectUI : MonoBehaviour
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
+    public void OnClickUserGuideScene()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        PlayerPrefs.SetString("FromScene", GetCurrentSceneName());
+        SceneManager.LoadScene("UserGuideScene");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+    public void OnClickStageSelect()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
     public void OnClickHome()
     {
         SEManager.Instance.StopAll();
@@ -51,5 +67,10 @@ public class PageSelectUI : MonoBehaviour
         SceneBGMManager.instance.PlayStageBGM();
 
         SceneManager.LoadScene($"Stage{stage:00}");
+    }
+    public static string GetCurrentSceneName()
+    {
+        // 2. このコードが現在のシーン名を取得します
+        return SceneManager.GetActiveScene().name;
     }
 }
