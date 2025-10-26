@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("画面外判定")]
     [Tooltip("画面外に出てからゲームオーバーになるまでの猶予秒数")]
-    public float outTimeToLose = 0.5f;
+    public float outTimeToLose = 1f;
     private float outTimer = 0f;
     private SpriteRenderer sr;
 
@@ -120,32 +120,40 @@ public class PlayerController : MonoBehaviour
     {
         if (isActive)
         {
-            // すでにエフェクトがない場合は生成
+            // まだエフェクトが存在しないなら生成
             if (currentAuraEffect == null && lightningAuraPrefab != null)
             {
-                currentAuraEffect = Instantiate(lightningAuraPrefab, transform.position, Quaternion.identity);
-                currentAuraEffect.transform.SetParent(transform); // プレイヤーに追従
+                // 親を指定して生成（ズレ防止）
+                currentAuraEffect = Instantiate(lightningAuraPrefab, transform);
                 currentAuraEffect.transform.localPosition = Vector3.zero;
+                currentAuraEffect.transform.localRotation = Quaternion.identity;
+                currentAuraEffect.transform.localScale = Vector3.one;
 
-                // 前面に出す（SortingLayerを指定）
+                // 描画設定
                 var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
                 foreach (var r in renderers)
                 {
-                    r.sortingLayerName = "Player"; // 適切なレイヤー名に変更
+                    r.sortingLayerName = "Player";
                     r.sortingOrder = 10;
                 }
+            }
+
+            // アクティブにする
+            if (currentAuraEffect != null && !currentAuraEffect.activeSelf)
+            {
+                currentAuraEffect.SetActive(true);
             }
         }
         else
         {
-            // isActiveがfalseになったら削除
-            if (currentAuraEffect != null)
+            // 🔻 isActiveがfalseなら非表示にするだけ（削除しない）
+            if (currentAuraEffect != null && currentAuraEffect.activeSelf)
             {
-                Destroy(currentAuraEffect);
-                currentAuraEffect = null;
+                currentAuraEffect.SetActive(false);
             }
         }
     }
+
 
 
     void FixedUpdate()
@@ -229,7 +237,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        isInSlowZone = false;
+        if (collision.CompareTag("SlowZone"))
+        {
+            isInSlowZone = false;
+
+            //SlowZoneエフェクトが存在すれば削除
+            if (currentAuraEffect != null)
+            {
+                Destroy(currentAuraEffect);
+                currentAuraEffect = null;
+            }
+
+            // 念のため isActive もリセット
+            isActive = false;
+        }
     }
 
     private void OnDestroy()
