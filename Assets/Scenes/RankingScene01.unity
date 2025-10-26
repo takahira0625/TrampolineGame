@@ -839,15 +839,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11486218, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11486218, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: cutoutRange
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: startFade
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22424616, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: m_Pivot.x
@@ -1092,7 +1092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
-  fade: {fileID: 0}
+  fade: {fileID: 389863805}
 --- !u!1 &716619325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
-  fade: {fileID: 0}
+  fade: {fileID: 389863805}
 --- !u!1 &1523150023
 GameObject:
   m_ObjectHideFlags: 0
