@@ -5,8 +5,10 @@ public class RightClickTriggerOn : MonoBehaviour
 {
     [SerializeField] private BarMovement barFollow;
     [Header("前進距離と時間")]
-    [SerializeField] private float forwardDistance = 10.0f;
-    [SerializeField] private float forwardTime = 0.1f;
+    [SerializeField] float backDistance = 2f;        // 少し下がる距離（調整可能）
+    [SerializeField] float backTime = 0.05f;           // 下がる時間（短め）
+    [SerializeField] private float forwardDistance = 10.0f + 2f;
+    [SerializeField] private float forwardTime = 0.15f;
     [SerializeField] private float returnTime = 0.3f;
 
     [Header("反射設定")]
@@ -100,11 +102,24 @@ public class RightClickTriggerOn : MonoBehaviour
         col.isTrigger = true;
 
         originalPosition = rb.position;
-        Vector2 forward = (startRotation * Vector2.up).normalized;
 
+        Vector2 forward = (startRotation * Vector2.up).normalized;
+        Vector2 targetBackPos = originalPosition - forward * backDistance;
         Vector2 targetForwardPos = originalPosition + forward * forwardDistance;
+        
         float elapsed = 0f;
 
+        // --- 少し下がる ---
+        while (elapsed < backTime)
+        {
+            Vector2 newPos = Vector2.Lerp(originalPosition, targetBackPos, elapsed / backTime);
+            rb.MovePosition(newPos);
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        rb.MovePosition(targetBackPos);
+
+        elapsed = 0f;
         // --- 前進 ---
         while (elapsed < forwardTime)
         {
@@ -166,9 +181,13 @@ public class RightClickTriggerOn : MonoBehaviour
 
             if (playerCtrl.isActive)
             {
-                StartCoroutine(HitStop());
+                
                 Debug.Log("ヒットストップ: Active押し出し");
                 PlaySE(SmashSE, "CollisionSE");
+
+                float savedSpeed = playerCtrl.savedVelocity.magnitude;
+                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
+                playerCtrl.isActive = false;
 
                 // エフェクト生成
                 if (electroHitPrefab != null) // あらかじめ[SerializeField]でPrefabを指定
@@ -186,13 +205,9 @@ public class RightClickTriggerOn : MonoBehaviour
 
                     // ループする場合でも一定時間で消す（例：1秒）
                     Destroy(effect, 1f);
-
-                    // またはPrefabのParticleSystemでLoopをOFF & Stop Action = DestroyにしてもOK
                 }
+                StartCoroutine(HitStop());
 
-                float savedSpeed = playerCtrl.savedVelocity.magnitude;
-                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
-                playerCtrl.isActive = false;
             }
             else
             {
