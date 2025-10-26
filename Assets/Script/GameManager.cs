@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     // BGM
     public AudioClip gameBGM;
 
+    [SerializeField] Fade fade; // Fadeコンポーネントへの参照
     private void Awake()
     {
         // Singleton
@@ -209,7 +210,10 @@ public class GameManager : MonoBehaviour
         }
 
         // ランキングへ遷移（少し待つ場合は WaitForSeconds を延ばす）
-        StartCoroutine(GotoRanking(stage));
+        fade.FadeIn(0.5f, () => {
+            StartCoroutine(GotoRanking(stage));
+        });
+        
     }
 
     private IEnumerator GotoRanking(int stage)
