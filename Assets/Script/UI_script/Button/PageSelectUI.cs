@@ -52,4 +52,5 @@ public class PageSelectUI : MonoBehaviour
 
         SceneManager.LoadScene($"Stage{stage:00}");
     }
+
 }
