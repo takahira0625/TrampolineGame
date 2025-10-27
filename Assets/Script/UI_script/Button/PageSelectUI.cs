@@ -33,6 +33,22 @@ public class PageSelectUI : MonoBehaviour
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
+    public void OnClickUserGuideScene()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        PlayerPrefs.SetString("FromScene", GetCurrentSceneName());
+        SceneManager.LoadScene("UserGuideScene");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+    public void OnClickStageSelect()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+
     public void OnClickHome()
     {
         SEManager.Instance.StopAll();
@@ -43,7 +59,7 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        // •Û‘¶‚³‚ê‚½ƒXƒe[ƒW”Ô†‚ğæ“¾
+        // ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Xï¿½eï¿½[ï¿½Wï¿½Ôï¿½ï¿½ï¿½ï¿½æ“¾
         int stage = GameManager.instance.LoadLastStageNumber();
 
         SEManager.Instance.StopAll();
@@ -51,5 +67,10 @@ public class PageSelectUI : MonoBehaviour
         SceneBGMManager.instance.PlayStageBGM();
 
         SceneManager.LoadScene($"Stage{stage:00}");
+    }
+    public static string GetCurrentSceneName()
+    {
+        // 2. ï¿½ï¿½ï¿½ÌƒRï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½
+        return SceneManager.GetActiveScene().name;
     }
 }
