@@ -952,6 +952,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 26a2f563caacc944e8d62dd5a3babe01, type: 3}
+    - target: {fileID: 5704373449546327422, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 659995804}
+    - target: {fileID: 5704373449546327422, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 5721791782217165692, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
