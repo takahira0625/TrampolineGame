@@ -98,6 +98,7 @@ public class BarMovement : MonoBehaviour
     void FixedUpdate()
     {
         if (stopFollow) return;
+        if (!isActivated) return;
         rb.MovePosition(desiredPos);
         previousPosition = desiredPos;
     }
