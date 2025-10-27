@@ -23,7 +23,7 @@ MonoBehaviour:
   hp2Sprite: {fileID: 21300000, guid: dac62d682a49d8c48be45a364147f517, type: 3}
   baseSprite: {fileID: 21300000, guid: 4e0ba6ca48557b54797853b1907807b0, type: 3}
   graySprite: {fileID: 21300000, guid: 9ef06799333fa1c43ad79a66b8cb9dc9, type: 3}
-  blackSprite: {fileID: 21300000, guid: c0b5c12ab947e4444bf73f82f827614a, type: 3}
+  blackSprite: {fileID: 21300000, guid: 4fc0d278293cbc346b49a1c2af312da4, type: 3}
   speedHalfSprite: {fileID: 21300000, guid: 639fb40d2bc39b541b8ee13b346db792, type: 3}
   speedUpSprite: {fileID: 21300000, guid: 6783d5dde9142f8429efa9af6ec3e7ce, type: 3}
   cooldownSprite: {fileID: 21300000, guid: c0b5c12ab947e4444bf73f82f827614a, type: 3}

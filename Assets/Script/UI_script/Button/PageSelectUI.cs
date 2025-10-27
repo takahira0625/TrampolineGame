@@ -52,4 +52,13 @@ public class PageSelectUI : MonoBehaviour
 
         SceneManager.LoadScene($"Stage{stage:00}");
     }
+
+    public void OnClickCatalog01()
+    {
+        SceneManager.LoadScene("BlockCatalogScene01");
+    }
+
+    public void OnClickCatalog02() {
+        SceneManager.LoadScene("BlockCatalogScene02");
+    }
 }
