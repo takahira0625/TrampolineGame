@@ -32,13 +32,13 @@ public class GameOverSceneUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        // 保存されたステージ番号を取得
-        int stage = GameManager.instance.LoadLastStageNumber();
+        // 保存されたステージ名を取得
+        string stageName = GameManager.instance.LoadLastStageName();
 
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
 
-        SceneManager.LoadScene($"Stage{stage:00}");
+        SceneManager.LoadScene(stageName);
     }
 }

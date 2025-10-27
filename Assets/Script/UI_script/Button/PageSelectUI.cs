@@ -59,14 +59,14 @@ public class PageSelectUI : MonoBehaviour
 
     public void OnClickRetry()
     {
-        // �ۑ����ꂽ�X�e�[�W�ԍ����擾
-        int stage = GameManager.instance.LoadLastStageNumber();
+        // 保存されたステージ名を取得
+        string stageName = GameManager.instance.LoadLastStageName();
 
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
 
-        SceneManager.LoadScene($"Stage{stage:00}");
+        SceneManager.LoadScene(stageName);
     }
     public static string GetCurrentSceneName()
     {

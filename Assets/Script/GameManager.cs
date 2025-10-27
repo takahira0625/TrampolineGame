@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
         StopTimer();
         if (playerController != null) playerController.canMove = false;
         if (goalTextObject != null) goalTextObject.SetActive(true);
-        SaveCurrentStageNumber();
+        SaveCurrentStageName();
         //FinalTimerの保持
         PlayerPrefs.SetFloat("finaltimer", FinalTime);
         // スコア送信
@@ -208,7 +208,13 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("[GameManager] scoreSender が見つかりません。ランキング送信をスキップします。");
         }
-
+        if (LoadLastStageName() == "KeyGoalBlockScene")
+        {
+            fade.FadeIn(6f, () => {
+                SceneManager.LoadScene("BlockCatalogScene01");
+            });
+            return;
+        }
         // ランキングへ遷移（少し待つ場合は WaitForSeconds を延ばす）
         fade.FadeIn(0.5f, () => {
             StartCoroutine(GotoRanking(stage));
@@ -233,7 +239,7 @@ public class GameManager : MonoBehaviour
     // ==== ゲームオーバー ====
     public void GameOver()
     {
-        SaveCurrentStageNumber();
+        SaveCurrentStageName();
         if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
         Debug.Log("Game Over!");
         SceneManager.LoadScene("GameOverScene");
@@ -287,19 +293,19 @@ public class GameManager : MonoBehaviour
             return Mathf.Clamp(n, 1, 12);
         return 1;
     }
-    // 現在のシーンの番号を保存
-    public void SaveCurrentStageNumber()
+    // 現在のシーンの名前を保存
+    public void SaveCurrentStageName()
     {
-        int stageNumber = GetCurrentStageNumber();
-        PlayerPrefs.SetInt("LastStageNumber", stageNumber);
+        string stageName = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString("LastStageName", stageName);
         PlayerPrefs.Save();
-        Debug.Log($"ステージ番号 {stageNumber} を保存しました");
+        Debug.Log($"ステージ名 {stageName} を保存しました");
     }
-    // 最後に保存したシーンの番号を取得
-    public int LoadLastStageNumber()
+    // 最後に保存したシーンの名前を取得
+    public string LoadLastStageName()
     {
-        int stageNumber = PlayerPrefs.GetInt("LastStageNumber", 1);
-        Debug.Log($"最後に保存したステージ番号を読み込みました: {stageNumber}");
-        return stageNumber;
+        string stageName = PlayerPrefs.GetString("LastStageName", "Stage01");
+        Debug.Log($"最後に保存したステージ名を読み込みました: {stageName}");
+        return stageName;
     }
 }
