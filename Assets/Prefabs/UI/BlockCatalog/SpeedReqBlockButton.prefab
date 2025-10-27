@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 3386908842783040498}
   - component: {fileID: 5798881303665618359}
   - component: {fileID: 5562934521033511134}
+  - component: {fileID: 7649707903937684717}
   m_Layer: 5
   m_Name: SpeedReqBlockButton
   m_TagString: Untagged
@@ -256,7 +257,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5798881303665618359}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7649707903937684717}
+        m_TargetAssemblyTypeName: BlockCatalogUI, Assembly-CSharp
+        m_MethodName: OnClickSpeedReqBlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7649707903937684717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899098221125340195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87a557fcd98e91a478fd965f9b83f53f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
+  fade: {fileID: 0}
 --- !u!1 &4327079641166064418
 GameObject:
   m_ObjectHideFlags: 0

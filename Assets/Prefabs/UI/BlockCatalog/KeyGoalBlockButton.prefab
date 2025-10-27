@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6682511873462990346}
   - component: {fileID: 5173147129549707763}
   - component: {fileID: 6288358301375735626}
+  - component: {fileID: 6786606530684979039}
   m_Layer: 0
   m_Name: KeyGoalBlockButton
   m_TagString: Untagged
@@ -197,7 +198,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5173147129549707763}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6786606530684979039}
+        m_TargetAssemblyTypeName: BlockCatalogUI, Assembly-CSharp
+        m_MethodName: OnClickKeyGoalBlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6786606530684979039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973793881475981078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87a557fcd98e91a478fd965f9b83f53f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
+  fade: {fileID: 0}
 --- !u!1 &2262284583203869116
 GameObject:
   m_ObjectHideFlags: 0

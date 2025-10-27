@@ -98,4 +98,34 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ResultScene.unity
     guid: f2c7a71774504684686f14eb6a5d9fcf
+  - enabled: 1
+    path: Assets/Scenes/BlockCatalogScene01.unity
+    guid: ddf8ebf64957a52468ffe1827a08befe
+  - enabled: 1
+    path: Assets/Scenes/BlockCatalogScene02.unity
+    guid: c50567064cb22194c8cb7f3ef7bf631a
+  - enabled: 1
+    path: Assets/Scenes/NormalBlockScene.unity
+    guid: c3aa2f886fe441d4c9b17fa7a0cea98d
+  - enabled: 1
+    path: Assets/Scenes/KeyGoalBlockScene.unity
+    guid: 8e4311632c253fa4c959efad819ddb1d
+  - enabled: 1
+    path: Assets/Scenes/SpeedUpBlockScene.unity
+    guid: 23f0ddd210c3c494d9818ef0d73201d3
+  - enabled: 1
+    path: Assets/Scenes/SpeedDownBlockScene.unity
+    guid: 28b94aec04be55d4e9993ce4a4fcc91c
+  - enabled: 1
+    path: Assets/Scenes/SpeedReqBlockScene.unity
+    guid: 013fffd05bf6302498fda22dbc25eaa2
+  - enabled: 1
+    path: Assets/Scenes/BombBlockScene.unity
+    guid: 985883cf8638b084199184648f35a02d
+  - enabled: 1
+    path: Assets/Scenes/DoubleBlockScene.unity
+    guid: a726ec001148b734193614e79dfc7ba2
+  - enabled: 1
+    path: Assets/Scenes/WarpBlockScene.unity
+    guid: 71ccf69cfd69fce47831e1964fa3a33e
   m_configObjects: {}

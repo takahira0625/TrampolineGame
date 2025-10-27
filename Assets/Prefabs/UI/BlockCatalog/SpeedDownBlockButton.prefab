@@ -505,6 +505,7 @@ GameObject:
   - component: {fileID: 6381747779912229494}
   - component: {fileID: 2940233154802414071}
   - component: {fileID: 3508461870181091017}
+  - component: {fileID: 4800824922856591835}
   m_Layer: 5
   m_Name: SpeedDownBlockButton
   m_TagString: Untagged
@@ -617,4 +618,30 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2940233154802414071}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4800824922856591835}
+        m_TargetAssemblyTypeName: BlockCatalogUI, Assembly-CSharp
+        m_MethodName: OnClickSpeedDownBlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4800824922856591835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8802437504179773822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87a557fcd98e91a478fd965f9b83f53f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSE: {fileID: 0}
+  fade: {fileID: 0}
