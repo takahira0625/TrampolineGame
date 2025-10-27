@@ -144,4 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSize: {x: 0.1, y: 0.1}
-  KeySE: {fileID: 0}
+  KeySE: {fileID: 8300000, guid: d959056fb5e6f3a43b3ef1caf491dc7e, type: 3}
+  keyPartIndex: 0
+  playEffectOnHit: 1

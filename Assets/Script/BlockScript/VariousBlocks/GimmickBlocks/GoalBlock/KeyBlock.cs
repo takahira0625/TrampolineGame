@@ -16,6 +16,7 @@ public class KeyBlock : MonoBehaviour
 
     // 衝突エフェクト(クラス全体で共有)
     private static ParticleSystem hitEffectPrefab;
+    private static ParticleSystem getEffectPrefab;
     private static bool isEffectLoaded = false;
 
     // UIに「この番号の部品が取られた」と通知するイベント
@@ -36,6 +37,7 @@ public class KeyBlock : MonoBehaviour
         if (!isEffectLoaded)
         {
             hitEffectPrefab = Resources.Load<ParticleSystem>("Effects/CFXR3 Hit Fire B (Air)");
+            getEffectPrefab = Resources.Load<ParticleSystem>("Effects/Holy hit");
             isEffectLoaded = true;
 
             if (hitEffectPrefab == null)
@@ -119,9 +121,10 @@ public class KeyBlock : MonoBehaviour
         if (!playEffectOnHit || hitEffectPrefab == null) return;
 
         // エフェクトを生成して再生
-        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
-
+        //ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+        ParticleSystem getEffect = Instantiate(getEffectPrefab, this.transform.position, Quaternion.identity);
         // 自動削除
-        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        //Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        Destroy(getEffect.gameObject, getEffect.main.duration + getEffect.main.startLifetime.constantMax);
     }
 }
