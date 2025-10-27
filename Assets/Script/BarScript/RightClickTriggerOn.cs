@@ -85,7 +85,7 @@ public class RightClickTriggerOn : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isMoving && !col.isTrigger)
+        if (InputManager.IsRightClickPressed() && !isMoving && !col.isTrigger)
         {
             Debug.Log("右クリックで前進開始");
             startRotation = transform.rotation;
@@ -191,7 +191,7 @@ public class RightClickTriggerOn : MonoBehaviour
                 playerCtrl.isActive = false;
 
                 // エフェクト生成
-                if (electroHitPrefab != null) // あらかじめ[SerializeField]でPrefabを指定
+                if (electroHitPrefab != null)
                 {
                     Vector3 spawnPos = ballRb.transform.position;
                     GameObject effect = Instantiate(electroHitPrefab, spawnPos, Quaternion.identity);

@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("速度制限")]
     public float maxSpeed = 30f;
     [SerializeField, Tooltip("スロー時の速度の大きさ")]
-    private float slowSpeed = 1f;
+    private float slowSpeed = 0.1f;
     public Vector2 savedVelocity = Vector2.zero;
     //Bar関連
     [SerializeField] private RightClickTriggerOn rightClick;
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         //押し出してない時、
         if (!rightClick.IsMoving)
         {
-            if (isInSlowZone && Input.GetMouseButton(0))
+            if (isInSlowZone && InputManager.IsLeftClickPressed())
             {
                 isActive = true;
                 Vector2 velocity = rb.velocity;
@@ -111,31 +111,6 @@ public class PlayerController : MonoBehaviour
                 isActive = false;
             }
         }
-        //ここまで
-        /*
-        if (isInSlowZone)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                isActive = true;
-            }
-                
-            if (!rightClick.IsMoving)
-            {
-
-                Vector2 velocity = rb.velocity;
-                rb.velocity = velocity.normalized * slowSpeed;
-
-            }
-        }
-        else
-        {
-            if (!rightClick.IsMoving)
-            {
-                isActive = false;
-            }
-        }
-        */
 
         UpdateAfterImageColor();
         UpdateHighSpeedEffect();
