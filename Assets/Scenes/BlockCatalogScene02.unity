@@ -674,6 +674,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CatalogButton (Back)
       objectReference: {fileID: 0}
+    - target: {fileID: 5888177926682362890, guid: ca3e0fffab96ec6449fb93bf1f4d0cc0, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 5888177926682362890, guid: ca3e0fffab96ec6449fb93bf1f4d0cc0, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -947,6 +955,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4007108259743044796, guid: cf8268a087c3b58479f783229512f45e, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 4007108259743044796, guid: cf8268a087c3b58479f783229512f45e, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 7521912770416818972, guid: cf8268a087c3b58479f783229512f45e, type: 3}
       propertyPath: m_Name
       value: BombBlockButton
@@ -1044,6 +1060,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4800824922856591835, guid: 19bcf386197b68b4baf0fc728b171c18, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 4800824922856591835, guid: 19bcf386197b68b4baf0fc728b171c18, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 8802437504179773822, guid: 19bcf386197b68b4baf0fc728b171c18, type: 3}
       propertyPath: m_Name
       value: SpeedDownBlockButton
@@ -1061,6 +1085,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 549612886}
     m_Modifications:
+    - target: {fileID: 1358791032504273551, guid: 9c1db58918122fa4697dae940a8d9fce, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 1358791032504273551, guid: 9c1db58918122fa4697dae940a8d9fce, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 3023830831414078707, guid: 9c1db58918122fa4697dae940a8d9fce, type: 3}
       propertyPath: m_Name
       value: DoubleBlockButton
@@ -1158,6 +1190,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 549612886}
     m_Modifications:
+    - target: {fileID: 1296013245708288348, guid: 0d5ebc3d9fc452a4a9ea0cf774fca977, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 1296013245708288348, guid: 0d5ebc3d9fc452a4a9ea0cf774fca977, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 2820584548515650405, guid: 0d5ebc3d9fc452a4a9ea0cf774fca977, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1449,6 +1489,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: WarpBlockButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7996535595743431103, guid: ff80c54d23578ce4eb831dde25186033, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 7996535595743431103, guid: ff80c54d23578ce4eb831dde25186033, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1546,6 +1594,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedReqBlockButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7649707903937684717, guid: b8e0d11c32479564587c7bc56b1523fd, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
+    - target: {fileID: 7649707903937684717, guid: b8e0d11c32479564587c7bc56b1523fd, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
