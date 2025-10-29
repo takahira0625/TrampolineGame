@@ -108,9 +108,12 @@ MonoBehaviour:
   requiredKeys: 3
   lockedSprite: {fileID: 21300000, guid: 13c66f97192d50d47b30031a3e71e52e, type: 3}
   unlockedSprite: {fileID: 21300000, guid: b1b52b68a7e130946a57d4974e4cc45e, type: 3}
+  ShieldEffect: {fileID: 1161354269684338271, guid: ea3e42407bd90fc43a893f3164460bd8, type: 3}
+  ShieldEffectHit: {fileID: 1151901546208542452, guid: f358f8b4d672ef440bb8a31d13a6245b, type: 3}
   unlockEffectPrefab: {fileID: 2513661457047019541, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
   effectOffset: {x: 0, y: 0, z: 0}
   goalSE: {fileID: 8300000, guid: b505822e0cb4fc6469d2ad438f1cf2f7, type: 3}
+  shieldHitSE: {fileID: 8300000, guid: 0be67d52445150b489a1424f9fc77426, type: 3}
 --- !u!70 &-6636970187652519209
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -120,7 +123,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 3797651389120414331}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: db285ca2b8f56684880a52a9b1fe0aba, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

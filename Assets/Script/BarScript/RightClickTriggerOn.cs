@@ -20,6 +20,8 @@ public class RightClickTriggerOn : MonoBehaviour
 
     [SerializeField, Header("ヒットストップ設定")]
     private float hitStopDuration = 0.1f;
+    [SerializeField, Header("右クリックで前進開始時のSE")]
+    private AudioClip pushStartSE;
 
     private bool isMoving = false;
     public bool IsMoving => isMoving;
@@ -88,6 +90,7 @@ public class RightClickTriggerOn : MonoBehaviour
         if (InputManager.IsRightClickPressed() && !isMoving && !col.isTrigger)
         {
             Debug.Log("右クリックで前進開始");
+            PlaySE(pushStartSE, "PushStartSE");
             startRotation = transform.rotation;
             StartCoroutine(MoveForwardAndBack());
         }
@@ -239,7 +242,7 @@ public class RightClickTriggerOn : MonoBehaviour
     private IEnumerator HitStop()
     {
         float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        Time.timeScale = 0.4f;
         yield return new WaitForSecondsRealtime(hitStopDuration);
         Time.timeScale = originalTimeScale;
     }

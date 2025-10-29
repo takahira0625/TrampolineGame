@@ -4,6 +4,7 @@ using System.Collections;
 public class BombBlock : GimmickBlock
 {
     [SerializeField] private ExplosionEffect explosionEffectPrefab;
+    [SerializeField] private GameObject explosionEffectPrefabShake;
     [SerializeField] private float explosionRadius = 3f;
     private bool hasExploded = false; // îöî≠çœÇ›ÉtÉâÉO
     [SerializeField] private AudioClip explosionSound;
@@ -48,8 +49,21 @@ public class BombBlock : GimmickBlock
         // îöî≠PrefabÇê∂ê¨ÇµÇƒé¿çs
         if (explosionEffectPrefab != null)
         {
-            ExplosionEffect effect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            ExplosionEffect effect = Instantiate(
+                explosionEffectPrefab,
+                transform.position,
+                Quaternion.identity
+            );
             effect.Initialize(explosionRadius, this);
+        }
+        if (explosionEffectPrefabShake != null)
+        {
+            GameObject shake = Instantiate(
+                explosionEffectPrefabShake,
+                transform.position,
+                Quaternion.identity
+            );
+
         }
         Destroy(gameObject);
     }

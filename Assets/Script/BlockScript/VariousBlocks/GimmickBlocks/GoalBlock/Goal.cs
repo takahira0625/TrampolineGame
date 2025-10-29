@@ -10,7 +10,9 @@ public class Goal : BaseBlock
     [Header("ゴール見た目設定")]
     [SerializeField] private Sprite lockedSprite;   // 鍵未取得時の見た目
     [SerializeField] private Sprite unlockedSprite; // 全取得後の見た目
-    
+    [SerializeField] private GameObject ShieldEffect; // 鍵を取得していない時にぶつかったときのエフェクト
+    [SerializeField] private GameObject ShieldEffectHit; // 鍵を取得していない時にぶつかったときのエフェクト
+
     [Header("解放エフェクト設定")]
     [SerializeField] private ParticleSystem unlockEffectPrefab;
     [SerializeField] private Vector3 effectOffset = Vector3.zero;
@@ -21,6 +23,8 @@ public class Goal : BaseBlock
 
     [Header("サウンド設定")]
     [SerializeField] private AudioClip goalSE;
+    [SerializeField, Header("シールドヒット音")]
+    private AudioClip shieldHitSE;
     protected override void Awake()
     {
         base.Awake();
@@ -68,6 +72,7 @@ public class Goal : BaseBlock
 
         Vector3 originalScale = transform.localScale;
         Vector3 smallScale = originalScale * 0.1f;
+        //ここに鍵が壊れる演出を作る
 
         // --- 縮む（0.3秒）---
         float duration = 0.6f;
@@ -75,7 +80,7 @@ public class Goal : BaseBlock
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            elapsed += Time.unscaledDeltaTime; // ← TimeScaleの影響を受けない
+            elapsed += Time.unscaledDeltaTime;
             transform.localScale = Vector3.Lerp(originalScale, smallScale, elapsed / duration);
             yield return null;
         }
@@ -116,7 +121,38 @@ public class Goal : BaseBlock
             }
             else
             {
-                Debug.Log("キーの数が足りません");
+                ContactPoint2D contact = collision.GetContact(0);
+                if (ShieldEffect != null)
+                {
+                    Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+
+                    // ゴールの位置でエフェクトを生成
+                    GameObject effect = Instantiate(
+                        ShieldEffect,
+                        transform.position,
+                        rotation
+                    );
+
+                    if (shieldHitSE != null && SEManager.Instance != null && !hasGoaled)
+                    {
+                        SEManager.Instance.PlayOneShot(shieldHitSE);
+                    }
+
+
+                    Destroy(effect, 2f);
+                }
+                if (ShieldEffectHit != null)
+                {
+                    // 衝突位置でエフェクトを生成
+
+                    GameObject effectHit = Instantiate(
+                        ShieldEffectHit,
+                        contact.point,
+                        Quaternion.identity
+                    );
+                    Destroy(effectHit, 1.5f);
+                }
+
             }
         }
     }
