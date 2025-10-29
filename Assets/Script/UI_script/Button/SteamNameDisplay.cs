@@ -7,6 +7,9 @@ public class SteamNameDisplay : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private string format = "ようこそ、{0} さん！";
     [SerializeField] private string notReadyText = "Steam未ログイン";
+    [SerializeField] private SteamGatekeeper GateKeeper;
+
+    private int count = 0;
 
     void OnEnable()
     {
@@ -18,6 +21,18 @@ public class SteamNameDisplay : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+
+        if (GateKeeper != null && GateKeeper.IsSteamReady ==true)
+        {
+            if (count == 0)
+            {
+                Refresh();
+                count++;
+            }
+        }
+    }
     void OnDisable()
     {
         SteamInit.OnReady -= HandleSteamReady;

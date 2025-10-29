@@ -906,6 +906,7 @@ MonoBehaviour:
   overrideStageNumber: 0
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}
+  fade: {fileID: 0}
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
@@ -3143,11 +3144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7066897570707931640, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.0564995
+      value: 7.68
       objectReference: {fileID: 0}
     - target: {fileID: 7066897570707931640, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1214056
+      value: -6.73
       objectReference: {fileID: 0}
     - target: {fileID: 7066897570707931640, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4850,7 +4851,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!4 &1083427112 stripped
 Transform:
@@ -6066,8 +6067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a6b8b7eca3926428cfaf0cd6067702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLength: 0.5
-  maxLength: 5
 --- !u!1 &1437715474
 GameObject:
   m_ObjectHideFlags: 0
