@@ -5322,6 +5322,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedHUD
       objectReference: {fileID: 0}
+    - target: {fileID: 6773302145037298805, guid: 7aca8cf894531d04fa37b2ba936429d0, type: 3}
+      propertyPath: m_Text
+      value: Speed
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8078,7 +8082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4249276433364733531, guid: d383fa5809f722c488d8afc497932997, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 204
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 4249276433364733531, guid: d383fa5809f722c488d8afc497932997, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
