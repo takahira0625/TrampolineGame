@@ -14,8 +14,7 @@ public class ExplosionEffect : MonoBehaviour
         "NormalBlock",
         "SpeedHalfBlock",
         "DoubleBlock",
-        "SpeedDoubleBlock",
-        "WarpBlock"
+        "SpeedDoubleBlock"
     };
 
     private float radius;

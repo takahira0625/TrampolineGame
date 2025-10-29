@@ -121,10 +121,10 @@ public class KeyBlock : MonoBehaviour
         if (!playEffectOnHit || hitEffectPrefab == null) return;
 
         // エフェクトを生成して再生
-        //ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
         ParticleSystem getEffect = Instantiate(getEffectPrefab, this.transform.position, Quaternion.identity);
         // 自動削除
-        //Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
-        Destroy(getEffect.gameObject, getEffect.main.duration + getEffect.main.startLifetime.constantMax);
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        Destroy(getEffect.gameObject, getEffect.main.duration + getEffect.main.startLifetime.constantMax-1);
     }
 }
