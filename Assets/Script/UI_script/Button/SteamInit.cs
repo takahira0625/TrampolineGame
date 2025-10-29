@@ -1,35 +1,47 @@
-using UnityEngine;
 using Steamworks;
+using System;
+using UnityEngine;
 
 public class SteamInit : MonoBehaviour
 {
     public static bool IsReady { get; private set; }
-    public static event System.Action OnReady;
+    public static event Action OnReady;
 
-    bool inited;
+    private bool inited;
 
     void Awake()
     {
         try
         {
-            inited = SteamAPI.Init();
+            inited = SteamAPI.Init();   // Åöèâä˙âªÇÕÇ±Ç±ÇæÇØ
             IsReady = inited;
             if (inited)
             {
-                Debug.Log($"[Steam] OK Persona={SteamFriends.GetPersonaName()} / ID={SteamUser.GetSteamID().m_SteamID}");
-                OnReady?.Invoke(); 
+                Debug.Log("[SteamInit] SteamAPI.Init OK");
+                OnReady?.Invoke();
             }
             else
             {
-                Debug.LogError("SteamAPI.Init é∏îsÅB");
+                Debug.LogError("[SteamInit] SteamAPI.Init é∏îs");
             }
         }
-        catch (System.DllNotFoundException e)
+        catch (DllNotFoundException e)
         {
-            Debug.LogError("Steamworks DLL Ç™å©Ç¬Ç©ÇÁÇ»Ç¢: " + e);
+            Debug.LogError("[SteamInit] Steamworks DLL Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒ: " + e);
         }
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    void Update() { if (inited) SteamAPI.RunCallbacks(); }
-    void OnApplicationQuit() { if (inited) SteamAPI.Shutdown(); }
+    void Update()
+    {
+        if (inited) SteamAPI.RunCallbacks(); // ÅöRunCallbacks ÇÕÇ±Ç±ÇæÇØ
+    }
+
+    void OnApplicationQuit()
+    {
+        if (inited) SteamAPI.Shutdown();
+        inited = false;
+        IsReady = false;
+    }
 }

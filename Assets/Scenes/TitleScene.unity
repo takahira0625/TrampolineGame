@@ -1668,7 +1668,7 @@ MonoBehaviour:
   nameText: {fileID: 1689831601}
   format: 'Welcome,{0} '
   notReadyText: "Steam\u672A\u30ED\u30B0\u30A4\u30F3"
-  GateKeeper: {fileID: 0}
+  GateKeeper: {fileID: 1358929594}
 --- !u!114 &1689831601
 MonoBehaviour:
   m_ObjectHideFlags: 0

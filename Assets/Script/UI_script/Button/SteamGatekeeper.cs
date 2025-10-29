@@ -1,126 +1,126 @@
 using Steamworks;
-using System; // Guid用（今は未使用でもOK）
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
-/// <summary>
-/// Steam または ゲスト でゲーム開始を制御するクラス。
-/// ・Steam利用時 → ランキング投稿など全機能有効
-/// ・ゲスト利用時 → 一時プレイのみ（記録・保存なし）
-/// </summary>
 public class SteamGatekeeper : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private GameObject steamGatePanel;  // ログイン案内パネル
-    [SerializeField] private Button startButton;         // 「はじめる」ボタン
+    [SerializeField] private GameObject steamGatePanel;
+    [SerializeField] private Button startButton;
+    [SerializeField] private SteamNameDisplay nameDisplay;
 
     [Header("Options")]
-    [SerializeField] private bool autoHideWhenSteamReady = true; // SteamまたはGuestでOKなら自動で隠す
+    [SerializeField] private bool autoHideWhenSteamReady = true;
 
     [Header("Guest Login (Optional)")]
-    [SerializeField] private Button guestLoginButton;          // ゲストボタン（任意）
-    [SerializeField] private GameObject afterLoginHideTarget;  // ログイン後に隠すUI（任意）
+    [SerializeField] private Button guestLoginButton;
+    [SerializeField] private GameObject afterLoginHideTarget;
 
-    public bool IsSteamReady => SteamAPI.IsSteamRunning();
-    private bool guestMode = false; // 現在ゲストモード中かどうか
+    private bool guestMode = false;
+    private bool personaReady = false;   // ★NameDisplayからの通知でtrue
 
-    private bool AlreadyLogin = false;
     void Start()
     {
-        // GuestLoginButtonが設定されていればイベント登録
         if (guestLoginButton != null)
         {
             guestLoginButton.onClick.RemoveAllListeners();
             guestLoginButton.onClick.AddListener(OnClickGuestLogin);
         }
+        ApplyState();
 
-        // 初期状態の反映
-        ApplyState(SteamAPI.IsSteamRunning());
+        StartCoroutine(AutoCloseWhenAlreadyLoggedIn());
     }
 
-    void Update()
-    {
-        if (IsSteamReady)
-        {
-            if (!AlreadyLogin)
-            {
-                ApplyState(SteamAPI.IsSteamRunning());
-                AlreadyLogin = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Steamログイン誘導ボタンの処理
-    /// </summary>
     public void OnClickLoginSteam()
     {
-        bool isRunning = SteamAPI.IsSteamRunning();
-        ApplyState(isRunning);
+        guestMode = false;
 
-        if (!isRunning)
+        bool running = SteamAPI.IsSteamRunning();
+        bool logged = false;
+
+        // Steamworks 初期化済みのときだけ BLoggedOn を参照
+        if (SteamInit.IsReady && running)
+            logged = SteamUser.BLoggedOn();
+
+        // ★ 未起動 または 未ログイン の場合は Steam を前面に出す
+        if (!running || !logged)
         {
             try
             {
-                // Steamクライアントを起動
-                Application.OpenURL("steam://open/main");
+                UnityEngine.Application.OpenURL("steam://open/main"); // クライアントを前面化
             }
             catch
             {
-                // 失敗時はWebログインへフォールバック
-                Application.OpenURL("https://store.steampowered.com/login/");
+                // 最悪ブラウザのログインでも
+                UnityEngine.Application.OpenURL("https://store.steampowered.com/login/");
             }
         }
+
+        // ★ ここで Display 側の再チェックを即スタート（待機コルーチン&コールバックが走る）
+        nameDisplay?.TryRefreshAndNotify();
+
+        UnityEngine.Debug.Log("[SteamGatekeeper] Login clicked; waiting persona name...");
     }
 
-    /// <summary>
-    /// ゲストモードで即プレイ開始（名前・IDなし）
-    /// </summary>
+
+
     public void OnClickGuestLogin()
     {
         guestMode = true;
-        Debug.Log("[GuestLogin] ゲストモードで開始します（名前・IDは発行しません）。");
-
-        // ログインパネルなどを非表示
-        if (steamGatePanel != null) steamGatePanel.SetActive(false);
-
-        if (afterLoginHideTarget != null) afterLoginHideTarget.SetActive(false);
-
-        // スタートボタンを有効化
-        ApplyState(SteamAPI.IsSteamRunning());
+        Debug.Log("[SteamGatekeeper] Guest mode");
+        ApplyState();
     }
 
-    /// <summary>
-    /// Steamまたはゲストモードで開始可能かを判定しUIを更新
-    /// </summary>
-    private void ApplyState(bool steamReady)
+    /// <summary>SteamNameDisplay から呼ばれる。ユーザー名が表示できた＝準備完了。</summary>
+    public void NotifySteamPersonaReady()
     {
-        bool canStart = steamReady || guestMode;
-
-        // パネルの表示/非表示
-        if (steamGatePanel != null)
-            steamGatePanel.SetActive(!canStart || !autoHideWhenSteamReady);
-
-        // スタートボタンの有効/無効
-        if (startButton != null)
-            startButton.interactable = canStart;
+        personaReady = true;
+        Debug.Log("[SteamGatekeeper] Persona ready → close gate");
+        ApplyState();
     }
 
-    // ====== 外部から呼び出す便利メソッド ======
-
-    /// <summary>
-    /// ランキング投稿が可能か？（Steamユーザーのみ）
-    /// </summary>
-    public static bool IsRankEligible()
+    private void ApplyState()
     {
-        return SteamAPI.IsSteamRunning();
+        bool canStart = personaReady || guestMode;
+
+        if (startButton) startButton.interactable = canStart;
+        if (steamGatePanel) steamGatePanel.SetActive(!(canStart && autoHideWhenSteamReady));
+        if (afterLoginHideTarget) afterLoginHideTarget.SetActive(!canStart);
+
+        UnityEngine.Debug.Log($"[Gatekeeper] ApplyState: personaReady={personaReady}, guestMode={guestMode}, canStart={canStart}");
     }
 
-    /// <summary>
-    /// 現在ゲストモードか？（一時セッション）
-    /// </summary>
-    public bool IsGuestMode()
+
+    // SteamGatekeeper.cs の中に追加
+    private IEnumerator AutoCloseWhenAlreadyLoggedIn()
     {
-        return guestMode;
+        // SteamInit 初期化完了まで待機
+        while (!SteamInit.IsReady) yield return null;
+
+        // 最大 3 秒ほど様子を見る（0.25s × 12）
+        for (int i = 0; i < 12 && !personaReady; i++)
+        {
+            // クライアント起動 & ログイン済みか
+            if (SteamAPI.IsSteamRunning() && SteamUser.BLoggedOn())
+            {
+                string persona = SteamFriends.GetPersonaName();
+                if (!string.IsNullOrEmpty(persona) && persona != "[unknown]")
+                {
+                    UnityEngine.Debug.Log($"[Gatekeeper] auto-close: persona={persona}");
+                    personaReady = true;
+                    ApplyState(); // ★ここで確実にパネルを閉じる
+                    yield break;
+                }
+                else
+                {
+                    // まだ空なら情報要求を出して少し待つ
+                    SteamFriends.RequestUserInformation(SteamUser.GetSteamID(), true);
+                }
+            }
+            yield return new WaitForSeconds(0.25f);
+        }
+        UnityEngine.Debug.Log("[Gatekeeper] auto-close: not ready yet");
     }
+
 }
