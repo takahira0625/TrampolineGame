@@ -240,6 +240,9 @@ MonoBehaviour:
   currentStageConfig: {fileID: 11400000, guid: 8085a588f81c7da4b94629171ce49c6a, type: 2}
   keyPartImages:
   - {fileID: 9043208598573926787}
+  completeEffectPrefab: {fileID: 0}
+  effectOffset: {x: 0, y: 0, z: 0}
+  autoDestroyEffect: 1
   keyCompletionEffect: {fileID: 6497909848764484480}
 --- !u!1001 &3515429719532780693
 PrefabInstance:
