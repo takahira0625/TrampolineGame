@@ -14,6 +14,8 @@ public class WarpPair : BaseBlock
     [SerializeField] private float disableDuration = 0.5f; // ワープ元・先を一時無効化
     [SerializeField] private float offsetY = 1.0f;         // プレイヤーを少し上に出す
 
+    [SerializeField] private float WaitTime = 0.5f;
+
     [SerializeField] private GameObject teleportEffectPrefab;
 
     private bool isDisabled = false;
@@ -73,7 +75,7 @@ public class WarpPair : BaseBlock
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(WaitTime);
 
         isDisabled = false;
         destination.isDisabled = false;
