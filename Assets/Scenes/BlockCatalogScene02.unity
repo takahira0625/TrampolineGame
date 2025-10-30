@@ -1594,6 +1594,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedReqBlockButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7084895750403297591, guid: b8e0d11c32479564587c7bc56b1523fd, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d919bb2a42c3a34479acaec402b52659, type: 3}
     - target: {fileID: 7649707903937684717, guid: b8e0d11c32479564587c7bc56b1523fd, type: 3}
       propertyPath: fade
       value: 
