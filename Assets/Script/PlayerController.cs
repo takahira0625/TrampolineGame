@@ -72,15 +72,20 @@ public class PlayerController : MonoBehaviour
             afterImagePlayer.SetColorIfneeded(normalAfterImageColor);
         }
     }
-
     void Update()
     {
         // 画面外判定
         if (!sr.isVisible)
         {
-            outTimer += Time.deltaTime;
+            if (GameManager.instance.hasStarted)
+            {
+                outTimer += Time.deltaTime;
+            }
+            
+            Debug.Log("画面外タイマー: " + outTimer.ToString("F2") + "秒");
             if (outTimer >= outTimeToLose)
             {
+                Debug.Log("画面外に出ました");
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 GameManager.instance.UnregisterPlayer(this);
