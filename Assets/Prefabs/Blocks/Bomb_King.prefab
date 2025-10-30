@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7066897570707931640}
   - component: {fileID: 3294510214245016835}
   - component: {fileID: -4722819471972507649}
-  - component: {fileID: 2572458874759298119}
+  - component: {fileID: 2062530074304682288}
   m_Layer: 0
-  m_Name: WarpPair
-  m_TagString: WarpBlock
+  m_Name: Bomb_King
+  m_TagString: BombBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bf9c818c516f80a489d787d85d82f821, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -115,7 +115,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2572458874759298119
+--- !u!114 &2062530074304682288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3797651389120414331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db0b4a69fb044a34197d818ae2eae142, type: 3}
+  m_Script: {fileID: 11500000, guid: df4bada4907b14c4d9f3cd336e327d27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parameter: {fileID: 0}
@@ -148,7 +148,18 @@ MonoBehaviour:
   playSoundOnHit: 1
   customHitSound: {fileID: 0}
   playEffectOnHit: 1
-  pairedWarp: {fileID: 0}
-  disableDuration: 0.5
-  offsetY: 1
-  teleportEffectPrefab: {fileID: 2715471840370901047, guid: df9374346b76e444dbbb2b019de4da25, type: 3}
+  cooldown: {fileID: 0}
+  explosionEffectPrefab: {fileID: 8777462857694897634, guid: a0d7c627e20aac04fbe538593ac877af, type: 3}
+  explosionEffectPrefabShake: {fileID: 1141330259687333427, guid: 6718dc24203da53468af9ada8fef7d6d, type: 3}
+  explosionRadius: 5
+  explosionSound: {fileID: 0}
+  customSprite: {fileID: 21300000, guid: bf9c818c516f80a489d787d85d82f821, type: 3}
+  destroyableTags:
+  - NormalBlock
+  - SpeedHalfBlock
+  - DoubleBlock
+  - SpeedDoubleBlock
+  - SpeedReqBlock
+  - KeyBlock
+  - BlackBlock
+  - WarpBlock
