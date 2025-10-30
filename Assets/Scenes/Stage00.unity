@@ -1105,6 +1105,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 1121913969}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8f83bb954ddb42848b99870bf90b2890, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1608,6 +1612,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 1470572593}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 315c2f7278e7408478df3ce34068ab19, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -9951,6 +9959,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 2093132826}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8f83bb954ddb42848b99870bf90b2890, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -14251,6 +14263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedReqBlock
       objectReference: {fileID: 0}
+    - target: {fileID: 624581176439169900, guid: d5a4b8594549a6641afd73e5f37470c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7420434379190034484, guid: d5a4b8594549a6641afd73e5f37470c7, type: 3}
       propertyPath: m_LocalScale.x
       value: 30
@@ -14301,6 +14317,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7883599501884535608, guid: d5a4b8594549a6641afd73e5f37470c7, type: 3}
       propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 58f8cb37db983c441888a633a5c9a42b, type: 3}
+    - target: {fileID: 9174986521013986998, guid: d5a4b8594549a6641afd73e5f37470c7, type: 3}
+      propertyPath: customSprite
       value: 
       objectReference: {fileID: 21300000, guid: 58f8cb37db983c441888a633a5c9a42b, type: 3}
     - target: {fileID: 9174986521013986998, guid: d5a4b8594549a6641afd73e5f37470c7, type: 3}
@@ -15278,6 +15298,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 2113108738}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -17356,6 +17380,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 477341801}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 315c2f7278e7408478df3ce34068ab19, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -18245,6 +18273,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 326842920}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
