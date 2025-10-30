@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 30f;
     [SerializeField, Tooltip("スロー時の速度の大きさ")]
     private float slowSpeed = 0.1f;
+
     public Vector2 savedVelocity = Vector2.zero;
     //Bar関連
     [SerializeField] private RightClickTriggerOn rightClick;
@@ -71,15 +72,20 @@ public class PlayerController : MonoBehaviour
             afterImagePlayer.SetColorIfneeded(normalAfterImageColor);
         }
     }
-
     void Update()
     {
         // 画面外判定
         if (!sr.isVisible)
         {
-            outTimer += Time.deltaTime;
+            if (GameManager.instance.hasStarted)
+            {
+                outTimer += Time.deltaTime;
+            }
+            
+            Debug.Log("画面外タイマー: " + outTimer.ToString("F2") + "秒");
             if (outTimer >= outTimeToLose)
             {
+                Debug.Log("画面外に出ました");
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 GameManager.instance.UnregisterPlayer(this);
@@ -126,12 +132,12 @@ public class PlayerController : MonoBehaviour
             currentAuraEffect.transform.localPosition = Vector3.zero;
 
             // SortingLayerを設定
-            var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
+            /*var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
             foreach (var r in renderers)
             {
                 r.sortingLayerName = "Player";
                 r.sortingOrder = 10;
-            }
+            }/*/
 
             // 初期状態は非表示
             currentAuraEffect.SetActive(false);

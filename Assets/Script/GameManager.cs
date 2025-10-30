@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     [Header("Timer")]
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
-    private bool hasStarted = false;
+    public bool hasStarted = false;
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
@@ -240,8 +240,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SaveCurrentStageName();
+
         if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
-        Debug.Log("Game Over!");
+
         SceneManager.LoadScene("GameOverScene");
     }
 

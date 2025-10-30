@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 5383152512889467349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.67, y: 2.63, z: 0}
+  m_LocalPosition: {x: 4.67, y: -3.59, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -177,8 +177,9 @@ MonoBehaviour:
   reboundCoefficient: 0.7
   reboundExitSpeed: 25
   pushSpeed: 35
-  electroHitPrefab: {fileID: 2965222256817593503, guid: 27da1b12b64b93f4fab4c03fb7622aeb, type: 3}
+  electroHitPrefab: {fileID: 7217076268632073493, guid: af9e11cf9735fd241ad7091f61eaf7f5, type: 3}
   hitStopDuration: 0.5
+  pushStartSE: {fileID: 8300000, guid: a8ee8f0a31e106245ad45a48a4ec75a5, type: 3}
 --- !u!50 &1465036473749397005
 Rigidbody2D:
   serializedVersion: 4
@@ -255,6 +256,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7254595007854023088}
     m_Modifications:
+    - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
+      propertyPath: activateLoopSE
+      value: 
+      objectReference: {fileID: 8300000, guid: c794a18e05491374ba22f4b1f226d1c4, type: 3}
     - target: {fileID: 3650638188812647480, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4
