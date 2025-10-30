@@ -709,6 +709,7 @@ MonoBehaviour:
   nameText: {fileID: 352885604}
   format: 'Welcome,{0} '
   notReadyText: "Steam\u672A\u30ED\u30B0\u30A4\u30F3"
+  GateKeeper: {fileID: 0}
 --- !u!114 &352885604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1809,7 +1810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: startFade
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22424616, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: m_Pivot.x
