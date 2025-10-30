@@ -520,7 +520,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 184388345}
         m_TargetAssemblyTypeName: PageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickStageSelect1_6
+        m_MethodName: OnClickStageSelect7_12
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -709,6 +709,7 @@ MonoBehaviour:
   nameText: {fileID: 352885604}
   format: 'Welcome,{0} '
   notReadyText: "Steam\u672A\u30ED\u30B0\u30A4\u30F3"
+  GateKeeper: {fileID: 0}
 --- !u!114 &352885604
 MonoBehaviour:
   m_ObjectHideFlags: 0

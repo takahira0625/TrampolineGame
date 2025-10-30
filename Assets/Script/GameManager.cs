@@ -240,8 +240,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SaveCurrentStageName();
+
         if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
-        Debug.Log("Game Over!");
+
         SceneManager.LoadScene("GameOverScene");
     }
 
