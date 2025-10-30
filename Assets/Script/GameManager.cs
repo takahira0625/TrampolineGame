@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     [Header("Timer")]
     [SerializeField] private bool autoStartTimer = false;
     private bool isTiming = false;
-    private bool hasStarted = false;
+    public bool hasStarted = false;
     private float elapsedTime = 0f;
     public float FinalTime { get; private set; } = -1f;
 
