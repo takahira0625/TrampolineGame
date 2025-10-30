@@ -16,14 +16,27 @@ public class WarpPair : BaseBlock
 
     [SerializeField] private float WaitTime = 0.5f;
 
+    [Header("エフェクト設定")]
     [SerializeField] private GameObject teleportEffectPrefab;
+
+    [Header("スプライト設定")]
+    [Tooltip("インスペクターで個別に見た目を指定できます。指定しなければ parameter.WarpPairSprite を使用します。")]
+    [SerializeField] private Sprite customSprite; //個別スプライト設定
 
     private bool isDisabled = false;
 
     protected override void Awake()
     {
         base.Awake();
-        SetSprite(parameter.WarpPairSprite); // スプライト差し替え可能なら
+        // 個別スプライトが設定されていればそれを優先
+        if (customSprite != null)
+        {
+            SetSprite(customSprite);
+        }
+        else
+        {
+            SetSprite(parameter.WarpPairSprite);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -45,18 +58,15 @@ public class WarpPair : BaseBlock
         destination.isDisabled = true;
 
         // --- ① スローモーション開始 ---
-        Time.timeScale = 0.3f; // 全体をゆっくりに（例：0.3倍）
+        Time.timeScale = 0.7f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
         // --- ② ワープ前エフェクト ---
         if (teleportEffectPrefab != null)
         {
             GameObject effect = Instantiate(teleportEffectPrefab, player.position, Quaternion.identity);
-            Destroy(effect, 1.0f); // ← 1秒後に自動削除
+            Destroy(effect, 1.0f);
         }
-
-        // 少し待つ（エフェクト発生時間分）
-        yield return new WaitForSecondsRealtime(0.1f);
 
         // --- ③ ワープ実行 ---
         player.position = destination.transform.position + Vector3.up * offsetY;
@@ -68,7 +78,7 @@ public class WarpPair : BaseBlock
             Destroy(effect, 1.0f);
         }
 
-        // 少し待つ
+        // 少し待つ（リアルタイムで）
         yield return new WaitForSecondsRealtime(0.1f);
 
         // --- ⑤ スローモーション解除 ---
@@ -81,9 +91,7 @@ public class WarpPair : BaseBlock
         destination.isDisabled = false;
     }
 
-
 #if UNITY_EDITOR
-    // シーン上でペア関係を見やすくするデバッグ描画
     private void OnDrawGizmos()
     {
         if (pairedWarp != null)

@@ -1,29 +1,23 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 public class ExplosionEffect : MonoBehaviour
 {
     [SerializeField] private GameObject vfxPrefab;
     [SerializeField] private float vfxLifetime = 2f;
-    [SerializeField] private float chainDelay = 0.1f; // 連鎖爆発のディレイ
-    [SerializeField]
-    private List<string> destroyableTags = new List<string>
-    {
-        "Block",
-        "NormalBlock",
-        "SpeedHalfBlock",
-        "DoubleBlock",
-        "SpeedDoubleBlock"
-    };
+    [SerializeField] private float chainDelay = 0.1f;
 
     private float radius;
-    private BombBlock originBomb; // 元の爆弾
+    private BombBlock originBomb;
+    private List<string> destroyableTags; // ← BombBlockから受け取る
 
-    public void Initialize(float radius, BombBlock originBomb = null)
+    public void Initialize(float radius, BombBlock originBomb = null, List<string> destroyableTags = null)
     {
         this.radius = radius;
         this.originBomb = originBomb;
+        this.destroyableTags = destroyableTags ?? new List<string>();
+
         PlayEffect();
         DestroyBlocks();
         TriggerChainExplosions();
@@ -56,10 +50,8 @@ public class ExplosionEffect : MonoBehaviour
         foreach (var hit in hits)
         {
             BombBlock bomb = hit.GetComponent<BombBlock>();
-            // 自分以外のBombBlockを検出
             if (bomb != null && bomb != originBomb)
             {
-                // chainDelayの時間後に爆発を起動
                 StartCoroutine(DelayedExplosion(bomb));
             }
         }
@@ -68,7 +60,7 @@ public class ExplosionEffect : MonoBehaviour
     private IEnumerator DelayedExplosion(BombBlock bomb)
     {
         yield return new WaitForSeconds(chainDelay);
-        if (bomb != null) // 既に破壊されていないかチェック
+        if (bomb != null)
         {
             bomb.TriggerExplosion();
         }
