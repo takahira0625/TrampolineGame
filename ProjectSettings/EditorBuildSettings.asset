@@ -134,4 +134,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WarpBlockScene.unity
     guid: 71ccf69cfd69fce47831e1964fa3a33e
+  - enabled: 1
+    path: Assets/Scenes/UserGuideScene_JP.unity
+    guid: a76ca4e6250051e409d2009fa97c0776
   m_configObjects: {}
