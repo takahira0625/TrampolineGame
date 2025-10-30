@@ -170,6 +170,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // ▼▼▼ ここから追加 ▼▼▼
+
+    /// <summary>
+    /// ブロック側から呼び出され、即座に速度を変更する
+    /// （GimmickBlock側でスロー中でないことを確認してから呼ばれる）
+    /// </summary>
+    /// <param name="multiplier">速度の倍率 (例: 2.0f)</param>
+    public void RequestSpeedChange(float multiplier)
+    {
+        if (rb != null)
+        {
+            // 反射直後の速度 (rb.velocity) に倍率をかける
+            rb.velocity *= multiplier;
+        }
+    }
+
+    // ▲▲▲ ここまで追加 ▲▲▲
+
     private void UpdateAfterImageColor()
     {
         if (afterImagePlayer == null || rb == null) return;
