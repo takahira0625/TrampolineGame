@@ -827,6 +827,7 @@ GameObject:
   - component: {fileID: 965945546}
   - component: {fileID: 965945545}
   - component: {fileID: 965945549}
+  - component: {fileID: 965945550}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -937,6 +938,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
   fade: {fileID: 373591342}
+--- !u!114 &965945550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965945544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6995f8643d3456b479ca6eec64c27716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JP1: {fileID: 1537536864}
+  JP2: {fileID: 2123756603}
+  JP3: {fileID: 1269728102}
 --- !u!1 &986852381
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,7 +1349,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "      \u3000\u3092\u30AF\u30EA\u30C3\u30AF\u3000\u3000\u3000\u30B2\u30FC\u30E0\u30B9\u30BF\u30FC\u30C8"
+  m_Text: "       \u3092\u3072\u3060\u308A\u30AF\u30EA\u30C3\u30AF \u30B2\u30FC\u30E0\u30B9\u30BF\u30FC\u30C8"
 --- !u!222 &1537536865
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -815,6 +815,7 @@ GameObject:
   - component: {fileID: 965945546}
   - component: {fileID: 965945545}
   - component: {fileID: 965945549}
+  - component: {fileID: 965945550}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -925,6 +926,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
   fade: {fileID: 993932206}
+--- !u!114 &965945550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965945544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04152e6f7e270d04e826406372dda604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ENG1: {fileID: 1537536864}
+  ENG2: {fileID: 2123756603}
+  ENG3: {fileID: 1269728102}
 --- !u!1 &986852381
 GameObject:
   m_ObjectHideFlags: 0
