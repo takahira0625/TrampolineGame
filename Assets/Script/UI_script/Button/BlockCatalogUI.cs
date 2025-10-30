@@ -99,4 +99,10 @@ public class BlockCatalogUI : MonoBehaviour
             SceneManager.LoadScene("BlockCatalogScene02");
         }
     }
+
+    public void OnClickStage00()
+    {
+        //ŠJ”­—p
+        SceneManager.LoadScene("Stage00");
+    }
 }
