@@ -368,6 +368,7 @@ MonoBehaviour:
   goalTextObject: {fileID: 633067703}
   playerController: {fileID: 0}
   autoStartTimer: 0
+  hasStarted: 0
   overrideStageNumber: 0
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}
@@ -978,15 +979,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Goal !
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a3c4945295d462141bde6b39bbb5f18a, type: 2}
+  m_sharedMaterial: {fileID: 3401156510958467763, guid: a3c4945295d462141bde6b39bbb5f18a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278255615
+  m_fontColor: {r: 1, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

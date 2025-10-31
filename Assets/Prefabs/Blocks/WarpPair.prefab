@@ -151,4 +151,6 @@ MonoBehaviour:
   pairedWarp: {fileID: 0}
   disableDuration: 0.5
   offsetY: 1
-  teleportEffectPrefab: {fileID: 0}
+  WaitTime: 0.5
+  teleportEffectPrefab: {fileID: 2715471840370901047, guid: df9374346b76e444dbbb2b019de4da25, type: 3}
+  customSprite: {fileID: 0}

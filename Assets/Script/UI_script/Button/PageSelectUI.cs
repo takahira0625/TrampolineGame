@@ -37,8 +37,14 @@ public class PageSelectUI : MonoBehaviour
     {
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        PlayerPrefs.SetString("FromScene", GetCurrentSceneName());
         SceneManager.LoadScene("UserGuideScene");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
+    public void OnClickUserGuideScene_JP()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("UserGuideScene_JP");
         SEManager.Instance.PlayOneShot(clickSE);
     }
     public void OnClickStageSelect()

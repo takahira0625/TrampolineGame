@@ -20,7 +20,7 @@ public class SEManager : MonoBehaviour
 
     private List<AudioSource> audioSources = new List<AudioSource>();
     private float volume = 1f;
-    private const int MAX_AUDIO_SOURCES = 10; // “¯Ä¶‰Â”\‚ÈŒø‰Ê‰¹‚Ì”
+    private const int MAX_AUDIO_SOURCES = 3; // “¯Ä¶‰Â”\‚ÈŒø‰Ê‰¹‚Ì”
 
     void Awake()
     {
