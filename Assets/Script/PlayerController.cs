@@ -132,12 +132,12 @@ public class PlayerController : MonoBehaviour
             currentAuraEffect.transform.localPosition = Vector3.zero;
 
             // SortingLayerを設定
-            /*var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
+            var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
             foreach (var r in renderers)
             {
                 r.sortingLayerName = "Player";
-                r.sortingOrder = 10;
-            }/*/
+                r.sortingOrder = 3;
+            }
 
             // 初期状態は非表示
             currentAuraEffect.SetActive(false);
