@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SpeedReq Block
+  m_text: OverSpeed Block
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 25bdb265495af4446aa7e8acae0b2b4c, type: 2}
   m_sharedMaterial: {fileID: 7179506950138338891, guid: 25bdb265495af4446aa7e8acae0b2b4c, type: 2}
