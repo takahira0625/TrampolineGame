@@ -132,12 +132,12 @@ public class PlayerController : MonoBehaviour
             currentAuraEffect.transform.localPosition = Vector3.zero;
 
             // SortingLayerを設定
-            /*var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
-            foreach (var r in renderers)
-            {
-                r.sortingLayerName = "Player";
-                r.sortingOrder = 10;
-            }/*/
+            //var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
+            //foreach (var r in renderers)
+            //{
+            //    r.sortingLayerName = "Player";
+            //    r.sortingOrder = 3;
+            //}
 
             // 初期状態は非表示
             currentAuraEffect.SetActive(false);
@@ -169,6 +169,24 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    // ▼▼▼ ここから追加 ▼▼▼
+
+    /// <summary>
+    /// ブロック側から呼び出され、即座に速度を変更する
+    /// （GimmickBlock側でスロー中でないことを確認してから呼ばれる）
+    /// </summary>
+    /// <param name="multiplier">速度の倍率 (例: 2.0f)</param>
+    public void RequestSpeedChange(float multiplier)
+    {
+        if (rb != null)
+        {
+            // 反射直後の速度 (rb.velocity) に倍率をかける
+            rb.velocity *= multiplier;
+        }
+    }
+
+    // ▲▲▲ ここまで追加 ▲▲▲
 
     private void UpdateAfterImageColor()
     {

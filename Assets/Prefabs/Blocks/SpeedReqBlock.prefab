@@ -150,6 +150,7 @@ MonoBehaviour:
   customHitSound: {fileID: 8300000, guid: f4340d99d7f2a8144a6c0d7f8ca67162, type: 3}
   playEffectOnHit: 1
   requiredSpeed: 50
+  customSprite: {fileID: 21300000, guid: d919bb2a42c3a34479acaec402b52659, type: 3}
   customHitBudSound: {fileID: 8300000, guid: f4340d99d7f2a8144a6c0d7f8ca67162, type: 3}
   breakSound: {fileID: 8300000, guid: 7efa8004e038ad541b9bcaace5c18f0b, type: 3}
 --- !u!1 &5616716021223577167

@@ -25,7 +25,13 @@ public class SpeedDoubleBlock : SpeedChangeBlock
     {
         if (eachMaterial != null)
         {
-            eachMaterial.bounciness = parameter.UpBounce;
+            // ▼▼▼ 修正点 1 ▼▼▼
+            // bounciness を 2.0 (UpBounce) にするのをやめ、
+            // 1.0 (Bounce) にして反射角を正常化する
+            // eachMaterial.bounciness = parameter.UpBounce; // ← 削除
+            eachMaterial.bounciness = parameter.Bounce;   // ← 変更
+                                                          // ▲▲▲ 修正点 1 終了 ▲▲▲
+
             col.sharedMaterial = eachMaterial;
         }
 
@@ -46,8 +52,8 @@ public class SpeedDoubleBlock : SpeedChangeBlock
     // GimmickBlock または SpeedChangeBlock の OnCooldownStart を上書き
     protected override void OnCooldownStart()
     {
-        //    (物理特性(bounciness)を変更する)
-        base.OnCooldownStart();
+        // (物理特性(bounciness)を変更する)
+        base.OnCooldownStart(); // ここで bounciness が 1.0 に戻される
 
         if (health == 2) // HPが3から2になった
         {
@@ -58,4 +64,23 @@ public class SpeedDoubleBlock : SpeedChangeBlock
             SetSprite(coolTimeSpriteHP1);
         }
     }
+
+    // ▼▼▼ 修正点 2 (メソッド追加) ▼▼▼
+    /// <summary>
+    /// GimmickBlock から呼ばれる、プレイヤー（ボール）接触時の処理
+    /// （クールタイム中でなく、スロー中でもない時だけ呼ばれる）
+    /// </summary>
+    protected override void OnPlayerTouch(GameObject player)
+    {
+        // "Player" タグのオブジェクト（ボール）から PlayerController スクリプトを取得
+        PlayerController pc = player.GetComponent<PlayerController>();
+
+        if (pc != null)
+        {
+            // PlayerController の速度変更メソッドを呼ぶ
+            // UpBounce (2.0f) を「速度倍率」として渡す
+            pc.RequestSpeedChange(parameter.UpBounce);
+        }
+    }
+    // ▲▲▲ 修正点 2 終了 ▲▲▲
 }

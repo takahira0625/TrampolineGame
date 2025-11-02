@@ -150,6 +150,7 @@ public class Goal : BaseBlock
                         contact.point,
                         Quaternion.identity
                     );
+
                     Destroy(effectHit, 1.5f);
                 }
 

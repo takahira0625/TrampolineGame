@@ -4,7 +4,7 @@ using UnityEngine;
 //1.クールタイム中は無敵 2.クールタイム中は色を暗くする 3.クールタイム中はバウンスを１にする
 public abstract class GimmickBlock : BaseBlock
 {
-    //コンポーネントの取得
+    // ... （Awake, HandleCooldownChanged までは変更なし） ...
     [SerializeField] protected CoolTimeScript cooldown;
     protected Collider2D col;
     protected Renderer rend;
@@ -41,32 +41,58 @@ public abstract class GimmickBlock : BaseBlock
         }
     }
 
+    // OnPlayerTouch は子クラスで実装するので中身は空のまま
     protected virtual void OnPlayerTouch(GameObject player)
     {
-        // 共通の「プレイヤー接触時」処理（クールタイムなど）
-        //if (cooldown != null && !cooldown.IsOnCooldown)
-        //{
-        //    cooldown.StartCooldown(parameter.cooldownTime);
-        //}
     }
 
+    // ▼▼▼ 修正点 1 ▼▼▼
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        base.OnCollisionEnter2D(collision);
-
         if (collision.gameObject.CompareTag("Player"))
         {
-            OnPlayerTouch(collision.gameObject);
-        }
-    }
+            // クールタイム中でないか確認
+            if (cooldown != null && !cooldown.IsOnCooldown)
+            {
+                // プレイヤーがスロー中でないか確認
+                PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
 
+                // pc が存在し、かつスロー中でない (!pc.isActive) 場合のみ OnPlayerTouch を呼ぶ
+                if (pc != null && !pc.isActive)
+                {
+                    OnPlayerTouch(collision.gameObject);
+                }
+            }
+        }
+
+        // base の処理（TakeDamage）は OnPlayerTouch のチェック後に行う
+        base.OnCollisionEnter2D(collision);
+    }
+    // ▲▲▲ 修正点 1 終了 ▲▲▲
+
+
+    // ▼▼▼ 修正点 2 ▼▼▼
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            OnPlayerTouch(other.gameObject);
+            // クールタイム中でないか確認
+            if (cooldown != null && !cooldown.IsOnCooldown)
+            {
+                // プレイヤーがスロー中でないか確認
+                PlayerController pc = other.GetComponent<PlayerController>();
+
+                // pc が存在し、かつスロー中でない (!pc.isActive) 場合のみ OnPlayerTouch を呼ぶ
+                if (pc != null && !pc.isActive)
+                {
+                    OnPlayerTouch(other.gameObject);
+                }
+            }
         }
     }
+    // ▲▲▲ 修正点 2 終了 ▲▲▲
+
+    // ... （TakeDamage, UpdateBlockAppearance などの残りのメソッドは変更なし） ...
     protected override void TakeDamage(int damage)
     {
         if (cooldown != null && cooldown.IsOnCooldown) return; // クールタイム中は無敵
