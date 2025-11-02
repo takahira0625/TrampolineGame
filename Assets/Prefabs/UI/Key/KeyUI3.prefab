@@ -319,6 +319,9 @@ MonoBehaviour:
   - {fileID: 7073398512366163385}
   - {fileID: 254519481881245304}
   - {fileID: 8138040875957250976}
+  completeEffectPrefab: {fileID: 0}
+  effectOffset: {x: 0, y: 0, z: 0}
+  autoDestroyEffect: 1
   keyCompletionEffect: {fileID: 4665206394371712826}
 --- !u!1 &8103425279778135771
 GameObject:

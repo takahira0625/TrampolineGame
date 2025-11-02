@@ -167,6 +167,9 @@ MonoBehaviour:
   keyPartImages:
   - {fileID: 128737092769461456}
   - {fileID: 8766356513405179127}
+  completeEffectPrefab: {fileID: 0}
+  effectOffset: {x: 0, y: 0, z: 0}
+  autoDestroyEffect: 1
   keyCompletionEffect: {fileID: 1844044947415191110}
 --- !u!1 &4461494977544627118
 GameObject:

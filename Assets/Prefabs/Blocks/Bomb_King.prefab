@@ -155,10 +155,9 @@ MonoBehaviour:
   explosionSound: {fileID: 0}
   customSprite: {fileID: 21300000, guid: f175d3e218666864796032898d0edcf6, type: 3}
   destroyableTags:
-  - BlackBlock
+  - Block
   - NormalBlock
   - SpeedHalfBlock
   - DoubleBlock
   - SpeedDoubleBlock
-  - WarpBlock
-  - WarpBlock
+  - BlackBlock
