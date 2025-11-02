@@ -12,6 +12,18 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    private List<string> noGameOverScenes = new List<string>
+    {
+        "NormalBlockScene",
+        "KeyGoalBlockScene",
+        "SpeedUpBlockScene",
+        "SpeedDownBlockScene",
+        "SpeedReqBlockScene",
+        "BombBlockScene",
+        "DoubleBlockScene",
+        "WarpBlockScene",
+        "KingBombBlockScene"
+    };
     // 鍵・コイン関連
     private int totalKeys = 0;
     public int TotalKeys => totalKeys;
@@ -139,7 +151,18 @@ public class GameManager : MonoBehaviour
         if (activePlayers.Count == 0)
         {
             Debug.Log("全プレイヤーが死亡しました。GameOver。");
-            GameOver();
+
+            string currentSceneName = SceneManager.GetActiveScene().name;
+
+            if (noGameOverScenes.Contains(currentSceneName))
+            {
+                Debug.Log($"シーン '{currentSceneName}' はゲームオーバー無効リストに含まれているため、待機します。");
+            }
+            else
+            {
+                Debug.Log($"シーン '{currentSceneName}' は通常のゲームシーンのため、GameOver処理を実行します。");
+                GameOver();
+            }
         }
     }
 
