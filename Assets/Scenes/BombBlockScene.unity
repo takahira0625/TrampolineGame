@@ -303,6 +303,7 @@ MonoBehaviour:
   goalTextObject: {fileID: 633067703}
   playerController: {fileID: 0}
   autoStartTimer: 0
+  hasStarted: 0
   overrideStageNumber: 0
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}

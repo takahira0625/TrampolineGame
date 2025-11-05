@@ -190,7 +190,7 @@ public class RightClickTriggerOn : MonoBehaviour
                 PlaySE(SmashSE, "CollisionSE");
 
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
-                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
+                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.3f, pushSpeed + 1);
                 playerCtrl.isActive = false;
 
                 // エフェクト生成
