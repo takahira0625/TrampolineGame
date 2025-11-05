@@ -656,18 +656,42 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ToggleSettings
       objectReference: {fileID: 0}
+    - target: {fileID: 1385399744984989850, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 440d70585d96e8b47a3dd2656975ee04, type: 3}
+    - target: {fileID: 1560543261157093563, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0bc9511d4ee7415469785a24d83c9f11, type: 3}
     - target: {fileID: 2981924496971109607, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: m_Name
       value: StageSelect7_12
       objectReference: {fileID: 0}
+    - target: {fileID: 3355936966355214336, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 446b0e4eb8ba41242a317ebf165736f6, type: 3}
     - target: {fileID: 3824956325357197945, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4970388292817914760, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a9ead89dd42be274a95491d23a9bc669, type: 3}
     - target: {fileID: 5046993018845135165, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: settingsPanel
       value: 
       objectReference: {fileID: 2016648183}
+    - target: {fileID: 5721791782217165692, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 84cc8d68082a9fc46be9896cc1f41af0, type: 3}
+    - target: {fileID: 6148949447452671339, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d698416142e47e747a9dc9764a94fce8, type: 3}
     - target: {fileID: 6409592376257552140, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: fade
       value: 

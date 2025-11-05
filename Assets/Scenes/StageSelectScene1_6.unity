@@ -1028,11 +1028,11 @@ PrefabInstance:
     - target: {fileID: 1385399744984989850, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: de202a0264ff2ba42a1adbb728f65ca8, type: 3}
+      objectReference: {fileID: 21300000, guid: 01d4f71c72fe96e4ba5b3d5f5becbedd, type: 3}
     - target: {fileID: 1560543261157093563, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 7c2c6d3ee6c2a5b43970c4bdcd3e17a7, type: 3}
+      objectReference: {fileID: 21300000, guid: 93b0677d0984ce142bd29e00210e2279, type: 3}
     - target: {fileID: 1672301563865425525, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: settingsPanel
       value: 
@@ -1044,7 +1044,7 @@ PrefabInstance:
     - target: {fileID: 3355936966355214336, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 5e092b9eb8e9f2045a847578d7895062, type: 3}
+      objectReference: {fileID: 21300000, guid: 2355b8f2b5b20924fb5e4c8fc8d15adb, type: 3}
     - target: {fileID: 4274063878748839722, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1052,7 +1052,7 @@ PrefabInstance:
     - target: {fileID: 4970388292817914760, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 26a2f563caacc944e8d62dd5a3babe01, type: 3}
+      objectReference: {fileID: 21300000, guid: 4fa9d9da77e42b14f92f0a7fd659e5cd, type: 3}
     - target: {fileID: 5704373449546327422, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: fade
       value: 
@@ -1064,11 +1064,11 @@ PrefabInstance:
     - target: {fileID: 5721791782217165692, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 70de471419802034f8cf241a6be7571c, type: 3}
+      objectReference: {fileID: 21300000, guid: 855112c3dfc0833439f66880660d8a8c, type: 3}
     - target: {fileID: 6148949447452671339, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 8cef06d2d2c11b642bf752719bbeeb0a, type: 3}
+      objectReference: {fileID: 21300000, guid: 730d020462c06054b80fcf07a11383de, type: 3}
     - target: {fileID: 6845164995947168879, guid: 973ffcca30c90be47aae32fcd49d76e7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
