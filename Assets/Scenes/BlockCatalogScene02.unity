@@ -893,9 +893,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4369366746432395991, guid: 5a56200993f2c1a4583569966beb407c, type: 3}
+      propertyPath: m_Name
+      value: Catalog03Button (Legacy)
+      objectReference: {fileID: 0}
     - target: {fileID: 7069261190735922336, guid: 5a56200993f2c1a4583569966beb407c, type: 3}
       propertyPath: m_Name
-      value: Arrow01
+      value: Arrow03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
