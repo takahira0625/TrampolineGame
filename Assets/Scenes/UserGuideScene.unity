@@ -309,6 +309,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UserGuideSceneButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2239412995518672533, guid: e44345d9bb6fa134ea0339da2dffb4d2, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 993932206}
     - target: {fileID: 3847818284217642343, guid: e44345d9bb6fa134ea0339da2dffb4d2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

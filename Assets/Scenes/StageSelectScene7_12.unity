@@ -664,6 +664,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 0bc9511d4ee7415469785a24d83c9f11, type: 3}
+    - target: {fileID: 2206821021148758756, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: fda16790d6ceab047b9c4b8af8a9ff04, type: 3}
+    - target: {fileID: 2318885899246025648, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: fda16790d6ceab047b9c4b8af8a9ff04, type: 3}
     - target: {fileID: 2981924496971109607, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: m_Name
       value: StageSelect7_12
@@ -676,14 +684,30 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4663413052526079474, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: fda16790d6ceab047b9c4b8af8a9ff04, type: 3}
     - target: {fileID: 4970388292817914760, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: a9ead89dd42be274a95491d23a9bc669, type: 3}
     - target: {fileID: 5046993018845135165, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
+    - target: {fileID: 5046993018845135165, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: settingsPanel
       value: 
       objectReference: {fileID: 2016648183}
+    - target: {fileID: 5420190998481737778, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: fda16790d6ceab047b9c4b8af8a9ff04, type: 3}
+    - target: {fileID: 5617930324296166092, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: fda16790d6ceab047b9c4b8af8a9ff04, type: 3}
     - target: {fileID: 5721791782217165692, guid: 1dd833eb277ff3c4684c21575955b88b, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -845,6 +869,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankingButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1335163621}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 2611365576626305405, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

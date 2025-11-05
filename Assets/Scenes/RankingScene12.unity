@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RetryButton (Legacy)
       objectReference: {fileID: 0}
+    - target: {fileID: 1247120763547067303, guid: 4e67ac6b5a4292c4bb01161776f83921, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 250515015}
     - target: {fileID: 7204092836310901373, guid: 4e67ac6b5a4292c4bb01161776f83921, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -333,6 +337,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+--- !u!114 &250515015 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+  m_PrefabInstance: {fileID: 250515014}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d416d1715bbc06d4789612d1211da8d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &271098626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -341,6 +356,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 794521254}
     m_Modifications:
+    - target: {fileID: 2180322776338512541, guid: 67c0401e548c24046a74118102549380, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 250515015}
     - target: {fileID: 7549212433171084250, guid: 67c0401e548c24046a74118102549380, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1307,6 +1326,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StageSelectButton (Legacy)
       objectReference: {fileID: 0}
+    - target: {fileID: 8278835316794405872, guid: c81fe59f843924948b74e1d253ee1957, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 250515015}
     - target: {fileID: 8898009628262851665, guid: c81fe59f843924948b74e1d253ee1957, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

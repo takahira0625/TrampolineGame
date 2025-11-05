@@ -890,6 +890,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reload
       objectReference: {fileID: 0}
+    - target: {fileID: 8038485362854317147, guid: 2cbb6e9f4ec92bb44b2af8efa20a2716, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 462850886}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1199,6 +1203,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BackToBlockCatalog
       objectReference: {fileID: 0}
+    - target: {fileID: 4063693293658567506, guid: e6db0da60f81d8442b214aa7ce366cfb, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 462850886}
     - target: {fileID: 4705177794289888769, guid: e6db0da60f81d8442b214aa7ce366cfb, type: 3}
       propertyPath: m_Name
       value: Back

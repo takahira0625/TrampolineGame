@@ -442,6 +442,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+--- !u!114 &659995804 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+  m_PrefabInstance: {fileID: 659995803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d416d1715bbc06d4789612d1211da8d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1495497273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -454,6 +465,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankingButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 659995804}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 2611365576626305405, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -592,8 +611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466222318ac20cf4c8e888263f8a3d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickSE: {fileID: 0}
-  fade: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
+  fade: {fileID: 659995804}
 --- !u!1001 &2140424934
 PrefabInstance:
   m_ObjectHideFlags: 0
