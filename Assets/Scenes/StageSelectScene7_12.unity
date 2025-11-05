@@ -757,6 +757,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UserGuideSceneButton (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2239412995518672533, guid: e44345d9bb6fa134ea0339da2dffb4d2, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1335163621}
     - target: {fileID: 3847818284217642343, guid: e44345d9bb6fa134ea0339da2dffb4d2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1091,6 +1095,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8562391067153413572, guid: 27e9bc87162f7d54082915720609b105, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
