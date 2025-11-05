@@ -47,6 +47,13 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("UserGuideScene_JP");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+    public void OnClickRankingHubScene()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("RankingHubScene");
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
     public void OnClickStageSelect()
     {
         SEManager.Instance.StopAll();
