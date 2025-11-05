@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredCoins: 1
   goalTextObject: {fileID: 633067703}
-  playerController: {fileID: 0}
+  playerController: {fileID: 263480462}
   autoStartTimer: 0
   hasStarted: 0
   overrideStageNumber: 0
@@ -2126,6 +2126,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bbcaeb70a9368d4f830ab871b6f5eb8, type: 3}
+--- !u!114 &263480462 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4899980963031003792, guid: 6bbcaeb70a9368d4f830ab871b6f5eb8, type: 3}
+  m_PrefabInstance: {fileID: 263480461}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e7aa0fbc925f544980e5f2687e435a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &263535884
 GameObject:
   m_ObjectHideFlags: 0

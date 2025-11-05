@@ -934,7 +934,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredCoins: 1
   goalTextObject: {fileID: 633067703}
-  playerController: {fileID: 0}
+  playerController: {fileID: 370975020}
   autoStartTimer: 0
   hasStarted: 0
   overrideStageNumber: 0
