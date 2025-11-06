@@ -22,12 +22,23 @@ public class GameOverSceneUI : MonoBehaviour
             Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
         }
     }
+
+    private void RestoreBGMVolume()
+    {
+        if (BGMManager.Instance != null)
+        {
+            float currentVolume = BGMManager.Instance.GetVolume();
+            BGMManager.Instance.SetVolume(Mathf.Min(currentVolume * 2f, 1f));
+        }
+    }
+
     public void OnClickLogin()
     {
         FindFadeCanvas();
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
         SEManager.Instance.PlayOneShot(clickSE);
+        RestoreBGMVolume();
         fade.FadeIn(0.5f, () =>
         {
             SceneManager.LoadScene("StageSelectScene1_6");
@@ -40,7 +51,8 @@ public class GameOverSceneUI : MonoBehaviour
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
         SEManager.Instance.PlayOneShot(clickSE);
-        SceneBGMManager.instance.PlayTitleBGM();
+        
+        RestoreBGMVolume();
         // ステージセレクトシーンに遷移
         // PlayerPrefsから最後にプレイしたステージ名を取得
         string lastPlayedStage = "";
@@ -77,6 +89,7 @@ public class GameOverSceneUI : MonoBehaviour
                     {
                         SceneManager.LoadScene("StageSelectScene1_6");
                     });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     Debug.Log($"Last played stage was {lastPlayedStage}. Loading StageSelectScene1_6.");
                     return;
                 }
@@ -86,6 +99,7 @@ public class GameOverSceneUI : MonoBehaviour
                     {
                         SceneManager.LoadScene("StageSelectScene7_12");
                     });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     Debug.Log($"Last played stage was {lastPlayedStage}. Loading StageSelectScene7_12.");
                     return;
                 }
@@ -94,6 +108,7 @@ public class GameOverSceneUI : MonoBehaviour
                     Debug.LogWarning($"Stage number {stageNumber} out of expected range (1-12). Loading default StageSelect.");
                     
                     fade.FadeIn(0.5f, () => { SceneManager.LoadScene("StageSelectScene1_6"); });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     return;
                 }
             }
@@ -108,9 +123,11 @@ public class GameOverSceneUI : MonoBehaviour
         FindFadeCanvas();
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
-        SceneBGMManager.instance.PlayTitleBGM();
+        
         SEManager.Instance.PlayOneShot(clickSE);
+        RestoreBGMVolume();
         fade.FadeIn(0.5f, () => { SceneManager.LoadScene("TitleScene"); });
+        SceneBGMManager.instance.PlayTitleBGM();
     }
 
     public void OnClickRetry()
@@ -121,11 +138,11 @@ public class GameOverSceneUI : MonoBehaviour
 
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
-        SceneBGMManager.instance.PlayStageBGM();
+        RestoreBGMVolume();
         fade.FadeIn(0.5f, () =>
         {
             SceneManager.LoadScene(stageName);
         });
-        
+        SceneBGMManager.instance.PlayStageBGM();
     }
 }
