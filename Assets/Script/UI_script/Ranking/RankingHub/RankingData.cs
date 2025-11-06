@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic; // ← using が必要です
 
 [Serializable]
-public class ScoreEntry // ← 個人ランキングの1回の記録 (タイムとリプレイファイル名)
+public class ScoreEntry // ← 個人ランキングの1回の記録
 {
     public float time;
-    public string replayFileName;
+    public string userName; // ユーザー名 (リプレイファイル名から変更)
 }
 
 [Serializable]

@@ -222,11 +222,11 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
         int score = Mathf.RoundToInt(-FinalTime * 1000); // 負のミリ秒（大きいほど速い）
 
+        long steamId = 0;
+        string playerName = "Unknown";
+
         if (scoreSender != null)
         {
-            // Steam から取得（未初期化ならフォールバック）
-            long steamId = 0;
-            string playerName = "Unknown";
             try
             {
                 // SteamLoginManager はあなたのプロジェクトの既存クラスを想定
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         // ==== 個人ランキングの保存処理 ====
         string stageIdStr = $"Stage-{stage}";
-        bool isNewRecord = AddNewPersonalScore(stageIdStr, FinalTime);
+        bool isNewRecord = AddNewPersonalScore(stageIdStr, FinalTime, playerName);
         if (isNewRecord)
         {
             Debug.Log($"[PersonalRanking] ステージ {stageIdStr} のトップ3にランクインしました！");
@@ -430,7 +430,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 個人ランキングに新しいスコアを追加する (Goal() から呼ばれる)
-    private bool AddNewPersonalScore(string stageId, float clearTime)
+    private bool AddNewPersonalScore(string stageId, float clearTime, string userName)
     {
         if (currentPersonalRankings == null)
         {
@@ -455,7 +455,7 @@ public class GameManager : MonoBehaviour
             ScoreEntry newEntry = new ScoreEntry
             {
                 time = clearTime,
-                replayFileName = null
+                userName = userName
             };
             stageScores.Add(newEntry);
             stageScores.Sort((a, b) => a.time.CompareTo(b.time)); // 昇順ソート
