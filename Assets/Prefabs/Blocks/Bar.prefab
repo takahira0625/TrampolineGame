@@ -269,6 +269,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: c794a18e05491374ba22f4b1f226d1c4, type: 3}
     - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
+      propertyPath: requiredHoldTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
       propertyPath: rightClickTriggerOn
       value: 
       objectReference: {fileID: 8460906794975558630}

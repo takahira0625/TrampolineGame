@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -182,6 +183,29 @@ public class PlayerController : MonoBehaviour
         else
         {
             isInSlowZone = false;
+        }
+    }
+    public void RequestDragReset(float delayTime)
+    {
+        StartCoroutine(ResetDragAfterDelay(delayTime));
+    }
+    private IEnumerator ResetDragAfterDelay(float delayTime)
+    {
+        // Rigidbody2Dがアタッチされている前提
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb == null) yield break;
+
+        float originalDrag = rb.drag; // 元のDrag値を保存
+
+        rb.drag = 0f; // Dragを0に設定
+
+        yield return new WaitForSeconds(delayTime); // 指定時間待機
+
+        // PlayerControllerはボールが破棄されるまで存在する（Destroyされない限り）
+        // そのため、確実に元の値に戻せる
+        if (rb != null)
+        {
+            rb.drag = originalDrag;
         }
     }
 

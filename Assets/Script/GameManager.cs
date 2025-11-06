@@ -199,13 +199,13 @@ public class GameManager : MonoBehaviour
             Rigidbody2D cloneRb = clone.GetComponent<Rigidbody2D>();
             if (cloneRb != null)
             {
+                cloneRb.drag = 0.15f;
+
                 cloneRb.velocity = velocity;
+                Debug.Log($"新しいプレイヤーを生成しました。初速度: {velocity}, Drag: 0.15");
             }
             cloneController.CheckInitialSlowZone();
         }
-
-        Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
-
         return cloneController;
     }
 

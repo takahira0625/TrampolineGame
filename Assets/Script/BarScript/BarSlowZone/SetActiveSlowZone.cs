@@ -17,7 +17,7 @@ public class SetActiveSlowZone : MonoBehaviour
     private RightClickTriggerOn rightClickTriggerOn;
 
     private float clickHoldTime = 0f;
-    [SerializeField] private float requiredHoldTime = 3f;
+    [SerializeField] private float requiredHoldTime = 5f;
     private bool actionTriggered = false;
 
     [SerializeField, Header("SlowZone有効時の効果音")]
@@ -25,7 +25,7 @@ public class SetActiveSlowZone : MonoBehaviour
     [SerializeField, Header("アクション直前の警告音 (2,3秒)")]
     private AudioClip alarmSE;
 
-    private float alarmStartTime = 1.8f;
+    private float alarmStartTime = 3.8f;
 
     private AudioSource audioSource;
 

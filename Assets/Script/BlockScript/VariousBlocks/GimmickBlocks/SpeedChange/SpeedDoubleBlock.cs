@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 public class SpeedDoubleBlock : SpeedChangeBlock
 {
     [Header("HPごとの安定スプライト")]
@@ -71,36 +70,11 @@ public class SpeedDoubleBlock : SpeedChangeBlock
     protected override void OnPlayerTouch(GameObject player)
     {
         PlayerController pc = player.GetComponent<PlayerController>();
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 
         if (pc != null)
         {
-
             pc.RequestSpeedChange(parameter.UpBounce);
-        }
-
-        if (rb != null)
-        {
-            StartCoroutine(ResetDragAfterDelay(rb,1f));
-        }
-    }
-
-    /// <summary>
-    /// ボール（リジッドボディ）のDragを一時的に0にし、指定時間後に元に戻す
-    /// </summary>
-    private IEnumerator ResetDragAfterDelay(Rigidbody2D rb, float delayTime)
-    {
-        if (rb == null) yield break;
-
-        float originalDrag = rb.drag;
-
-        rb.drag = 0f; // Dragを0に設定
-
-        yield return new WaitForSeconds(delayTime); // 指定時間待機
-
-        if (rb != null)
-        {
-            rb.drag = originalDrag;
+            pc.RequestDragReset(1f);
         }
     }
 }
