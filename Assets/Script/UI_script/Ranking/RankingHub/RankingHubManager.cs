@@ -65,13 +65,14 @@ public class RankingHubManager : MonoBehaviour
     [SerializeField] private List<HighlightedButton> stageButtons;
 
     [Header("ランキング表示 (Online)")]
-    [SerializeField] private Text[] onlineRank_Names; // 3つ分の名前
     [SerializeField] private Text[] onlineRank_Times; // 3つ分のタイム
+    [SerializeField] private Text[] onlineRank_Names; // 3つ分の名前
 
     [Header("ランキング表示 (Personal)")]
     [SerializeField] private Text[] personalRank_Times; // 3つ分のタイム
-    [SerializeField] private Button[] personalRank_ReplayButtons; // 3つ分のリプレイボタン
+    [SerializeField] private Text[] personalRank_Names; // 3つ分の名前
 
+    private ScoreSender scoreSender;
 
     // --- 初期化 ---
 
@@ -87,12 +88,31 @@ public class RankingHubManager : MonoBehaviour
 
     void Start()
     {
+        // --- 【追記】 ScoreSender を探す ---
+        scoreSender = FindObjectOfType<ScoreSender>();
+        if (scoreSender == null)
+        {
+            // GameManager が ScoreSenderPrefab から自動生成するはずなので、
+            // このシーンに ScoreSender がいなくてもエラーとは限らない。
+            // DontDestroyOnLoad されているはずのインスタンスを探す。
+            Debug.LogWarning("[RankingHubManager] ScoreSender が見つかりません。");
+        }
+
+        // --- 【追記】 ScoreSender からのイベントを購読 ---
+        ScoreSender.OnBoardDataReceived += HandleBoardData;
+        ScoreSender.OnBoardDataFailed += HandleBoardError;
+
         // ==== 1. デフォルト表示の解決 ====
         // シーン開始時に、強制的に「Stage 1」と「Online」を選択した状態にする
         SelectStage(1);
         SelectTab(0); // 0 = Online
     }
 
+    void OnDestroy()
+    {
+        ScoreSender.OnBoardDataReceived -= HandleBoardData;
+        ScoreSender.OnBoardDataFailed -= HandleBoardError;
+    }
 
     // --- 2. 機能 (ボタンから呼ばれるメソッド) ---
 
@@ -121,16 +141,6 @@ public class RankingHubManager : MonoBehaviour
         RefreshDisplayPanel();
     }
 
-    // リプレイボタンが押された時に呼ばれる
-    public void OnReplayButtonClicked(int rank)
-    {
-        Debug.Log($"ステージ {currentStageNum} の {rank + 1} 位のリプレイを開始します");
-
-        // TODO: ここでリプレイ再生処理を呼び出す
-        // (例: `allPersonalRankings` から該当の `replayFileName` を取得して再生)
-    }
-
-
     // --- 3. 内部処理 (UIを更新するメソッド) ---
 
     // 現在の状態（タブとステージ）に基づいて、パネル全体を更新する
@@ -153,16 +163,58 @@ public class RankingHubManager : MonoBehaviour
     // オンラインパネルの内容を、現在のステージ番号で更新
     void UpdateOnlinePanel()
     {
-        // TODO: ここで外部DBから currentStageNum のランキングを取得する処理
-        // (例: ScoreSender.Instance.GetBoard(currentStageNum, OnOnlineDataReceived);)
+        if (scoreSender == null)
+        {
+            // scoreSender が見つからない場合、再度探してみる
+            scoreSender = FindObjectOfType<ScoreSender>();
+            if (scoreSender == null)
+            {
+                HandleBoardError("ScoreSender not found");
+                return;
+            }
+        }
 
-        // (↓ 以下はダミーデータ。実際のデータ取得後にコールバックで実行する)
-        onlineRank_Names[0].text = $"OYU_DAYO_S{currentStageNum}";
-        onlineRank_Times[0].text = "00:10.00";
-        onlineRank_Names[1].text = "PLAYER_B";
-        onlineRank_Times[1].text = "00:11.00";
-        onlineRank_Names[2].text = "PLAYER_C";
-        onlineRank_Times[2].text = "00:12.00";
+        // 1. UIを「読み込み中...」の状態にする
+        for (int i = 0; i < 3; i++)
+        {
+            onlineRank_Names[i].text = "-";
+            onlineRank_Times[i].text = "--:--.--";
+        }
+
+        // 2. ScoreSenderに「現在のステージのデータをください」とリクエスト
+        scoreSender.RequestBoard(currentStageNum);
+    }
+
+    // ScoreSender がデータ受信に成功したときに呼ばれる
+    private void HandleBoardData(List<RankingEntry> board)
+    {
+       
+        if (board != null)
+        {
+            foreach (var entry in board)
+            {
+                if (entry.out_rnk >= 1 && entry.out_rnk <= 3)
+                {
+                    int index = entry.out_rnk - 1;
+
+                    onlineRank_Names[index].text = entry.out_display_name;
+
+                    float timeInSeconds = -entry.out_score / 1000f;
+                    onlineRank_Times[index].text = GameManager.FormatTime(timeInSeconds);
+                }
+            }
+        }
+    }
+
+    // ScoreSender がデータ受信に失敗したときに呼ばれる
+    private void HandleBoardError(string errorMessage)
+    {
+        Debug.LogError(errorMessage);
+        for (int i = 0; i < 3; i++)
+        {
+            onlineRank_Names[i].text = "ERROR";
+            onlineRank_Times[i].text = "N/A";
+        }
     }
 
     // 個人パネルの内容を、現在のステージ番号で更新
@@ -178,20 +230,24 @@ public class RankingHubManager : MonoBehaviour
         {
             if (scores != null && i < scores.Count)
             {
-                // 記録がある場合
+                // 記録がある場合 (iが 0, 1, 2 のどれか)
                 personalRank_Times[i].text = GameManager.FormatTime(scores[i].time);
-                bool hasReplay = !string.IsNullOrEmpty(scores[i].replayFileName);
 
-                // ボタンのGameObjectは常に表示する
-                personalRank_ReplayButtons[i].gameObject.SetActive(true);
-                // 「押せるかどうか」をデータ(hasReplay)で切り替える
-                personalRank_ReplayButtons[i].interactable = hasReplay;
+                // ユーザー名を表示 (Guest対応)
+                if (string.IsNullOrEmpty(scores[i].userName) || scores[i].userName == "Unknown")
+                {
+                    personalRank_Names[i].text = "Guest";
+                }
+                else
+                {
+                    personalRank_Names[i].text = scores[i].userName;
+                }
             }
             else
             {
-                // 記録がない場合 (タイムもボタンも非表示)
+                // 記録がない場合
                 personalRank_Times[i].text = "--:--.--";
-                personalRank_ReplayButtons[i].gameObject.SetActive(false); // 記録がない行はボタンごと非表示
+                personalRank_Names[i].text = "-"; // 名前もハイフン
             }
         }
     }

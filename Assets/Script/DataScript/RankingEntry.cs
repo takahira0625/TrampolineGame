@@ -11,5 +11,3 @@ public class RankingEntry
 
     public float timeSeconds => Mathf.Abs((float)out_score) / 1000f;
 }
-
-
