@@ -290,7 +290,11 @@ public class GameManager : MonoBehaviour
     {
         SaveCurrentStageName();
 
-        if (BGMManager.Instance != null) BGMManager.Instance.SetVolume(0.2f);
+        if (BGMManager.Instance != null)
+        {
+            float currentVolume = BGMManager.Instance.GetVolume();
+            BGMManager.Instance.SetVolume(currentVolume * 0.5f);
+        }
 
         SceneManager.LoadScene("GameOverScene");
     }

@@ -4,69 +4,146 @@ using UnityEngine.SceneManagement;
 public class StageSelectUI : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
+    [SerializeField] private Fade fade;
     private void LoadStage(int n)
     {
         Debug.Log("SE");
-        SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
         SceneManager.LoadScene("Stage" + n.ToString("D2"));
     }
-
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
     public void OnClickStage1()
     {
-        LoadStage(1);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(1);
+        });
+        
     }
 
     public void OnClickStage2()
     {
-        LoadStage(2);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(2);
+        });
+        
     }
 
     public void OnClickStage3()
     {
-        LoadStage(3);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(3);
+        });
     }
 
     public void OnClickStage4()
     {
-        LoadStage(4);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(4);
+        });
     }
 
     public void OnClickStage5()
     {
-        LoadStage(5);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(5);
+        });
     }
     public void OnClickStage6()
     {
-        LoadStage(6);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(6);
+        });
     }
     public void OnClickStage7()
     {
-        LoadStage(7);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(7);
+        });
     }
 
     public void OnClickStage8()
     {
-        LoadStage(8);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(8);
+        });
     }
 
     public void OnClickStage9()
     {
-        LoadStage(9);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(9);
+        });
     }
 
     public void OnClickStage10()
     {
-        LoadStage(10);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(10);
+        }); 
     }
 
     public void OnClickStage11()
     {
-        LoadStage(11);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(11);
+        });
     }
 
     public void OnClickStage12()
     {
-        LoadStage(12);
+        FindFadeCanvas();
+        SEManager.Instance.PlayOneShot(clickSE);
+        fade.FadeIn(0.5f, () =>
+        {
+            LoadStage(12);
+        });
     }
 }

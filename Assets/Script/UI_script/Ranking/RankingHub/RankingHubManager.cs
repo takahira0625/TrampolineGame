@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO; // JSON読み込み用
-using System.Linq; // JSON読み込み用
+using System.Linq;
+using System.Runtime.CompilerServices; // JSON読み込み用
 
 // 1. ボタンの「見た目セット」を定義するクラス
 [System.Serializable]
@@ -49,6 +50,7 @@ public class RankingHubManager : MonoBehaviour
     [Header("現在の状態")]
     private int currentStageNum = 1; // 現在選択中のステージ番号 (デフォルト1)
     private RankingTab currentTab = RankingTab.Online; // 現在のタブ (デフォルトOnline)
+    private bool isFirstStageSelection = true; // 初回のステージ選択かどうか
 
     [Header("データ (JSON)")]
     private PersonalRankings allPersonalRankings; // 読み込んだ個人ランキング
@@ -73,7 +75,8 @@ public class RankingHubManager : MonoBehaviour
     [SerializeField] private Text[] personalRank_Names; // 3つ分の名前
 
     private ScoreSender scoreSender;
-
+    [Header("SE")]
+    [SerializeField] private AudioClip clickSE;
     // --- 初期化 ---
 
     void Awake()
@@ -104,8 +107,9 @@ public class RankingHubManager : MonoBehaviour
 
         // ==== 1. デフォルト表示の解決 ====
         // シーン開始時に、強制的に「Stage 1」と「Online」を選択した状態にする
-        SelectStage(1);
         SelectTab(0); // 0 = Online
+        SelectStage(1);
+        
     }
 
     void OnDestroy()
@@ -119,6 +123,16 @@ public class RankingHubManager : MonoBehaviour
     /// ステージボタンが押された時に呼ばれる
     public void SelectStage(int stageNum)
     {
+        // 初回でない場合のみSEを再生
+        if (!isFirstStageSelection)
+        {
+            SEManager.Instance.PlayOneShot(clickSE);
+        }
+        else
+        {
+            isFirstStageSelection = false; // 初回フラグをオフにする
+        }
+
         currentStageNum = stageNum;
 
         // (A) ステージボタンの見た目を更新
@@ -131,6 +145,10 @@ public class RankingHubManager : MonoBehaviour
     // Online/Personalタブが押された時に呼ばれる
     public void SelectTab(int tabIndex)
     {
+        if (!isFirstStageSelection)
+        {
+            SEManager.Instance.PlayOneShot(clickSE);
+        }
         // int を enum に変換
         currentTab = (RankingTab)tabIndex;
 
