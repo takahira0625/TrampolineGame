@@ -5604,7 +5604,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 4867316761639467793}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -5615,7 +5615,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &1350649951
 RectTransform:
@@ -18773,6 +18773,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 953676610955026423}
+  - {fileID: 1350649951}
   - {fileID: 139020344}
   - {fileID: 1247263490}
   - {fileID: 540398714039950121}
@@ -18798,6 +18799,5 @@ SceneRoots:
   - {fileID: 1247802760}
   - {fileID: 281620283}
   - {fileID: 430201218}
-  - {fileID: 1350649951}
   - {fileID: 1488014052}
   - {fileID: 1270612775}
