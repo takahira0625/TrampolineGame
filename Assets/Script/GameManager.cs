@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
     public AudioClip gameBGM;
 
     [SerializeField] Fade fade; // Fadeコンポーネントへの参照
+
+    [SerializeField] private GameObject playerPrefab;//複製するプレイヤーのPrefab
     private void Awake()
     {
         // Singleton
@@ -199,7 +201,9 @@ public class GameManager : MonoBehaviour
             {
                 cloneRb.velocity = velocity;
             }
+            cloneController.CheckInitialSlowZone();
         }
+
         Debug.Log($"プレイヤーを分裂させました！ 現在のプレイヤー数: {activePlayers.Count}");
 
         return cloneController;

@@ -853,6 +853,7 @@ MonoBehaviour:
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}
   fade: {fileID: 462850886}
+  playerPrefab: {fileID: 4450722571166087080, guid: 6bbcaeb70a9368d4f830ab871b6f5eb8, type: 3}
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
