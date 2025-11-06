@@ -5,15 +5,36 @@ using UnityEngine.UI;
 using System.IO; // JSON読み込み用
 using System.Linq; // JSON読み込み用
 
-// 1. ボタンとハイライト用Imageをセットにするためのクラス
+// 1. ボタンの「見た目セット」を定義するクラス
+[System.Serializable]
+public class ButtonVisuals
+{
+    public Color imageColor = Color.white;
+    public Sprite imageSprite;
+    public Color textColor = Color.white;
+    [Tooltip("アイコンの画像")]
+    public Sprite iconSprite;              // アイコンの画像
+    [Tooltip("アイコンの色")]
+    public Color iconColor = Color.white;   // アイコンの色
+}
+
+// 2. ボタンとハイライト用Imageをセットにするためのクラス
 [System.Serializable]
 public class HighlightedButton
 {
     public Button button;      // 押すためのボタン
-    public Image highlightImage; // 色を変えるためのImage (ボタン自体でもOK)
+    public Image highlightImage; // 色/画像を変えるためのImage
+    public Text buttonText;    // 色を変えるためのText
+
+    [Tooltip("テキストの横にあるアイコン用のImage")]
+    public Image iconImage;      // アイコンImage
+
+    [Header("ビジュアル設定")]
+    public ButtonVisuals selectedVisuals;   // ★ 選択時の見た目セット
+    public ButtonVisuals deselectedVisuals; // ★ 非選択時の見た目セット
 }
 
-// 2. どちらのタブがアクティブか
+// 3. どちらのタブがアクティブか
 public enum RankingTab
 {
     Online,
@@ -42,10 +63,6 @@ public class RankingHubManager : MonoBehaviour
     [Header("ステージボタン設定")]
     [Tooltip("Scroll View の Content の子として配置したボタン12個")]
     [SerializeField] private List<HighlightedButton> stageButtons;
-
-    [Header("色設定")]
-    [SerializeField] private Color selectedColor = Color.yellow; // 選択中の色
-    [SerializeField] private Color deselectedColor = Color.gray; // 非選択の色
 
     [Header("ランキング表示 (Online)")]
     [SerializeField] private Text[] onlineRank_Names; // 3つ分の名前
@@ -185,28 +202,60 @@ public class RankingHubManager : MonoBehaviour
     {
         for (int i = 0; i < stageButtons.Count; i++)
         {
+            if (stageButtons[i] == null || stageButtons[i].button == null || stageButtons[i].highlightImage == null) continue;
+
+            // 適用する「見た目セット」を決定
+            ButtonVisuals visualsToApply;
+
             if (i == (currentStageNum - 1)) // 選択中のボタン
             {
-                stageButtons[i].highlightImage.color = selectedColor;
+                stageButtons[i].button.interactable = false;
+                visualsToApply = stageButtons[i].selectedVisuals; // ★ 選択時のセット
             }
             else // 非選択のボタン
             {
-                stageButtons[i].highlightImage.color = deselectedColor;
+                stageButtons[i].button.interactable = true;
+                visualsToApply = stageButtons[i].deselectedVisuals; // ★ 非選択時のセット
             }
+
+            // 決定した「見た目セット」をUIに適用
+            stageButtons[i].highlightImage.color = visualsToApply.imageColor;
+            stageButtons[i].highlightImage.sprite = visualsToApply.imageSprite;
+            if (stageButtons[i].buttonText != null)
+                stageButtons[i].buttonText.color = visualsToApply.textColor;
         }
     }
 
     void UpdateTabVisuals()
     {
-        if (currentTab == RankingTab.Online)
+        // 適用するビジュアルセットを決定
+        var onlineVisuals = (currentTab == RankingTab.Online) ? onlineTab.selectedVisuals : onlineTab.deselectedVisuals;
+        var personalVisuals = (currentTab == RankingTab.Personal) ? personalTab.selectedVisuals : personalTab.deselectedVisuals;
+
+        // Onlineタブに適用
+        onlineTab.button.interactable = (currentTab != RankingTab.Online); // 選択中じゃない時だけ押せる
+        onlineTab.highlightImage.color = onlineVisuals.imageColor;
+        onlineTab.highlightImage.sprite = onlineVisuals.imageSprite;
+        if (onlineTab.buttonText != null)
+            onlineTab.buttonText.color = onlineVisuals.textColor;
+
+        if (onlineTab.iconImage != null)
         {
-            onlineTab.highlightImage.color = selectedColor;
-            personalTab.highlightImage.color = deselectedColor;
+            onlineTab.iconImage.sprite = onlineVisuals.iconSprite;
+            onlineTab.iconImage.color = onlineVisuals.iconColor;
         }
-        else // Personal
+
+        // Personalタブに適用
+        personalTab.button.interactable = (currentTab != RankingTab.Personal); // 選択中じゃない時だけ押せる
+        personalTab.highlightImage.color = personalVisuals.imageColor;
+        personalTab.highlightImage.sprite = personalVisuals.imageSprite;
+        if (personalTab.buttonText != null)
+            personalTab.buttonText.color = personalVisuals.textColor;
+
+        if (personalTab.iconImage != null)
         {
-            onlineTab.highlightImage.color = deselectedColor;
-            personalTab.highlightImage.color = selectedColor;
+            personalTab.iconImage.sprite = personalVisuals.iconSprite;
+            personalTab.iconImage.color = personalVisuals.iconColor;
         }
     }
 
