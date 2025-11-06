@@ -168,7 +168,6 @@ public class KeyUIController : MonoBehaviour
             }
         }
 
-        // --- この行以降に来る = 全て true = 完成！ ---
 
         isComplete = true; // 完成フラグを立てる (重複防止)
 

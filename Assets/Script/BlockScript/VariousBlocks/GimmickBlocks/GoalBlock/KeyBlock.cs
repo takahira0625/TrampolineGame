@@ -1,6 +1,10 @@
 using UnityEngine;
 using System; // イベント(Action)を使うために必要
 
+// KeyFlyToHUD スクリプトが同じプロジェクトに存在し、
+// KeyBlockと同じGameObjectか子にアタッチされることを前提とする
+// (あるいはAddComponentで追加されます)
+
 public class KeyBlock : MonoBehaviour
 {
     [SerializeField] private Vector2 targetSize = new Vector2(0.1f, 0.1f);
@@ -22,6 +26,9 @@ public class KeyBlock : MonoBehaviour
     // UIに「この番号の部品が取られた」と通知するイベント
     public static event Action<int> OnKeyPartCollected;
 
+    private const string KeyUIControllerName = "KeyUIController";
+
+
     protected void Awake()
     {
         SetSprite();
@@ -29,9 +36,6 @@ public class KeyBlock : MonoBehaviour
         PreloadHitEffect();
     }
 
-    /// <summary>
-    /// エフェクトを事前にロード(一度のみ)
-    /// </summary>
     private void PreloadHitEffect()
     {
         if (!isEffectLoaded)
@@ -57,7 +61,7 @@ public class KeyBlock : MonoBehaviour
         {
             // Resources/Audio/SE/Key から読み込み
             KeySE = Resources.Load<AudioClip>("Audio/SE/Block/Key");
-            
+
             if (KeySE == null)
             {
                 Debug.LogWarning("鍵のSEが見つかりません: Resources/Audio/SE/BlockKey");
@@ -88,14 +92,16 @@ public class KeyBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 接触位置を取得
+
+            // 接触位置を取得 (この位置でエフェクトを生成する)
             Vector2 contactPoint = collision.contacts[0].point;
 
+            // --- 取得ロジック (変更なし) ---
             PlayerInventory inventory = collision.gameObject.GetComponent<PlayerInventory>();
             if (inventory != null)
             {
                 inventory.AddKey();
-                
+
                 // SEを再生
                 if (KeySE != null && SEManager.Instance != null)
                 {
@@ -103,13 +109,42 @@ public class KeyBlock : MonoBehaviour
                 }
             }
 
-            // エフェクトを再生
+            // エフェクトを再生 (鍵が消える前に行う)
             PlayHitEffect(contactPoint);
 
             // UIに通知
             OnKeyPartCollected?.Invoke(keyPartIndex);
 
-            Destroy(gameObject);
+
+            // 1. 行先を取得
+            KeyDestination hudTarget = KeyDestination.Instance;
+
+            if (hudTarget != null)
+            {
+                Vector3 targetWorldPos = hudTarget.transform.position;
+
+                // 2. 飛翔コンポーネントを取得/追加
+                KeyFlyToHUD flyer = GetComponent<KeyFlyToHUD>();
+                if (flyer == null)
+                {
+                    // 飛翔に必要な KeyFlyToHUD がなければ追加
+                    flyer = gameObject.AddComponent<KeyFlyToHUD>();
+                }
+
+                // 3. 飛翔開始
+                flyer.StartFlight(targetWorldPos);
+                Debug.Log("KeyFlyToHUD.StartFlightを呼び出しました。");
+
+
+                Collider2D col = GetComponent<Collider2D>();
+                if (col != null) col.enabled = false;
+
+            }
+            else
+            {
+                Debug.LogError("KeyUIControllerが見つかりません。即座に鍵を破壊します。");
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -118,13 +153,19 @@ public class KeyBlock : MonoBehaviour
     /// </summary>
     private void PlayHitEffect(Vector2 position)
     {
-        if (!playEffectOnHit || hitEffectPrefab == null) return;
+        if (!playEffectOnHit) return;
 
-        // エフェクトを生成して再生
-        ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
-        ParticleSystem getEffect = Instantiate(getEffectPrefab, this.transform.position, Quaternion.identity);
-        // 自動削除
-        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
-        Destroy(getEffect.gameObject, getEffect.main.duration + getEffect.main.startLifetime.constantMax-1);
+        if (hitEffectPrefab != null)
+        {
+            ParticleSystem effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+            Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        }
+
+        if (getEffectPrefab != null)
+        {
+            ParticleSystem getEffect = Instantiate(getEffectPrefab, this.transform.position, Quaternion.identity);
+
+            Destroy(getEffect.gameObject, getEffect.main.duration + getEffect.main.startLifetime.constantMax - 1);
+        }
     }
 }

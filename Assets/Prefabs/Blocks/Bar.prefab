@@ -257,9 +257,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 7254595007854023088}
     m_Modifications:
     - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
+      propertyPath: alarmSE
+      value: 
+      objectReference: {fileID: 8300000, guid: ff8d6420f80ae1a4c8c9d34b8c597a54, type: 3}
+    - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
+      propertyPath: blinkSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
       propertyPath: activateLoopSE
       value: 
       objectReference: {fileID: 8300000, guid: c794a18e05491374ba22f4b1f226d1c4, type: 3}
+    - target: {fileID: -1369353235482288038, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
+      propertyPath: rightClickTriggerOn
+      value: 
+      objectReference: {fileID: 8460906794975558630}
     - target: {fileID: 3650638188812647480, guid: c63d911b0b39c8f4093552c70e457a86, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4
