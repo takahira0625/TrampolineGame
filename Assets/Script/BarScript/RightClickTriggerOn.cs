@@ -208,7 +208,6 @@ public class RightClickTriggerOn : MonoBehaviour
                     Destroy(effect, 1f);
                 }
                 StartCoroutine(HitStop());
-
             }
             else
             {
