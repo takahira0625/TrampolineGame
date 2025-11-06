@@ -8,12 +8,36 @@ public class PageSelectUI : MonoBehaviour
 
     void Start()
     {
+        FindFadeCanvas();
         fade.FadeOut(0.5f);
     }
+
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
+
     public void OnClickLogin()
     {
         SEManager.Instance.StopAll();
-        SceneManager.LoadScene("StageSelectScene1_6");
+        SceneBGMManager.instance.PlayTitleBGM();
+        FindFadeCanvas();
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("StageSelectScene1_6");
+        });
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -56,17 +80,25 @@ public class PageSelectUI : MonoBehaviour
     }
     public void OnClickStageSelect()
     {
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
+        });
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickHome()
     {
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("TitleScene");
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("TitleScene");
+        });
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -74,12 +106,14 @@ public class PageSelectUI : MonoBehaviour
     {
         // 保存されたステージ名を取得
         string stageName = GameManager.instance.LoadLastStageName();
-
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-
-        SceneManager.LoadScene(stageName);
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene(stageName);
+        });
     }
     public static string GetCurrentSceneName()
     {
