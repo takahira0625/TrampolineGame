@@ -65,12 +65,12 @@ public class RankingHubManager : MonoBehaviour
     [SerializeField] private List<HighlightedButton> stageButtons;
 
     [Header("ランキング表示 (Online)")]
-    [SerializeField] private Text[] onlineRank_Names; // 3つ分の名前
     [SerializeField] private Text[] onlineRank_Times; // 3つ分のタイム
+    [SerializeField] private Text[] onlineRank_Names; // 3つ分の名前
 
     [Header("ランキング表示 (Personal)")]
     [SerializeField] private Text[] personalRank_Times; // 3つ分のタイム
-    [SerializeField] private Button[] personalRank_ReplayButtons; // 3つ分のリプレイボタン
+    [SerializeField] private Text[] personalRank_Names; // 3つ分の名前
 
     private ScoreSender scoreSender;
 
@@ -141,16 +141,6 @@ public class RankingHubManager : MonoBehaviour
         RefreshDisplayPanel();
     }
 
-    // リプレイボタンが押された時に呼ばれる
-    public void OnReplayButtonClicked(int rank)
-    {
-        Debug.Log($"ステージ {currentStageNum} の {rank + 1} 位のリプレイを開始します");
-
-        // TODO: ここでリプレイ再生処理を呼び出す
-        // (例: `allPersonalRankings` から該当の `replayFileName` を取得して再生)
-    }
-
-
     // --- 3. 内部処理 (UIを更新するメソッド) ---
 
     // 現在の状態（タブとステージ）に基づいて、パネル全体を更新する
@@ -187,7 +177,7 @@ public class RankingHubManager : MonoBehaviour
         // 1. UIを「読み込み中...」の状態にする
         for (int i = 0; i < 3; i++)
         {
-            onlineRank_Names[i].text = "Loading...";
+            onlineRank_Names[i].text = "-";
             onlineRank_Times[i].text = "--:--.--";
         }
 
@@ -198,14 +188,7 @@ public class RankingHubManager : MonoBehaviour
     // ScoreSender がデータ受信に成功したときに呼ばれる
     private void HandleBoardData(List<RankingEntry> board)
     {
-        // 1. まず全スロットを「記録なし」でクリア
-        for (int i = 0; i < 3; i++)
-        {
-            onlineRank_Names[i].text = "-";
-            onlineRank_Times[i].text = "--:--.--";
-        }
-
-        // 2. 受信したデータ (board) があれば、UIに設定
+       
         if (board != null)
         {
             foreach (var entry in board)
@@ -247,20 +230,24 @@ public class RankingHubManager : MonoBehaviour
         {
             if (scores != null && i < scores.Count)
             {
-                // 記録がある場合
+                // 記録がある場合 (iが 0, 1, 2 のどれか)
                 personalRank_Times[i].text = GameManager.FormatTime(scores[i].time);
-                bool hasReplay = !string.IsNullOrEmpty(scores[i].replayFileName);
 
-                // ボタンのGameObjectは常に表示する
-                personalRank_ReplayButtons[i].gameObject.SetActive(true);
-                // 「押せるかどうか」をデータ(hasReplay)で切り替える
-                personalRank_ReplayButtons[i].interactable = hasReplay;
+                // ユーザー名を表示 (Guest対応)
+                if (string.IsNullOrEmpty(scores[i].userName) || scores[i].userName == "Unknown")
+                {
+                    personalRank_Names[i].text = "Guest";
+                }
+                else
+                {
+                    personalRank_Names[i].text = scores[i].userName;
+                }
             }
             else
             {
-                // 記録がない場合 (タイムもボタンも非表示)
+                // 記録がない場合
                 personalRank_Times[i].text = "--:--.--";
-                personalRank_ReplayButtons[i].gameObject.SetActive(false); // 記録がない行はボタンごと非表示
+                personalRank_Names[i].text = "-"; // 名前もハイフン
             }
         }
     }
