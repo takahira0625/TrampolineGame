@@ -114,6 +114,9 @@ MonoBehaviour:
   effectOffset: {x: 0, y: 0, z: 0}
   goalSE: {fileID: 8300000, guid: b505822e0cb4fc6469d2ad438f1cf2f7, type: 3}
   shieldHitSE: {fileID: 8300000, guid: 0be67d52445150b489a1424f9fc77426, type: 3}
+  animationDuration: 1
+  initialRadius: 3
+  rotationSpeed: 480
 --- !u!70 &-6636970187652519209
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

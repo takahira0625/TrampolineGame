@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class PopUpButton : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
-
+    [SerializeField] private Fade fade;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,12 +18,28 @@ public class PopUpButton : MonoBehaviour
     {
         
     }
-
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
     /// <summary>
     /// 現在のシーンを再読み込みする
     /// </summary>
     public void ReloadCurrentScene()
     {
+        FindFadeCanvas();
         SEManager.Instance.PlayOneShot(clickSE);
         BGMManager.Instance.Stop();
         SceneBGMManager.instance.PlayStageBGM();
@@ -32,7 +48,11 @@ public class PopUpButton : MonoBehaviour
 
         // 現在のシーン名を取得して再読み込み
         string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene(currentSceneName);
+        });
+        
     }
 
     /// <summary>
@@ -42,7 +62,7 @@ public class PopUpButton : MonoBehaviour
     {
         // Time.timeScaleが0の場合は元に戻す
         Time.timeScale = 1f;
-
+        FindFadeCanvas();
         // SEを再生
         if (clickSE != null && SEManager.Instance != null)
         {
@@ -66,13 +86,21 @@ public class PopUpButton : MonoBehaviour
             {
                 if (stageNumber >= 1 && stageNumber <= 6)
                 {
-                    SceneManager.LoadScene("StageSelectScene1_6");
+                    fade.FadeIn(0.5f, () =>
+                    {
+                        SceneManager.LoadScene("StageSelectScene1_6");
+                    });
+                    
                     Debug.Log($"Current scene {currentSceneName} is a Stage 1-6. Loading StageSelectScene1_6.");
                     return; // 処理が完了したのでここで関数を終了
                 }
                 else if (stageNumber >= 7 && stageNumber <= 12)
                 {
-                    SceneManager.LoadScene("StageSelectScene7_12");
+                    fade.FadeIn(0.5f, () =>
+                    {
+                        SceneManager.LoadScene("StageSelectScene7_12");
+                    });
+                    
                     Debug.Log($"Current scene {currentSceneName} is a Stage 7-12. Loading StageSelectScene7_12.");
                     return; // 処理が完了したのでここで関数を終了
                 }

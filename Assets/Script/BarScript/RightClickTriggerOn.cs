@@ -95,8 +95,10 @@ public class RightClickTriggerOn : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveForwardAndBack()
+    public IEnumerator MoveForwardAndBack()
     {
+        startRotation = transform.rotation;
+
         if (barFollow != null)
             barFollow.stopFollow = true;
 

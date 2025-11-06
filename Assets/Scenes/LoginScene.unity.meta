@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/LoginScene.unity.meta
 guid: 9fa8e0c022d28d640b70f348dc5e8569
 DefaultImporter:
+========
+guid: 18480a1e33d81fa4f9020ed5248928a4
+PrefabImporter:
+>>>>>>>> main:Assets/Script/BlockScript/VariousBlocks/GimmickBlocks/GoalBlock/KeyDestination.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

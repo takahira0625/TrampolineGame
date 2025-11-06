@@ -5,20 +5,54 @@ using System.Text.RegularExpressions;
 public class GameOverSceneUI : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
+    [SerializeField] private Fade fade;
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
+
+    private void RestoreBGMVolume()
+    {
+        if (BGMManager.Instance != null)
+        {
+            float currentVolume = BGMManager.Instance.GetVolume();
+            BGMManager.Instance.SetVolume(Mathf.Min(currentVolume * 2f, 1f));
+        }
+    }
+
     public void OnClickLogin()
     {
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
-        SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
+        RestoreBGMVolume();
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("StageSelectScene1_6");
+        });
     }
 
     public void OnClickStageSelect()
     {
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
         SEManager.Instance.PlayOneShot(clickSE);
-        SceneBGMManager.instance.PlayTitleBGM();
+        
+        RestoreBGMVolume();
         // ステージセレクトシーンに遷移
         // PlayerPrefsから最後にプレイしたステージ名を取得
         string lastPlayedStage = "";
@@ -35,11 +69,13 @@ public class GameOverSceneUI : MonoBehaviour
         if (string.IsNullOrEmpty(lastPlayedStage))
         {
             Debug.LogWarning("No last played stage found. Loading default StageSelect.");
-            SceneManager.LoadScene("StageSelectScene1_6");
+            fade.FadeIn(0.5f, () =>
+            {
+                SceneManager.LoadScene("StageSelectScene1_6");
+            });
             return;
         }
 
-        // ここから先は前回と同じロジックでOKです
         // lastPlayedStageが "Stage" で始まり、その後に数字が続く形式を想定
         if (lastPlayedStage.StartsWith("Stage") && lastPlayedStage.Length >= 6) // StageXX or StageX
         {
@@ -49,47 +85,64 @@ public class GameOverSceneUI : MonoBehaviour
             {
                 if (stageNumber >= 1 && stageNumber <= 6)
                 {
-                    SceneManager.LoadScene("StageSelectScene1_6");
+                    fade.FadeIn(0.5f, () =>
+                    {
+                        SceneManager.LoadScene("StageSelectScene1_6");
+                    });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     Debug.Log($"Last played stage was {lastPlayedStage}. Loading StageSelectScene1_6.");
                     return;
                 }
                 else if (stageNumber >= 7 && stageNumber <= 12)
                 {
-                    SceneManager.LoadScene("StageSelectScene7_12");
+                    fade.FadeIn(0.5f, () =>
+                    {
+                        SceneManager.LoadScene("StageSelectScene7_12");
+                    });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     Debug.Log($"Last played stage was {lastPlayedStage}. Loading StageSelectScene7_12.");
                     return;
                 }
                 else
                 {
                     Debug.LogWarning($"Stage number {stageNumber} out of expected range (1-12). Loading default StageSelect.");
-                    SceneManager.LoadScene("StageSelectScene1_6");
+                    
+                    fade.FadeIn(0.5f, () => { SceneManager.LoadScene("StageSelectScene1_6"); });
+                    SceneBGMManager.instance.PlayTitleBGM();
                     return;
                 }
             }
         }
         // 上記のステージ名パターンに一致しない場合のデフォルトの挙動
         Debug.LogWarning($"Last played stage '{lastPlayedStage}' did not match expected pattern. Loading default StageSelect.");
-        SceneManager.LoadScene("StageSelectScene1_6"); // どの条件にも当てはまらない場合のデフォルト
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("StageSelectScene1_6"); }); // どの条件にも当てはまらない場合のデフォルト
     }
 
     public void OnClickHome()
     {
+        FindFadeCanvas();
         SEManager.Instance.StopAll();
         BGMManager.Instance.Stop();
-        SceneBGMManager.instance.PlayTitleBGM();
-        SceneManager.LoadScene("TitleScene");
+        
         SEManager.Instance.PlayOneShot(clickSE);
+        RestoreBGMVolume();
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("TitleScene"); });
+        SceneBGMManager.instance.PlayTitleBGM();
     }
 
     public void OnClickRetry()
     {
+        FindFadeCanvas();
         // 保存されたステージ名を取得
         string stageName = GameManager.instance.LoadLastStageName();
 
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
+        RestoreBGMVolume();
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene(stageName);
+        });
         SceneBGMManager.instance.PlayStageBGM();
-
-        SceneManager.LoadScene(stageName);
     }
 }

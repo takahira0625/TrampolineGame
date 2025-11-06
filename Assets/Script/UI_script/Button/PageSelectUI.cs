@@ -5,26 +5,28 @@ public class PageSelectUI : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private Fade fade;
-    // ★追加: ログイン誘導パネルへの参照 (Inspectorで割り当ててください)
+
+    // ログイン誘導パネルへの参照
     [SerializeField] private GameObject steamGatePanel;
 
     void Start()
     {
         fade.FadeOut(0.5f);
 
-        // ★修正: ゲーム開始時はログインパネルを非表示にしておく
+        // 起動時にパネルを非表示にする
         if (steamGatePanel != null)
         {
             steamGatePanel.SetActive(false);
         }
     }
 
+    // StartButtonが呼び出すメソッド
     public void OnClickLogin()
     {
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
 
-        // ★修正: シーン遷移を削除し、SteamGatePanelを表示する
+        // StartButtonが押されたときにパネルを表示する
         if (steamGatePanel != null)
         {
             steamGatePanel.SetActive(true);
@@ -34,12 +36,10 @@ public class PageSelectUI : MonoBehaviour
     public void OnClickStageSelect1_6()
     {
         SEManager.Instance.StopAll();
-        // ... (省略)
+        SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
-
-    // ... (他の OnClickStageSelect7_12, OnClickUserGuideScene などのメソッドはそのまま)
 
     public void OnClickStageSelect7_12()
     {
@@ -56,6 +56,7 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("UserGuideScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickUserGuideScene_JP()
     {
         SEManager.Instance.StopAll();
@@ -63,6 +64,7 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("UserGuideScene_JP");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickRankingHubScene()
     {
         SEManager.Instance.StopAll();
@@ -70,6 +72,7 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("RankingHubScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickStageSelect()
     {
         SEManager.Instance.StopAll();
@@ -97,9 +100,10 @@ public class PageSelectUI : MonoBehaviour
 
         SceneManager.LoadScene(stageName);
     }
+
     public static string GetCurrentSceneName()
     {
-        // 2. ̃R[h݂̃V[擾܂
+        // 2. 現在のシーン名を取得します
         return SceneManager.GetActiveScene().name;
     }
 }

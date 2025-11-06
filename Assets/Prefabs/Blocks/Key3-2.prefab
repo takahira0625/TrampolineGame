@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3294510214245016835}
   - component: {fileID: -4722819471972507649}
   - component: {fileID: -7452368853856521720}
+  - component: {fileID: 6807230104057771317}
   m_Layer: 0
   m_Name: Key3-2
   m_TagString: KeyBlock
@@ -144,4 +145,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSize: {x: 0.1, y: 0.1}
+  KeySE: {fileID: 0}
   keyPartIndex: 1
+  playEffectOnHit: 1
+--- !u!114 &6807230104057771317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797651389120414331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a333e3be26ac45742bbe8f249ef9de11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flightDuration: 0.5
+  curveHeight: 5
