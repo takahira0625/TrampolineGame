@@ -427,6 +427,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
+    - target: {fileID: 4582089620200934553, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
     - target: {fileID: 8164008452322355858, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
       propertyPath: m_Name
       value: ComingSoon (2)
@@ -533,6 +537,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
+    - target: {fileID: 4582089620200934553, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
     - target: {fileID: 8164008452322355858, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
       propertyPath: m_Name
       value: ComingSoon (1)
@@ -639,6 +647,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
+    - target: {fileID: 4582089620200934553, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
     - target: {fileID: 8164008452322355858, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
       propertyPath: m_Name
       value: ComingSoon (4)
@@ -1082,6 +1094,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.39215687
       objectReference: {fileID: 0}
+    - target: {fileID: 4582089620200934553, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 1673443186}
     - target: {fileID: 8164008452322355858, guid: 98f4dd4e2d66095498e6d802ba553191, type: 3}
       propertyPath: m_Name
       value: ComingSoon (3)

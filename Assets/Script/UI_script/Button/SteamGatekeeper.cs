@@ -2,6 +2,7 @@ using Steamworks;
 using System; // Guid用（今は未使用でもOK）
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 /// <summary>
 /// Steam または ゲスト でゲーム開始を制御するクラス。
@@ -24,7 +25,8 @@ public class SteamGatekeeper : MonoBehaviour
     public bool IsSteamReady => SteamAPI.IsSteamRunning();
     private bool guestMode = false; // 現在ゲストモード中かどうか
 
-    private bool AlreadyLogin = false;
+    private bool AlreadyLogin = false; // プレイ可能状態を追跡する
+
     void Start()
     {
         // GuestLoginButtonが設定されていればイベント登録
@@ -34,21 +36,28 @@ public class SteamGatekeeper : MonoBehaviour
             guestLoginButton.onClick.AddListener(OnClickGuestLogin);
         }
 
+        // SteamInitのイベントに登録
+        SteamInit.OnReady += OnSteamInitReady;
+
         // 初期状態の反映
         ApplyState(SteamAPI.IsSteamRunning());
     }
 
-    void Update()
+    void OnDestroy()
     {
-        if (IsSteamReady)
-        {
-            if (!AlreadyLogin)
-            {
-                ApplyState(SteamAPI.IsSteamRunning());
-                AlreadyLogin = true;
-            }
-        }
+        SteamInit.OnReady -= OnSteamInitReady;
     }
+
+    /// <summary>
+    /// SteamAPI.Initが成功したときに呼ばれる（後からSteamログインした場合を含む）
+    /// </summary>
+    private void OnSteamInitReady()
+    {
+        Debug.Log("[SteamGatekeeper] SteamInit OnReadyを受信しました。");
+        ApplyState(SteamAPI.IsSteamRunning());
+    }
+
+    // ★Update() メソッドを削除（SteamInitのイベント駆動に移行）
 
     /// <summary>
     /// Steamログイン誘導ボタンの処理
@@ -63,12 +72,14 @@ public class SteamGatekeeper : MonoBehaviour
             try
             {
                 // Steamクライアントを起動
-                Application.OpenURL("steam://open/main");
+                // ★修正: UnityEngine.Application と完全修飾
+                UnityEngine.Application.OpenURL("steam://open/main");
             }
             catch
             {
                 // 失敗時はWebログインへフォールバック
-                Application.OpenURL("https://store.steampowered.com/login/");
+                // ★修正: UnityEngine.Application と完全修飾
+                UnityEngine.Application.OpenURL("https://store.steampowered.com/login/");
             }
         }
     }
@@ -99,11 +110,18 @@ public class SteamGatekeeper : MonoBehaviour
 
         // パネルの表示/非表示
         if (steamGatePanel != null)
-            steamGatePanel.SetActive(!canStart || !autoHideWhenSteamReady);
+        {
+            // Steam Ready または ゲストモード で、かつ autoHideWhenSteamReady が true の場合、非表示
+            bool shouldHide = canStart && autoHideWhenSteamReady;
+            steamGatePanel.SetActive(!shouldHide);
+        }
 
         // スタートボタンの有効/無効
         if (startButton != null)
             startButton.interactable = canStart;
+
+        // ログイン状態を記録
+        AlreadyLogin = canStart;
     }
 
     // ====== 外部から呼び出す便利メソッド ======

@@ -5536,6 +5536,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankingButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 659995804}
+    - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
+      propertyPath: clickSE
+      value: 
+      objectReference: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
     - target: {fileID: 2611365576626305405, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
