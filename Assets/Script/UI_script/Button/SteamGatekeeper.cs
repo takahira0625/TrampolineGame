@@ -1,6 +1,7 @@
 using Steamworks;
-using System; // Guid用（今は未使用でもOK）
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement; // ★シーン遷移に必要
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -16,7 +17,7 @@ public class SteamGatekeeper : MonoBehaviour
     [SerializeField] private Button startButton;         // 「はじめる」ボタン
 
     [Header("Options")]
-    [SerializeField] private bool autoHideWhenSteamReady = true; // SteamまたはGuestでOKなら自動で隠す
+    //[SerializeField] private bool autoHideWhenSteamReady = true; // SteamまたはGuestでOKなら自動で隠す（※今回の仕様変更では非表示が主なので注意）
 
     [Header("Guest Login (Optional)")]
     [SerializeField] private Button guestLoginButton;          // ゲストボタン（任意）
@@ -29,7 +30,7 @@ public class SteamGatekeeper : MonoBehaviour
 
     void Start()
     {
-        // GuestLoginButtonが設定されていればイベント登録
+        // ... (イベント登録のロジックはそのまま) ...
         if (guestLoginButton != null)
         {
             guestLoginButton.onClick.RemoveAllListeners();
@@ -39,8 +40,8 @@ public class SteamGatekeeper : MonoBehaviour
         // SteamInitのイベントに登録
         SteamInit.OnReady += OnSteamInitReady;
 
-        // 初期状態の反映
-        ApplyState(SteamAPI.IsSteamRunning());
+        // ★修正: 初期起動時に自動でUIを隠す処理はしない
+        // ApplyState(SteamAPI.IsSteamRunning()); // コメントアウトまたは削除
     }
 
     void OnDestroy()
@@ -54,71 +55,76 @@ public class SteamGatekeeper : MonoBehaviour
     private void OnSteamInitReady()
     {
         Debug.Log("[SteamGatekeeper] SteamInit OnReadyを受信しました。");
-        ApplyState(SteamAPI.IsSteamRunning());
+        // Steamが初期化されたら、Steamモードで遷移可能状態をチェックする
+        ApplyState(true);
     }
 
-    // ★Update() メソッドを削除（SteamInitのイベント駆動に移行）
-
     /// <summary>
-    /// Steamログイン誘導ボタンの処理
+    /// Steamログイン誘導ボタンの処理 (外部から呼ばれる「Steamでログイン」ボタンを想定)
     /// </summary>
     public void OnClickLoginSteam()
     {
-        bool isRunning = SteamAPI.IsSteamRunning();
-        ApplyState(isRunning);
+        // 1. Steamが既に初期化済みであれば、即座に遷移
+        if (SteamInit.IsReady)
+        {
+            ApplyState(true);
+            return;
+        }
 
+        // 2. Steamが起動していない場合、クライアント起動を促す
+        bool isRunning = SteamAPI.IsSteamRunning();
         if (!isRunning)
         {
             try
             {
-                // Steamクライアントを起動
-                // ★修正: UnityEngine.Application と完全修飾
                 UnityEngine.Application.OpenURL("steam://open/main");
+                // クライアント起動後はSteamInit.csが再初期化を試み、成功すればOnSteamInitReady()が呼ばれ、そこから遷移する
             }
             catch
             {
-                // 失敗時はWebログインへフォールバック
-                // ★修正: UnityEngine.Application と完全修飾
                 UnityEngine.Application.OpenURL("https://store.steampowered.com/login/");
             }
         }
     }
 
     /// <summary>
-    /// ゲストモードで即プレイ開始（名前・IDなし）
+    /// ゲストモードで即プレイ開始（名前・IDなし）(外部から呼ばれる「ゲストで開始」ボタンを想定)
     /// </summary>
     public void OnClickGuestLogin()
     {
         guestMode = true;
         Debug.Log("[GuestLogin] ゲストモードで開始します（名前・IDは発行しません）。");
 
-        // ログインパネルなどを非表示
-        if (steamGatePanel != null) steamGatePanel.SetActive(false);
-
-        if (afterLoginHideTarget != null) afterLoginHideTarget.SetActive(false);
-
-        // スタートボタンを有効化
-        ApplyState(SteamAPI.IsSteamRunning());
+        // ゲストモードは確認不要なので、即座に遷移
+        ApplyState(SteamInit.IsReady);
     }
 
     /// <summary>
-    /// Steamまたはゲストモードで開始可能かを判定しUIを更新
+    /// Steamまたはゲストモードで開始可能かを判定しUIを更新し、シーン遷移
     /// </summary>
     private void ApplyState(bool steamReady)
     {
         bool canStart = steamReady || guestMode;
 
-        // パネルの表示/非表示
-        if (steamGatePanel != null)
+        // ログイン可能になったらパネルを非表示
+        if (canStart)
         {
-            // Steam Ready または ゲストモード で、かつ autoHideWhenSteamReady が true の場合、非表示
-            bool shouldHide = canStart && autoHideWhenSteamReady;
-            steamGatePanel.SetActive(!shouldHide);
-        }
+            if (steamGatePanel != null)
+            {
+                steamGatePanel.SetActive(false);
+            }
 
-        // スタートボタンの有効/無効
-        if (startButton != null)
-            startButton.interactable = canStart;
+            if (afterLoginHideTarget != null)
+            {
+                afterLoginHideTarget.SetActive(false);
+            }
+
+            // ★最重要: StageSelectScene1_6に遷移（初回ログイン時のみ）
+            if (!AlreadyLogin)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("StageSelectScene1_6");
+            }
+        }
 
         // ログイン状態を記録
         AlreadyLogin = canStart;

@@ -5,25 +5,41 @@ public class PageSelectUI : MonoBehaviour
 {
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private Fade fade;
+    // ★追加: ログイン誘導パネルへの参照 (Inspectorで割り当ててください)
+    [SerializeField] private GameObject steamGatePanel;
 
     void Start()
     {
         fade.FadeOut(0.5f);
+
+        // ★修正: ゲーム開始時はログインパネルを非表示にしておく
+        if (steamGatePanel != null)
+        {
+            steamGatePanel.SetActive(false);
+        }
     }
+
     public void OnClickLogin()
     {
         SEManager.Instance.StopAll();
-        SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
+
+        // ★修正: シーン遷移を削除し、SteamGatePanelを表示する
+        if (steamGatePanel != null)
+        {
+            steamGatePanel.SetActive(true);
+        }
     }
 
     public void OnClickStageSelect1_6()
     {
         SEManager.Instance.StopAll();
-        SceneBGMManager.instance.PlayTitleBGM();
+        // ... (省略)
         SceneManager.LoadScene("StageSelectScene1_6");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
+    // ... (他の OnClickStageSelect7_12, OnClickUserGuideScene などのメソッドはそのまま)
 
     public void OnClickStageSelect7_12()
     {
@@ -83,7 +99,7 @@ public class PageSelectUI : MonoBehaviour
     }
     public static string GetCurrentSceneName()
     {
-        // 2. ���̃R�[�h�����݂̃V�[�������擾���܂�
+        // 2. ̃R[h݂̃V[擾܂
         return SceneManager.GetActiveScene().name;
     }
 }
