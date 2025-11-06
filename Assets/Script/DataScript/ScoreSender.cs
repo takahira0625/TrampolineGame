@@ -16,6 +16,12 @@ public class ScoreSender : MonoBehaviour
     public int StageNumber { get; set; } = 1;
     public static List<RankingEntry> LastBoard { get; private set; }
 
+    // ランキングデータを正常に受信したときに発行されるイベント
+    public static event Action<List<RankingEntry>> OnBoardDataReceived;
+
+    // ランキングデータの取得に失敗したときに発行されるイベント
+    public static event Action<string> OnBoardDataFailed;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -116,6 +122,15 @@ public class ScoreSender : MonoBehaviour
         }
     }
 
+    // RankingHubから呼ばれる「ランキング取得専用」メソッド
+    public void RequestBoard(int stageNum)
+    {
+        // 既存のRPCを再利用し、スコア送信（score=0）と同時にボード取得を行います。
+        // （DB側で score=0 が無視されるか、ランクインしない前提）
+        // "RequestOnly" という名前は、DB側でデバッグするのに役立ちます。
+        StartCoroutine(PostScoreAndGetBoard(0, "RequestOnly", "all_time", stageNum, 0));
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // スコア送信＋Top3取得（RPC: submit_score_and_get_board）
     // ─────────────────────────────────────────────────────────────────────────
@@ -157,7 +172,9 @@ public class ScoreSender : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"[ScoreSender] RPC failed: {req.responseCode}\n{req.downloadHandler.text}");
+                string errorMsg = $"[ScoreSender] RPC failed: {req.responseCode}\n{req.downloadHandler.text}";
+                Debug.LogError(errorMsg);
+                OnBoardDataFailed?.Invoke(errorMsg); // 失敗イベントを発行
                 yield break;
             }
 
@@ -169,12 +186,24 @@ public class ScoreSender : MonoBehaviour
             {
                 var entries = new List<RankingEntry>(JsonHelper.FromJson<RankingEntry>(response));
                 LastBoard = entries;
+
+                // 1. 既存の（古い）ランキングシーンへの通知（そのまま残す！）
                 var board = FindObjectOfType<RankingBoardLeaderLegacy>();
-                if (board != null) board.RenderTop3(entries);
+                if (board != null)
+                {
+                    Debug.Log("[ScoreSender] 既存の RankingBoardLeaderLegacy を発見。RenderTop3 を呼び出します。");
+                    board.RenderTop3(entries);
+                }
+
+                // 2. 新しいランキングハブ（RankingHubManager）への通知（追加する）
+                Debug.Log("[ScoreSender] OnBoardDataReceived イベントを発行します。");
+                OnBoardDataReceived?.Invoke(entries);
             }
             catch (Exception e)
             {
-                Debug.LogError($"[ScoreSender] JSON parse error: {e}");
+                string errorMsg = $"[ScoreSender] JSON parse error: {e}";
+                Debug.LogError(errorMsg);
+                OnBoardDataFailed?.Invoke(errorMsg); // 失敗イベントを発行
             }
         }
     }
