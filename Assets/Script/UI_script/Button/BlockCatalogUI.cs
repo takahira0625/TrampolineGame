@@ -6,6 +6,27 @@ public class BlockCatalogUI : MonoBehaviour
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private Fade fade;
 
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
+    void Start()
+    {
+        FindFadeCanvas();
+        fade.FadeOut(0.5f);
+    }
     public void OnClickCatalog01()
     {
         SEManager.Instance.PlayOneShot(clickSE);
@@ -38,63 +59,72 @@ public class BlockCatalogUI : MonoBehaviour
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("NormalBlockScene");
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("NormalBlockScene");
+        });
     }
 
     public void OnClickKeyGoalBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("KeyGoalBlockScene");
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("KeyGoalBlockScene");
+        });
     }
 
     public void OnClickSpeedUpBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("SpeedUpBlockScene");
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("SpeedUpBlockScene");
+        });
     }
 
     public void OnClickSpeedDownBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("SpeedDownBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("SpeedDownBlockScene"); });
     }
 
     public void OnClickSpeedReqBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("SpeedReqBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("SpeedReqBlockScene"); });
     }
 
     public void OnClickBombBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("BombBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("BombBlockScene"); });
     }
 
     public void OnClickDoubleBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("DoubleBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("DoubleBlockScene"); });
     }
 
     public void OnClickWarpBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("WarpBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("WarpBlockScene"); });
     }
 
     public void OnClickKingBombBlock()
     {
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        SceneManager.LoadScene("KingBombBlockScene");
+        fade.FadeIn(0.5f, () => { SceneManager.LoadScene("KingBombBlockScene"); });
     }
 
     public void BackToBlockCatalog()
@@ -106,15 +136,15 @@ public class BlockCatalogUI : MonoBehaviour
 
         if (currentSceneName == "NormalBlockScene" | currentSceneName == "KeyGoalBlockScene")
         {
-            SceneManager.LoadScene("BlockCatalogScene01");
+            fade.FadeIn(0.5f, () => { SceneManager.LoadScene("BlockCatalogScene01"); });
         }
         else if (currentSceneName == "KingBombBlockScene")
         {
-            SceneManager.LoadScene("BlockCatalogScene03");
+            fade.FadeIn(0.5f, () => { SceneManager.LoadScene("BlockCatalogScene03"); });
         }
         else
         {
-            SceneManager.LoadScene("BlockCatalogScene02");
+            fade.FadeIn(0.5f, () => { SceneManager.LoadScene("BlockCatalogScene02"); });
         }
     }
 
