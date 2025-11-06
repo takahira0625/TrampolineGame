@@ -40,6 +40,7 @@ public class BGMManager : MonoBehaviour
         audioSource.loop = true;
         audioSource.playOnAwake = false;
         audioSource.volume = volume;
+        audioSource.priority = 0; // š BGM‚Ì—Dæ“x‚ğÅ‚‚Éİ’è(0‚ªÅ—Dæ)
     }
 
     /// <summary>

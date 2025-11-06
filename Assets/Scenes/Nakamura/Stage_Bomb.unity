@@ -681,6 +681,7 @@ MonoBehaviour:
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}
   fade: {fileID: 462850886}
+  playerPrefab: {fileID: 0}
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
@@ -1095,7 +1096,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5961084595131506563, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
@@ -3310,7 +3312,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5474823843842983943, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
@@ -3322,6 +3325,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 514691046462424613, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
+      propertyPath: explosionRadius
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6597772676289968999, guid: 577667ca96348c0468bef64a731bf2bf, type: 3}
       propertyPath: m_Name
       value: SurroundBombKing (25)
