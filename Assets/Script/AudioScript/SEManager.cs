@@ -20,7 +20,10 @@ public class SEManager : MonoBehaviour
 
     private List<AudioSource> audioSources = new List<AudioSource>();
     private float volume = 1f;
-    private const int MAX_AUDIO_SOURCES = 5; // 同時再生可能な効果音の数
+    private const int MAX_AUDIO_SOURCES = 20; // ★ 10から20に増やす
+
+    // ★ 新規追加: 優先度管理
+    private Queue<int> availableSourceIndices = new Queue<int>();
 
     void Awake()
     {
@@ -44,7 +47,9 @@ public class SEManager : MonoBehaviour
             source.playOnAwake = false;
             source.loop = false;
             source.volume = volume;
+            source.priority = 128; // ★ SEの優先度を設定(0-256、値が小さいほど優先度が高い)
             audioSources.Add(source);
+            availableSourceIndices.Enqueue(i);
         }
     }
 
@@ -65,7 +70,7 @@ public class SEManager : MonoBehaviour
     }
 
     /// <summary>
-    /// SEをワンショット再生する（複数の同じSEを重ねて再生可能）
+    /// SEをワンショット再生する(複数の同じSEを重ねて再生可能)
     /// </summary>
     public void PlayOneShot(AudioClip clip, float volumeScale = 1f)
     {
@@ -75,6 +80,11 @@ public class SEManager : MonoBehaviour
         if (availableSource != null)
         {
             availableSource.PlayOneShot(clip, volume * volumeScale);
+        }
+        else
+        {
+            // ★ デバッグログ追加(必要に応じてコメントアウト)
+            // Debug.LogWarning($"SE再生失敗: 利用可能なAudioSourceがありません - {clip.name}");
         }
     }
 
@@ -124,11 +134,11 @@ public class SEManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 使用可能なAudioSourceを取得する
+    /// 使用可能なAudioSourceを取得する(改善版)
     /// </summary>
     private AudioSource GetAvailableAudioSource()
     {
-        // 再生中でないAudioSourceを探す
+        // ★ 改善: 再生中でない最初のAudioSourceを探す
         foreach (AudioSource source in audioSources)
         {
             if (!source.isPlaying)
@@ -137,8 +147,20 @@ public class SEManager : MonoBehaviour
             }
         }
 
-        // すべて使用中の場合、最も古いものを使用
-        return audioSources[0];
+        // ★ 改善: すべて使用中の場合、最も再生時間が経過したものを見つける
+        AudioSource oldestSource = audioSources[0];
+        float oldestTime = audioSources[0].time;
+
+        for (int i = 1; i < audioSources.Count; i++)
+        {
+            if (audioSources[i].time > oldestTime)
+            {
+                oldestTime = audioSources[i].time;
+                oldestSource = audioSources[i];
+            }
+        }
+
+        return oldestSource;
     }
 
     /// <summary>
