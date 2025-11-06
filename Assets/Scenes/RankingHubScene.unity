@@ -1743,8 +1743,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1109217591}
   m_HandleRect: {fileID: 1109217590}
   m_Direction: 2
-  m_Value: 1.0000007
-  m_Size: 0.54791665
+  m_Value: 1.0000001
+  m_Size: 0.5479167
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2440,6 +2440,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+--- !u!114 &659995804 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+  m_PrefabInstance: {fileID: 659995803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d416d1715bbc06d4789612d1211da8d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &727929280
 GameObject:
   m_ObjectHideFlags: 0
@@ -5224,6 +5235,7 @@ MonoBehaviour:
   - {fileID: 879150289}
   - {fileID: 1847188442}
   - {fileID: 2133431144}
+  clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
 --- !u!4 &1368412432
 Transform:
   m_ObjectHideFlags: 0
@@ -5452,7 +5464,7 @@ PrefabInstance:
     - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
       propertyPath: fade
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 659995804}
     - target: {fileID: 2310723780684977232, guid: caa674d7528c8e645927c95b9eb0aa00, type: 3}
       propertyPath: clickSE
       value: 
@@ -5595,8 +5607,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466222318ac20cf4c8e888263f8a3d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickSE: {fileID: 0}
-  fade: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
+  fade: {fileID: 659995804}
 --- !u!1 &1691253236
 GameObject:
   m_ObjectHideFlags: 0
