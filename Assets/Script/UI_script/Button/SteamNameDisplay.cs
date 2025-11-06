@@ -1,38 +1,27 @@
-using UnityEngine;
-using TMPro;
 using Steamworks;
+using TMPro;
+using UnityEngine;
 
 public class SteamNameDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private string format = "ようこそ、{0} さん！";
-    [SerializeField] private string notReadyText = "Steam未ログイン";
+    [SerializeField] private string notReadyText = "Steam Not Login";
     [SerializeField] private SteamGatekeeper GateKeeper;
-
-    private int count = 0;
 
     void OnEnable()
     {
-        if (SteamInit.IsReady) { Refresh(); }
+        if (SteamInit.IsReady)
+        {
+            Refresh();
+        }
         else
         {
             if (nameText) nameText.text = notReadyText;
-            SteamInit.OnReady += HandleSteamReady; // ★初期化完了を待つ
+            SteamInit.OnReady += HandleSteamReady;
         }
     }
 
-    private void Update()
-    {
-
-        if (GateKeeper != null && GateKeeper.IsSteamReady ==true)
-        {
-            if (count == 0)
-            {
-                Refresh();
-                count++;
-            }
-        }
-    }
     void OnDisable()
     {
         SteamInit.OnReady -= HandleSteamReady;
@@ -41,11 +30,28 @@ public class SteamNameDisplay : MonoBehaviour
     void HandleSteamReady()
     {
         Refresh();
+        SteamInit.OnReady -= HandleSteamReady;
     }
 
     public void Refresh()
     {
         if (nameText == null) { Debug.LogWarning("[SteamNameDisplay] Name Text 未割当"); return; }
+
+        // 1. ゲストモード判定
+        if (GateKeeper != null && GateKeeper.IsGuestMode())
+        {
+            nameText.text = "ようこそ、ゲストさん！";
+            return;
+        }
+
+        // 2. Steam Ready 判定
+        if (!SteamInit.IsReady)
+        {
+            nameText.text = notReadyText;
+            return;
+        }
+
+        // 3. Steamユーザー名表示
         // ここは Init 済みで呼ばれる想定
         string persona = SteamFriends.GetPersonaName();
         nameText.text = string.Format(format, persona);

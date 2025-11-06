@@ -25,7 +25,6 @@ public class RightClickTriggerOn : MonoBehaviour
 
     private bool isMoving = false;
     public bool IsMoving => isMoving;
-    private bool hasHitThisPush = false;
 
     private Vector2 originalPosition;
     private Quaternion startRotation;
@@ -146,7 +145,6 @@ public class RightClickTriggerOn : MonoBehaviour
 
         isMoving = false;
         col.isTrigger = false;
-        hasHitThisPush = false;
         if (barFollow != null) barFollow.stopFollow = false;
     }
     private void PlaySE(AudioClip clip, string clipName)
@@ -174,13 +172,12 @@ public class RightClickTriggerOn : MonoBehaviour
 
         Rigidbody2D ballRb = other.attachedRigidbody;
         PlayerController playerCtrl = other.GetComponent<PlayerController>();
-        if (ballRb == null || playerCtrl == null || (isMoving && hasHitThisPush)) return;
+        if (ballRb == null || playerCtrl == null) return;
         
         // --- 押し出し中 ---
         if (isMoving)
         {
             GameManager.instance.StartTimerOnce();
-            hasHitThisPush = true;
             Vector2 forward = transform.up.normalized;
 
             if (playerCtrl.isActive)
@@ -190,7 +187,7 @@ public class RightClickTriggerOn : MonoBehaviour
                 PlaySE(SmashSE, "CollisionSE");
 
                 float savedSpeed = playerCtrl.savedVelocity.magnitude;
-                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.1f, pushSpeed + 1);
+                ballRb.velocity = forward * Mathf.Max(savedSpeed * 1.3f, pushSpeed + 1);
                 playerCtrl.isActive = false;
 
                 // エフェクト生成
@@ -211,7 +208,6 @@ public class RightClickTriggerOn : MonoBehaviour
                     Destroy(effect, 1f);
                 }
                 StartCoroutine(HitStop());
-
             }
             else
             {
@@ -242,7 +238,7 @@ public class RightClickTriggerOn : MonoBehaviour
     private IEnumerator HitStop()
     {
         float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0.4f;
+        Time.timeScale = 1f;
         yield return new WaitForSecondsRealtime(hitStopDuration);
         Time.timeScale = originalTimeScale;
     }

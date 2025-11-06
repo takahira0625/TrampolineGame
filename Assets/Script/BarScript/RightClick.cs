@@ -166,7 +166,7 @@ public class RightClick : MonoBehaviour
                 
                 if (savedSpeed > pushSpeed)
                 {
-                    pendingVelocity = forward * (savedSpeed * 1.1f);
+                    pendingVelocity = forward * (savedSpeed * 1.5f);
                 }
                 else
                 {

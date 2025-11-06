@@ -20,6 +20,13 @@ public class BlockCatalogUI : MonoBehaviour
         SceneManager.LoadScene("BlockCatalogScene02");
     }
 
+    public void OnClickCatalog03()
+    {
+        SEManager.Instance.PlayOneShot(clickSE);
+        SceneBGMManager.instance.PlayTitleBGM();
+        SceneManager.LoadScene("BlockCatalogScene03");
+    }
+
     public void OnClickStageSelect()
     {
         SEManager.Instance.PlayOneShot(clickSE);
@@ -83,6 +90,13 @@ public class BlockCatalogUI : MonoBehaviour
         SceneManager.LoadScene("WarpBlockScene");
     }
 
+    public void OnClickKingBombBlock()
+    {
+        SEManager.Instance.PlayOneShot(clickSE);
+        SceneBGMManager.instance.PlayStageBGM();
+        SceneManager.LoadScene("KingBombBlockScene");
+    }
+
     public void BackToBlockCatalog()
     {
         BGMManager.Instance.Stop();
@@ -93,6 +107,10 @@ public class BlockCatalogUI : MonoBehaviour
         if (currentSceneName == "NormalBlockScene" | currentSceneName == "KeyGoalBlockScene")
         {
             SceneManager.LoadScene("BlockCatalogScene01");
+        }
+        else if (currentSceneName == "KingBombBlockScene")
+        {
+            SceneManager.LoadScene("BlockCatalogScene03");
         }
         else
         {

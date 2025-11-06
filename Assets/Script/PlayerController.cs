@@ -125,22 +125,63 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeLightningAuraEffect()
     {
-        if (lightningAuraPrefab != null)
+        if (lightningAuraPrefab == null) return;
+
+        if (currentAuraEffect != null)
+        {
+            return;
+        }
+        GameObject existingAuraObject = null;
+
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.name.Contains(lightningAuraPrefab.name))
+            {
+                existingAuraObject = child.gameObject;
+                break;
+            }
+        }
+
+        if (existingAuraObject != null)
+        {
+            currentAuraEffect = existingAuraObject;
+            currentAuraEffect.SetActive(false);
+            Debug.Log("既存のエフェクト子オブジェクトを検出しました。新規生成スキップ。");
+        }
+        else
         {
             currentAuraEffect = Instantiate(lightningAuraPrefab, transform.position, Quaternion.identity);
             currentAuraEffect.transform.SetParent(transform);
             currentAuraEffect.transform.localPosition = Vector3.zero;
-
-            // SortingLayerを設定
-            /*var renderers = currentAuraEffect.GetComponentsInChildren<ParticleSystemRenderer>();
-            foreach (var r in renderers)
-            {
-                r.sortingLayerName = "Player";
-                r.sortingOrder = 10;
-            }/*/
-
-            // 初期状態は非表示
             currentAuraEffect.SetActive(false);
+            Debug.Log("エフェクトを新規生成しました。");
+        }
+    }
+
+    public void CheckInitialSlowZone()
+    {
+
+        Collider2D[] colliders = Physics2D.OverlapPointAll(transform.position);
+
+        bool foundSlowZone = false;
+        foreach (Collider2D col in colliders)
+        {
+            if (col.CompareTag("SlowZone") && col.isTrigger)
+            {
+                foundSlowZone = true;
+                break;
+            }
+        }
+
+        if (foundSlowZone)
+        {
+            isInSlowZone = true;
+            savedVelocity = rb.velocity;
+            Debug.Log("複製ボール: スローゾーン内で生成されました。");
+        }
+        else
+        {
+            isInSlowZone = false;
         }
     }
 
@@ -169,14 +210,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    // ▼▼▼ ここから追加 ▼▼▼
-
-    /// <summary>
     /// ブロック側から呼び出され、即座に速度を変更する
     /// （GimmickBlock側でスロー中でないことを確認してから呼ばれる）
-    /// </summary>
-    /// <param name="multiplier">速度の倍率 (例: 2.0f)</param>
     public void RequestSpeedChange(float multiplier)
     {
         if (rb != null)
@@ -185,8 +220,6 @@ public class PlayerController : MonoBehaviour
             rb.velocity *= multiplier;
         }
     }
-
-    // ▲▲▲ ここまで追加 ▲▲▲
 
     private void UpdateAfterImageColor()
     {

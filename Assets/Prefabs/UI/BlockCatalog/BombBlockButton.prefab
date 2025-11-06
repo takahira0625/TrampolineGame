@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u89E6\u308C\u308B\u3068\u5468\u56F2\u306E\u30D6\u30ED\u30C3\u30AF\u3092\u7834\u58CA\u3059\u308B\u30D6\u30ED\u30C3\u30AF\u3002\n\u9023\u9396\u3059\u308B\u3002"
+  m_text: "\u89E6\u308C\u308B\u3068\u5468\u56F2\u306E\u4E00\u90E8\u306E\u30D6\u30ED\u30C3\u30AF\u3092\u7834\u58CA\u3059\u308B\u30D6\u30ED\u30C3\u30AF\u3002\n\u9023\u9396\u3059\u308B\u3002"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 25bdb265495af4446aa7e8acae0b2b4c, type: 2}
   m_sharedMaterial: {fileID: 7179506950138338891, guid: 25bdb265495af4446aa7e8acae0b2b4c, type: 2}
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.74509805, g: 0.74509805, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}

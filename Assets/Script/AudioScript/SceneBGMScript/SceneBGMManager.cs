@@ -8,6 +8,9 @@ public class SceneBGMManager : MonoBehaviour
     [SerializeField] private AudioClip titleBGMClip;
     [SerializeField] private AudioClip stageBGMClip;
     [SerializeField] private AudioClip resultBGMClip;
+    
+    private const string VOLUME_KEY = "BGMVolume";
+    
     void Awake()
     {
         if (instance == null)
@@ -20,9 +23,12 @@ public class SceneBGMManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
     // Start is called before the first frame update
     void Start()
     {
+        // ï€ë∂Ç≥ÇÍÇΩâπó ÇìKóp
+        LoadAndApplyVolume();
         PlayTitleBGM();
     }
 
@@ -31,20 +37,28 @@ public class SceneBGMManager : MonoBehaviour
     {
         
     }
+    
+    private void LoadAndApplyVolume()
+    {
+        float savedVolume = PlayerPrefs.GetFloat(VOLUME_KEY, 0.5f);
+        BGMManager.Instance.SetVolume(savedVolume);
+    }
+    
     public void PlayTitleBGM()
     {
-        BGMManager.Instance.SetVolume(1f);
+        // SetVolume(1f)ÇçÌèú
         BGMManager.Instance.Play(titleBGMClip, fadeIn: true, fadeDuration: 2f);
     }
+    
     public void PlayStageBGM()
     {
-        BGMManager.Instance.SetVolume(1f);
+        // SetVolume(1f)ÇçÌèú
         BGMManager.Instance.Play(stageBGMClip, fadeIn: true, fadeDuration: 1f);
     }
+    
     public void PlayResultBGM()
     {
-        BGMManager.Instance.SetVolume(1f);
+        // SetVolume(1f)ÇçÌèú
         BGMManager.Instance.Play(resultBGMClip, fadeIn: true, fadeDuration: 2f);
     }
-
 }
