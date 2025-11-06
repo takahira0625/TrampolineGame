@@ -10,13 +10,12 @@ public class SteamInit : MonoBehaviour
 
     void Awake()
     {
-        // 最初の試行
         TryInitSteam();
     }
 
-    private void TryInitSteam() // 初期化処理をメソッド化
+    private void TryInitSteam()
     {
-        if (inited) return; // 既に初期化済みなら何もしない
+        if (inited) return;
 
         try
         {
