@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -340, y: 171}
+  m_AnchoredPosition: {x: 343, y: 171}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2945920030026075063
@@ -147,3 +147,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
   fade: {fileID: 0}
+  steamGatePanel: {fileID: 0}

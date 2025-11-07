@@ -790,6 +790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSE: {fileID: 0}
+  fade: {fileID: 0}
 --- !u!1001 &646387781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -962,7 +963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4026344497806078384, guid: ca3e0fffab96ec6449fb93bf1f4d0cc0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 340
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 4026344497806078384, guid: ca3e0fffab96ec6449fb93bf1f4d0cc0, type: 3}
       propertyPath: m_AnchoredPosition.y
