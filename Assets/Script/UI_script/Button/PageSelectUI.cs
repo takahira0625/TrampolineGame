@@ -96,7 +96,7 @@ public class PageSelectUI : MonoBehaviour
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
         SceneManager.LoadScene("TitleScene");
-        SEManager.Instance.PlayOneShot(clickSE);
+        //SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickRetry()
