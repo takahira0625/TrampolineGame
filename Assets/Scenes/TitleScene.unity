@@ -272,6 +272,7 @@ MonoBehaviour:
   startButton: {fileID: 0}
   guestLoginButton: {fileID: 0}
   afterLoginHideTarget: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
 --- !u!1 &142196342
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,6 +718,7 @@ MonoBehaviour:
   startButton: {fileID: 0}
   guestLoginButton: {fileID: 0}
   afterLoginHideTarget: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
 --- !u!114 &949001375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,6 +1040,7 @@ MonoBehaviour:
   startButton: {fileID: 0}
   guestLoginButton: {fileID: 0}
   afterLoginHideTarget: {fileID: 0}
+  clickSE: {fileID: 0}
 --- !u!1 &1150368769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,6 +1318,7 @@ MonoBehaviour:
   startButton: {fileID: 0}
   guestLoginButton: {fileID: 74283708}
   afterLoginHideTarget: {fileID: 1358929590}
+  clickSE: {fileID: 0}
 --- !u!1 &1619830888
 GameObject:
   m_ObjectHideFlags: 0
