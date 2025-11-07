@@ -6,41 +6,43 @@ public class PageSelectUI : MonoBehaviour
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private Fade fade;
 
+    // ログイン誘導パネルへの参照
+    [SerializeField] private GameObject steamGatePanel;
+
     void Start()
     {
-        FindFadeCanvas();
         fade.FadeOut(0.5f);
-    }
 
-    private void FindFadeCanvas()
-    {
-        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
-        if (fadeCanvasObject != null)
+        // 起動時にパネルを非表示にする
+        if (steamGatePanel != null)
         {
-            fade = fadeCanvasObject.GetComponent<Fade>();
-            if (fade == null)
-            {
-                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+            steamGatePanel.SetActive(false);
         }
     }
 
+    // StartButtonが呼び出すメソッド
     public void OnClickLogin()
     {
         SEManager.Instance.StopAll();
+        SEManager.Instance.PlayOneShot(clickSE);
+
+        // StartButtonが押されたときにパネルを表示する
+        if (steamGatePanel != null)
+        {
+            steamGatePanel.SetActive(true);
+        }
+    }
+    public void OnClickStageSelect1_6_fade()
+    {
+        SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        FindFadeCanvas();
         fade.FadeIn(0.5f, () =>
         {
             SceneManager.LoadScene("StageSelectScene1_6");
         });
+       
         SEManager.Instance.PlayOneShot(clickSE);
     }
-
     public void OnClickStageSelect1_6()
     {
         SEManager.Instance.StopAll();
@@ -64,6 +66,7 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("UserGuideScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickUserGuideScene_JP()
     {
         SEManager.Instance.StopAll();
@@ -71,6 +74,7 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("UserGuideScene_JP");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickRankingHubScene()
     {
         SEManager.Instance.StopAll();
@@ -78,27 +82,20 @@ public class PageSelectUI : MonoBehaviour
         SceneManager.LoadScene("RankingHubScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
+
     public void OnClickStageSelect()
     {
-        FindFadeCanvas();
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        fade.FadeIn(0.5f, () =>
-        {
-            SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
-        });
+        SceneManager.LoadScene(PlayerPrefs.GetString("FromScene"));
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
     public void OnClickHome()
     {
-        FindFadeCanvas();
         SEManager.Instance.StopAll();
         SceneBGMManager.instance.PlayTitleBGM();
-        fade.FadeIn(0.5f, () =>
-        {
-            SceneManager.LoadScene("TitleScene");
-        });
+        SceneManager.LoadScene("TitleScene");
         SEManager.Instance.PlayOneShot(clickSE);
     }
 
@@ -106,18 +103,17 @@ public class PageSelectUI : MonoBehaviour
     {
         // 保存されたステージ名を取得
         string stageName = GameManager.instance.LoadLastStageName();
-        FindFadeCanvas();
+
         SEManager.Instance.StopAll();
         SEManager.Instance.PlayOneShot(clickSE);
         SceneBGMManager.instance.PlayStageBGM();
-        fade.FadeIn(0.5f, () =>
-        {
-            SceneManager.LoadScene(stageName);
-        });
+
+        SceneManager.LoadScene(stageName);
     }
+
     public static string GetCurrentSceneName()
     {
-        // 2. ���̃R�[�h�����݂̃V�[�������擾���܂�
+        // 2. 現在のシーン名を取得します
         return SceneManager.GetActiveScene().name;
     }
 }

@@ -9244,6 +9244,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 3355983283214266762}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair
@@ -9379,13 +9383,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 8807218644973711920}
     m_Modifications:
     - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: dimValue
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: customSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3ff82e73f32da47408cc725e5e36faa7, type: 3}
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: activeLightDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3294510214245016835, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3ff82e73f32da47408cc725e5e36faa7, type: 3}
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair (1)
@@ -14037,6 +14049,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 12622413714580096}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair
@@ -16631,6 +16647,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 2000811028}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair
@@ -17142,6 +17162,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 2068649380592645114}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair (1)
@@ -18573,6 +18597,10 @@ PrefabInstance:
       propertyPath: pairedWarp
       value: 
       objectReference: {fileID: 3590520148909772523}
+    - target: {fileID: 2572458874759298119, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
+      propertyPath: customSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01e53a8a41093b34f88eb18a10628311, type: 3}
     - target: {fileID: 3797651389120414331, guid: 0486ad809ead58d4ab5886f6a07428c5, type: 3}
       propertyPath: m_Name
       value: WarpPair

@@ -203,7 +203,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8278835316794405872}
         m_TargetAssemblyTypeName: PageSelectUI, Assembly-CSharp
-        m_MethodName: OnClickLogin
+        m_MethodName: OnClickStageSelect1_6_fade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -227,3 +227,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickSE: {fileID: 8300000, guid: a4c706a442369484194047324c626ec5, type: 3}
   fade: {fileID: 0}
+  steamGatePanel: {fileID: 0}

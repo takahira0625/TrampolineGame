@@ -153,4 +153,4 @@ MonoBehaviour:
   offsetY: 1
   WaitTime: 0.5
   teleportEffectPrefab: {fileID: 2715471840370901047, guid: df9374346b76e444dbbb2b019de4da25, type: 3}
-  customSprite: {fileID: 0}
+  customSprite: {fileID: 21300000, guid: d12c5ee1729782c4aa519a26d00f0ed7, type: 3}

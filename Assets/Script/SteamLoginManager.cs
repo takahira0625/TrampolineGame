@@ -2,6 +2,7 @@ using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class SteamLoginManager : MonoBehaviour
 {
@@ -80,33 +81,16 @@ public class SteamLoginManager : MonoBehaviour
     /// </summary>
     public void LoginWithSteam()
     {
-        if (!Initialized)
-        {
-            Debug.LogError("[SteamLoginManager] Steam 未初期化です。Steam クライアントを起動してからお試しください。");
-            return;
-        }
-
-        if (!SteamAPI.IsSteamRunning())
-        {
-            Debug.LogError("[SteamLoginManager] Steam クライアントが起動/ログインしていません。");
-            return;
-        }
-
-        // 最新情報を同期
-        SteamId64 = SteamUser.GetSteamID().m_SteamID;
-        PersonaName = SteamFriends.GetPersonaName();
-
-        // 認証チケット（必要な場合のみ活用）
-        uint size;
-        var identity = new SteamNetworkingIdentity();
-        identity.SetSteamID(SteamUser.GetSteamID());
-        authTicket = SteamUser.GetAuthSessionTicket(ticketBuffer, ticketBuffer.Length, out size, ref identity);
-        var ticketBase64 = System.Convert.ToBase64String(ticketBuffer, 0, (int)size);
-        // ↑ サーバ検証が必要なら ticketBase64 を送ってください
+        // ... (中略：認証チケット発行までの既存ロジック) ...
 
         // UI / Event
         OnSteamLoggedIn?.Invoke(PersonaName, SteamId64.ToString());
         if (loginPanel) loginPanel.SetActive(false);
+
+        // ★★★ 追記するロジック ★★★
+        // ログイン成功後、StageSelectScene1_6に遷移する
+        SceneManager.LoadScene("StageSelectScene1_6");
+        // ★★★ 追記するロジック ★★★
 
         Debug.Log($"[SteamLoginManager] Logged in as {PersonaName} ({SteamId64}), ticket={authTicket.m_HAuthTicket}");
     }

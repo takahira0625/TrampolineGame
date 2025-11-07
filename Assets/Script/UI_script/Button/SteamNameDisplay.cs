@@ -37,17 +37,24 @@ public class SteamNameDisplay : MonoBehaviour
     {
         if (nameText == null) { Debug.LogWarning("[SteamNameDisplay] Name Text 未割当"); return; }
 
-        // 1. ゲストモード判定
-        if (GateKeeper != null && GateKeeper.IsGuestMode())
+        // 1. Steam Ready 判定を先に (Initが完了していないと、GateKeeperの判定も不確定なため)
+        if (!SteamInit.IsReady)
         {
-            nameText.text = "ようこそ、ゲストさん！";
+            // GateKeeper が null でない、かつ、ゲストモードなら表示
+            if (GateKeeper != null && GateKeeper.IsGuestMode())
+            {
+                nameText.text = "ようこそ、ゲストさん！";
+                return;
+            }
+
+            nameText.text = notReadyText;
             return;
         }
 
-        // 2. Steam Ready 判定
-        if (!SteamInit.IsReady)
+        // 2. ゲストモード判定
+        if (GateKeeper != null && GateKeeper.IsGuestMode())
         {
-            nameText.text = notReadyText;
+            nameText.text = "ようこそ、ゲストさん！";
             return;
         }
 
