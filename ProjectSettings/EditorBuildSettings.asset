@@ -168,7 +168,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Stage08.unity
     guid: d2470d80266ff7045b304420b6b4d2f0
   - enabled: 1
-    path: Assets/Scenes/Stage08_damy.unity
+    path: Assets/Scenes/Stage08.unity
     guid: 171ca5f500f1ee041b6ba53a8e27629d
   - enabled: 1
     path: Assets/Scenes/Stage09.unity
@@ -182,4 +182,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Stage12.unity
     guid: 1b83055aaedee0047b16ba5ed72c0a78
+  - enabled: 1
+    path: Assets/Scenes/Stage07.unity
+    guid: 2776d8cfba2d49a47bb808a8f5e1bee6
   m_configObjects: {}

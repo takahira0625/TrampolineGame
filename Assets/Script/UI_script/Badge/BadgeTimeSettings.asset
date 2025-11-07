@@ -23,17 +23,17 @@ MonoBehaviour:
     silverTime: 35
   - goldTime: 27
     silverTime: 32
-  - goldTime: 32
-    silverTime: 37
-  - goldTime: 10
-    silverTime: 20
-  - goldTime: 10
-    silverTime: 20
+  - goldTime: 30
+    silverTime: 50
   - goldTime: 40
-    silverTime: 45
+    silverTime: 50
+  - goldTime: 40
+    silverTime: 50
+  - goldTime: 30
+    silverTime: 40
   - goldTime: 24
     silverTime: 29
   - goldTime: 60
     silverTime: 65
-  - goldTime: 10
-    silverTime: 20
+  - goldTime: 60
+    silverTime: 80

@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb == null) yield break;
 
-        float originalDrag = rb.drag; // 元のDrag値を保存
+        float originalDrag = 0.15f; // 元のDrag値を保存
 
         rb.drag = 0f; // Dragを0に設定
 

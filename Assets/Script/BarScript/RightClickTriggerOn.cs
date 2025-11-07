@@ -210,12 +210,14 @@ public class RightClickTriggerOn : MonoBehaviour
                     Destroy(effect, 1f);
                 }
                 StartCoroutine(HitStop());
+                playerCtrl.RequestDragReset(3f);
             }
             else
             {
                 PlaySE(CollisionSE, "CollisionSE");
                 Debug.Log("非Active押し出し");
                 ballRb.velocity = forward * pushSpeed;
+                playerCtrl.RequestDragReset(3f);
             }
         }
     }
