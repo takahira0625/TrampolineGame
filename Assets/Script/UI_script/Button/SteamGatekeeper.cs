@@ -22,7 +22,8 @@ public class SteamGatekeeper : MonoBehaviour
     [Header("Guest Login (Optional)")]
     [SerializeField] private Button guestLoginButton;          // ゲストボタン（任意）
     [SerializeField] private GameObject afterLoginHideTarget;  // ログイン後に隠すUI（任意）
-
+    [Header("SE")]
+    [SerializeField] private AudioClip clickSE;               // クリック音
     public bool IsSteamReady => SteamAPI.IsSteamRunning();
     private bool guestMode = false; // 現在ゲストモード中かどうか
 
@@ -64,6 +65,7 @@ public class SteamGatekeeper : MonoBehaviour
     /// </summary>
     public void OnClickLoginSteam()
     {
+        SEManager.Instance.PlayOneShot(clickSE);
         // 1. Steamが既に初期化済みであれば、即座に遷移
         if (SteamInit.IsReady)
         {
@@ -92,6 +94,7 @@ public class SteamGatekeeper : MonoBehaviour
     /// </summary>
     public void OnClickGuestLogin()
     {
+        SEManager.Instance.PlayOneShot(clickSE);
         guestMode = true;
         Debug.Log("[GuestLogin] ゲストモードで開始します（名前・IDは発行しません）。");
 
