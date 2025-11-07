@@ -32,7 +32,17 @@ public class PageSelectUI : MonoBehaviour
             steamGatePanel.SetActive(true);
         }
     }
-
+    public void OnClickStageSelect1_6_fade()
+    {
+        SEManager.Instance.StopAll();
+        SceneBGMManager.instance.PlayTitleBGM();
+        fade.FadeIn(0.5f, () =>
+        {
+            SceneManager.LoadScene("StageSelectScene1_6");
+        });
+       
+        SEManager.Instance.PlayOneShot(clickSE);
+    }
     public void OnClickStageSelect1_6()
     {
         SEManager.Instance.StopAll();

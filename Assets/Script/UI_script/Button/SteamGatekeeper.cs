@@ -28,7 +28,23 @@ public class SteamGatekeeper : MonoBehaviour
     private bool guestMode = false; // 現在ゲストモード中かどうか
 
     private bool AlreadyLogin = false; // プレイ可能状態を追跡する
-
+    private Fade fade;
+    private void FindFadeCanvas()
+    {
+        GameObject fadeCanvasObject = GameObject.Find("FadeCanvas");
+        if (fadeCanvasObject != null)
+        {
+            fade = fadeCanvasObject.GetComponent<Fade>();
+            if (fade == null)
+            {
+                Debug.LogWarning("FadeCanvas オブジェクトに Fade コンポーネントが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("FadeCanvas オブジェクトがシーン内に見つかりません。");
+        }
+    }
     void Start()
     {
         // ... (イベント登録のロジックはそのまま) ...
@@ -65,6 +81,7 @@ public class SteamGatekeeper : MonoBehaviour
     /// </summary>
     public void OnClickLoginSteam()
     {
+        FindFadeCanvas();
         SEManager.Instance.PlayOneShot(clickSE);
         // 1. Steamが既に初期化済みであれば、即座に遷移
         if (SteamInit.IsReady)
@@ -94,6 +111,7 @@ public class SteamGatekeeper : MonoBehaviour
     /// </summary>
     public void OnClickGuestLogin()
     {
+        FindFadeCanvas();
         SEManager.Instance.PlayOneShot(clickSE);
         guestMode = true;
         Debug.Log("[GuestLogin] ゲストモードで開始します（名前・IDは発行しません）。");
@@ -125,7 +143,10 @@ public class SteamGatekeeper : MonoBehaviour
             // ★最重要: StageSelectScene1_6に遷移（初回ログイン時のみ）
             if (!AlreadyLogin)
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("StageSelectScene1_6");
+                fade.FadeIn(0.5f, () =>
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("StageSelectScene1_6");
+                });
             }
         }
 
