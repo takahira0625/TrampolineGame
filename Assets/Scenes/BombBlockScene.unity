@@ -308,6 +308,7 @@ MonoBehaviour:
   scoreSenderPrefab: {fileID: 0}
   gameBGM: {fileID: 0}
   fade: {fileID: 462850886}
+  playerPrefab: {fileID: 0}
 --- !u!4 &168480057
 Transform:
   m_ObjectHideFlags: 0
@@ -474,6 +475,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (2)
@@ -925,6 +930,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (1)
@@ -1314,6 +1323,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (5)
@@ -1465,6 +1478,8 @@ RectTransform:
   m_Children:
   - {fileID: 633067706}
   - {fileID: 4266086}
+  - {fileID: 1080328617}
+  - {fileID: 1102268991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1847,6 +1862,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (7)
@@ -1904,6 +1923,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (6)
@@ -2005,6 +2028,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (8)
@@ -2062,6 +2089,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (4)
@@ -2354,6 +2385,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062530074304682288, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
+      propertyPath: explosionRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3797651389120414331, guid: e15df0fee8ecf8544bca5b3394bd60c2, type: 3}
       propertyPath: m_Name
       value: Bomb (3)
