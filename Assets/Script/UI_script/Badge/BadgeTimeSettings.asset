@@ -35,5 +35,5 @@ MonoBehaviour:
     silverTime: 35
   - goldTime: 60
     silverTime: 80
-  - goldTime: 10
-    silverTime: 20
+  - goldTime: 120
+    silverTime: 150
